@@ -6,17 +6,17 @@ export default {
     isOwner: true,
     description: '✅ Aktifkan API Key yang sudah nonaktif',
     async execute(sock, m, msgData) {
-        const { args } = msgData;
+        const { args, senderJid, remoteJid } = msgData;
 
         if (args.length === 0) {
-            return m.reply(`
+            return sock.sendMessage(remoteJid, { text: `
 ✅ *Aktifkan API Key*
 
 Gunakan: *.activeapikey <nama>
 
 Contoh:
 *.activeapikey Web Platform
-`.trim());
+`.trim() });
         }
 
         try {
@@ -28,26 +28,26 @@ Contoh:
                 {
                     where: {
                         name: keyName,
-                        owner_number: m.sender
+                        owner_number: senderJid
                     }
                 }
             );
 
             if (updated === 0) {
-                return m.reply(`❌ API Key dengan nama "${keyName}" tidak ditemukan!`);
+                return sock.sendMessage(remoteJid, { text: `❌ API Key dengan nama "${keyName}" tidak ditemukan!` });
             }
 
-            return m.reply(`
+            return sock.sendMessage(remoteJid, { text: `
 ✅ *API Key Diaktifkan*
 
 Nama: ${keyName}
 
 Status: ✅ ACTIVE
 Key sudah bisa digunakan pada API Gateway.
-`.trim());
+`.trim() });
         } catch (error) {
             console.error('Active API Key Error:', error);
-            return m.reply(`❌ Error: ${error.message}`);
+            return sock.sendMessage(remoteJid, { text: `❌ Error: ${error.message}` });
         }
     }
 };

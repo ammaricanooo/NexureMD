@@ -7,7 +7,7 @@ export default {
     isOwner: true,
     description: '🔐 Lihat daftar semua API Key yang sudah dibuat',
     async execute(sock, m, msgData) {
-        const { args } = msgData;
+        const { args, senderJid, remoteJid } = msgData;
 
         try {
             let filter = {};
@@ -27,7 +27,7 @@ export default {
             // Ambil semua API Key milik owner ini
             const apiKeys = await ApiKey.findAll({
                 where: {
-                    owner_number: m.sender,
+                    owner_number: senderJid,
                     ...filter
                 },
                 order: [['createdAt', 'DESC']],
@@ -36,14 +36,14 @@ export default {
 
             // Jika tidak ada
             if (apiKeys.length === 0) {
-                return m.reply(`
+                return sock.sendMessage(remoteJid, { text: `
 🔐 *Daftar API Key${filterLabel}*
 
 Belum ada API Key.
 
 Buat API Key baru dengan:
 *.createapikey <nama>
-`.trim());
+`.trim() });
             }
 
             // Format tabel
@@ -71,10 +71,10 @@ Buat API Key baru dengan:
 *.activeapikey <nama>  - Aktifkan API Key
 *.deactiveapikey <nama> - Nonaktifkan API Key`;
 
-            return m.reply(tableStr);
+            return sock.sendMessage(remoteJid, { text: tableStr });
         } catch (error) {
             console.error('List API Key Error:', error);
-            return m.reply(`❌ Error: ${error.message}`);
+            return sock.sendMessage(remoteJid, { text: `❌ Error: ${error.message}` });
         }
     }
 };

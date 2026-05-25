@@ -6,10 +6,10 @@ export default {
     isOwner: true,
     description: '🗑️ Hapus API Key yang sudah tidak diperlukan',
     async execute(sock, m, msgData) {
-        const { args } = msgData;
+        const { args, senderJid, remoteJid } = msgData;
 
         if (args.length === 0) {
-            return m.reply(`
+            return sock.sendMessage(remoteJid, { text: `
 🗑️ *Hapus API Key*
 
 Gunakan: *.deleteapikey <nama>
@@ -18,7 +18,7 @@ Contoh:
 *.deleteapikey Web Platform
 
 ⚠️ Tindakan ini TIDAK BISA DIBATALKAN!
-`.trim());
+`.trim() });
         }
 
         try {
@@ -28,12 +28,12 @@ Contoh:
             const apiKey = await ApiKey.findOne({
                 where: {
                     name: keyName,
-                    owner_number: m.sender
+                    owner_number: senderJid
                 }
             });
 
             if (!apiKey) {
-                return m.reply(`❌ API Key dengan nama "${keyName}" tidak ditemukan!`);
+                return sock.sendMessage(remoteJid, { text: `❌ API Key dengan nama "${keyName}" tidak ditemukan!` });
             }
 
             // Minta konfirmasi
@@ -52,7 +52,7 @@ Untuk membatalkan, tunggu 30 detik atau ketik command lain.
             global.pendingDelete = global.pendingDelete || {};
             global.pendingDelete[keyName] = {
                 apiKeyId: apiKey.id,
-                ownerNumber: m.sender,
+                ownerNumber: senderJid,
                 timestamp: Date.now()
             };
 
@@ -61,10 +61,10 @@ Untuk membatalkan, tunggu 30 detik atau ketik command lain.
                 delete global.pendingDelete?.[keyName];
             }, 30000);
 
-            return m.reply(response);
+            return sock.sendMessage(remoteJid, { text: response });
         } catch (error) {
             console.error('Delete API Key Error:', error);
-            return m.reply(`❌ Error: ${error.message}`);
+            return sock.sendMessage(remoteJid, { text: `❌ Error: ${error.message}` });
         }
     }
 };

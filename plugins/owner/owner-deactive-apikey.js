@@ -6,10 +6,10 @@ export default {
     isOwner: true,
     description: '❌ Nonaktifkan API Key tanpa menghapusnya',
     async execute(sock, m, msgData) {
-        const { args } = msgData;
+        const { args, senderJid, remoteJid } = msgData;
 
         if (args.length === 0) {
-            return m.reply(`
+            return sock.sendMessage(remoteJid, { text: `
 ❌ *Nonaktifkan API Key*
 
 Gunakan: *.deactiveapikey <nama>
@@ -19,7 +19,7 @@ Contoh:
 
 ⚠️ Key tidak akan dihapus, hanya dinonaktifkan sementara.
 Gunakan *.activeapikey untuk mengaktifkan kembali.
-`.trim());
+`.trim() });
         }
 
         try {
@@ -31,16 +31,16 @@ Gunakan *.activeapikey untuk mengaktifkan kembali.
                 {
                     where: {
                         name: keyName,
-                        owner_number: m.sender
+                        owner_number: senderJid
                     }
                 }
             );
 
             if (updated === 0) {
-                return m.reply(`❌ API Key dengan nama "${keyName}" tidak ditemukan!`);
+                return sock.sendMessage(remoteJid, { text: `❌ API Key dengan nama "${keyName}" tidak ditemukan!` });
             }
 
-            return m.reply(`
+            return sock.sendMessage(remoteJid, { text: `
 ❌ *API Key Dinonaktifkan*
 
 Nama: ${keyName}
@@ -50,10 +50,10 @@ Key tidak bisa digunakan pada API Gateway.
 
 Untuk mengaktifkan kembali:
 *.activeapikey ${keyName}
-`.trim());
+`.trim() });
         } catch (error) {
             console.error('Deactive API Key Error:', error);
-            return m.reply(`❌ Error: ${error.message}`);
+            return sock.sendMessage(remoteJid, { text: `❌ Error: ${error.message}` });
         }
     }
 };
