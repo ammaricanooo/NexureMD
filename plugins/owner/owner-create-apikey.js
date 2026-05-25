@@ -1,23 +1,15 @@
 import ApiKey, { generateApiKey, hashApiKey } from '../../databases/orm/ApiKey.js';
 
-export const command = {
-    name: 'createapikey',
-    type: 'owner',
+export default {
+    command: ['createapikey'],
+    category: 'owner',
+    isOwner: true,
     description: '🔑 Buat API Key baru untuk gateway WhatsApp',
-    example: [
-        '*.createapikey <nama>',
-        '*.createapikey Web Platform',
-        '*.createapikey Mobile App'
-    ]
-};
+    async execute(sock, m, msgData) {
+        const { args } = msgData;
 
-export async function handler(m, { args, msgType, isOwner }) {
-    if (!isOwner) {
-        return m.reply('❌ Hanya Owner yang bisa membuat API Key!');
-    }
-
-    if (args.length === 0) {
-        return m.reply(`
+        if (args.length === 0) {
+            return m.reply(`
 🔑 *Buat API Key Baru*
 
 Gunakan: *.createapikey <nama>
@@ -29,10 +21,10 @@ Contoh:
 
 Nama adalah identitas API Key untuk kemudahan tracking.
 `.trim());
-    }
+        }
 
-    try {
-        const keyName = args.join(' ');
+        try {
+            const keyName = args.join(' ');
 
         // Validasi nama
         if (keyName.length < 3 || keyName.length > 255) {
@@ -78,14 +70,15 @@ Atau query parameter:
 ?apikey=${key}
 `.trim();
 
-        return m.reply(response);
-    } catch (error) {
-        console.error('Create API Key Error:', error);
-        
-        if (error.name === 'SequelizeUniqueConstraintError') {
-            return m.reply('❌ API Key ini sudah terdaftar, coba generate ulang!');
-        }
+            return m.reply(response);
+        } catch (error) {
+            console.error('Create API Key Error:', error);
+            
+            if (error.name === 'SequelizeUniqueConstraintError') {
+                return m.reply('❌ API Key ini sudah terdaftar, coba generate ulang!');
+            }
 
-        return m.reply(`❌ Error: ${error.message}`);
+            return m.reply(`❌ Error: ${error.message}`);
+        }
     }
-}
+};
