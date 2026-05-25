@@ -12,6 +12,9 @@ import { startCronJobs } from './libs/cronjob.js';
 import Group from './databases/orm/Group.js';
 import { setGroupMetadata } from './libs/groupCache.js';
 import Setting from './databases/orm/Setting.js';
+import express from 'express';
+import { setWhatsAppSocket, resetSocket } from './libs/socket-manager.js';
+import whatsappRouter from './api/whatsapp-gateway-api.js';
 
 
 // Pastikan inisialisasi database hanya berjalan sekali di luar loop agar tidak memanggil berkali-kali saat reconnect
@@ -135,6 +138,9 @@ async function connectToWhatsApp() {
         if (connection === 'close') {
             const reason = lastDisconnect.error?.output?.statusCode;
             console.log(`Koneksi terputus. Alasan: ${reason}`);
+            
+            // Reset socket saat disconnect
+            resetSocket();
 
             if (reason === DisconnectReason.loggedOut) {
                 console.log('Sesi telah kedaluwarsa atau dilogout. Menghapus session...');
@@ -148,6 +154,9 @@ async function connectToWhatsApp() {
             }
         } else if (connection === 'open') {
             console.log('✅ Bot berhasil terhubung ke WhatsApp! Sedang menyinkronkan data...');
+
+            // Register socket ke API gateway
+            setWhatsAppSocket(sock);
 
             // Tunggu sinkronisasi awal maksimal 3 detik agar cache terisi sebelum melayani pesan
             const syncPromise = syncGroups(sock);
@@ -224,5 +233,28 @@ async function connectToWhatsApp() {
         }
     });
 }
+
+// ============================================
+// SETUP EXPRESS API GATEWAY
+// ============================================
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Register WhatsApp API routes
+app.use('/api/whatsapp', whatsappRouter);
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+    res.json({ status: 'ok', message: 'Bot API running' });
+});
+
+// Start Express server
+const server = app.listen(PORT, () => {
+    console.log(`🌐 API Gateway running on http://localhost:${PORT}`);
+    console.log(`📡 WhatsApp API available at http://localhost:${PORT}/api/whatsapp`);
+});
 
 connectToWhatsApp();

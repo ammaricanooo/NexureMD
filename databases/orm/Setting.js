@@ -18,6 +18,11 @@ const Setting = sequelize.define('Setting', {
     is_gconly: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
+    },
+    fonnte_token: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+        defaultValue: null,
     }
 }, {
     tableName: 'settings',

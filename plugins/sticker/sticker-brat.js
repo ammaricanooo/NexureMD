@@ -24,7 +24,7 @@ export default {
                 isAnimated = true;
             }
 
-            const url = `${config.API_RYZUMI}${endpoint}${encodeURIComponent(text)}`;
+            const url = `${config.API_AMMARICANO}${endpoint}${encodeURIComponent(text)}`;
             const { data } = await axios.get(url, {
                 responseType: 'arraybuffer',
                 timeout: 30000
