@@ -20,7 +20,7 @@ export default {
             const isDouyin = url.includes("douyin");
             const apiEndpoint = isDouyin
                 ? `${config.API_RYZUMI}/api/downloader/douyin?url=${url}`
-                : `${config.API_RYZUMI}/api/downloader/tiktok?url=${url}`;
+                : `${config.API_AMMARICANO}/api/download/tiktok?url=${url}`;
 
             const { data: response } = await axios.get(apiEndpoint);
             let videoData, videoURL, info;
@@ -36,7 +36,7 @@ export default {
                 const author = videoData.author || {};
                 info = `*Caption:* ${videoData.desc || '-'}\n*Upload:* ${uploadTime}\n*Uploader:* ${author.nickname || "unknown"}`;
             } else {
-                videoData = response.data?.data;
+                videoData = response.data?.result;
                 if (!videoData) throw new Error("Gagal mendownload video TikTok kak~ (╥﹏╥)");
                 const hdURL = videoData.hdplay;
                 videoURL = (args[1] === "hd" && hdURL) ? hdURL : videoData.play;

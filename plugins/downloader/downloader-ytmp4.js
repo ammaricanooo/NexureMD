@@ -4,6 +4,35 @@ import fs from 'fs';
 import path from 'path';
 import config from '../../config.js';
 
+// Fetch video with quality fallback (tries 1080p first, cascades down)
+async function fetchVideoWithFallback(videoUrl, preferredQuality = '1080') {
+    const qualityChain = preferredQuality === '1080'
+        ? ['1080', '720', '480', '360', '240']
+        : [preferredQuality, '720', '480', '360', '240'];
+
+    let lastError = null;
+
+    for (const quality of qualityChain) {
+        try {
+            const apiUrl = `${config.API_AMMARICANO}/api/download/youtube?url=${encodeURIComponent(videoUrl)}&quality=${quality}`;
+            const { data } = await axios.get(apiUrl, {
+                headers: {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36'
+                }
+            });
+
+            if (data && data.url && data.url !== 'Unknown Download URL' && data.url.startsWith('http')) {
+                return { data, usedQuality: quality };
+            }
+        } catch (err) {
+            lastError = err;
+            continue;
+        }
+    }
+
+    throw lastError || new Error('Yahhh... Link videonya nggak ketemu atau semua resolusi nggak tersedia di server Ryzumi (╥﹏╥)');
+}
+
 export default {
     command: ['ytmp4', 'ytvideo', 'ytv'],
     category: 'downloader',
@@ -16,19 +45,12 @@ export default {
         }
 
         const videoUrl = msgData.args[0];
-        let resolution = msgData.args[1] || '480';
+        const preferredQuality = msgData.args[1] || '1080';
 
         await msgData.react('🕓');
 
         try {
-            const apiUrl = `${config.API_RYZUMI}/api/downloader/ytmp4?url=${encodeURIComponent(videoUrl)}&quality=${resolution}`;
-            // console.log('Ryzumi API Request:', apiUrl);
-
-            const { data } = await axios.get(apiUrl, {
-                headers: {
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36'
-                }
-            });
+            const { data, usedQuality } = await fetchVideoWithFallback(videoUrl, preferredQuality);
 
             if (!data || !data.url || data.url === 'Unknown Download URL' || !data.url.startsWith('http')) {
                 throw new Error('Yahhh... Link videonya nggak ketemu atau resolusi ini nggak tersedia di server Ryzumi (╥﹏╥)');
@@ -63,7 +85,7 @@ export default {
             });
 
             await new Promise((resolve) => {
-                const scaleHeight = resolution.toString().replace(/p/gi, '');
+                const scaleHeight = usedQuality.toString().replace(/p/gi, '');
                 const ffmpegCmd = `ffmpeg -y -i "${filePath}" -c:v libx264 -preset ultrafast -crf 38 -vf "scale=-2:${scaleHeight}" -pix_fmt yuv420p -profile:v baseline -level 3.0 -c:a copy -movflags +faststart "${fixedFilePath}"`;
 
                 exec(ffmpegCmd, (err) => {
@@ -93,7 +115,7 @@ export default {
                 `🎥 *Title:* ${data.title}\n` +
                 `👤 *Author:* ${data.author}\n` +
                 `⏳ *Duration:* ${data.lengthSeconds}\n` +
-                `📺 *Quality:* ${data.quality || resolution}\n` +
+                `📺 *Quality:* ${data.quality || usedQuality}\n` +
                 `👀 *Views:* ${data.views}\n` +
                 `📅 *Uploaded:* ${data.uploadDate}\n\n` +
                 `Ryzumi sudah perbaiki videonya agar lancar diputar di WA Kakak~ ✨`;

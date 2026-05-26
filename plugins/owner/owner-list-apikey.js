@@ -23,11 +23,12 @@ export default {
                     filterLabel = ' (Inactive)';
                 }
             }
+            const ownerNumber = senderJid.split('@')[0];
 
             // Ambil semua API Key milik owner ini
             const apiKeys = await ApiKey.findAll({
                 where: {
-                    owner_number: senderJid,
+                    owner_number: ownerNumber,
                     ...filter
                 },
                 order: [['createdAt', 'DESC']],

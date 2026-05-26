@@ -36,13 +36,14 @@ Nama adalah identitas API Key untuk kemudahan tracking.
             // Generate key baru
             const { key, prefix } = generateApiKey();
             const hashedKey = hashApiKey(key);
+            const ownerNumber = senderJid.split('@')[0];
 
             // Simpan ke database
             await ApiKey.create({
                 name: keyName,
                 key: hashedKey,
                 key_prefix: prefix,
-                owner_number: senderJid,
+                owner_number: ownerNumber,
                 description: `Created on ${new Date().toLocaleString()}`,
                 is_active: true
             });

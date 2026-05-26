@@ -20,7 +20,7 @@ const ApiKey = sequelize.define('ApiKey', {
         comment: 'API Key string yang di-hash'
     },
     key_prefix: {
-        type: DataTypes.STRING(10),
+        type: DataTypes.STRING(20),
         allowNull: false,
         comment: 'Prefix key untuk display (misal: sk_live_abc...)'
     },

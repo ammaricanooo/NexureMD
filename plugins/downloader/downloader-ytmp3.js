@@ -7,6 +7,43 @@ import config from '../../config.js';
 
 const streamPipeline = promisify(pipeline);
 
+// Choose the best available audio-only format URL from API response
+function selectBestAudioUrl(apiData) {
+    const res = apiData?.result || apiData;
+
+    // Try multiple known shapes
+    const formats = res?.formats || res?.formats?.audio || res?.audio || null;
+
+    // If there's a dedicated audio array
+    const audioArray = Array.isArray(res?.formats?.audio)
+        ? res.formats.audio
+        : Array.isArray(res?.audio)
+            ? res.audio
+            : Array.isArray(res?.formats)
+                ? // attempt to filter audio-only entries from mixed formats
+                  res.formats.filter(f => f.has_audio && !f.has_video)
+                : null;
+
+    if (audioArray && audioArray.length > 0) {
+        // Prefer highest bitrate, fallback to content_length
+        const sorted = audioArray.slice().sort((a, b) => {
+            const aBit = Number(a.bitrate || a.avg_bitrate || 0);
+            const bBit = Number(b.bitrate || b.avg_bitrate || 0);
+            if (bBit !== aBit) return bBit - aBit;
+            const aLen = Number(a.content_length || 0);
+            const bLen = Number(b.content_length || 0);
+            return bLen - aLen;
+        });
+        return sorted[0].url || sorted[0].url_simple || sorted[0].downloadUrl || null;
+    }
+
+    // Fallbacks: some APIs return direct url or result.url
+    if (res?.url) return res.url;
+    if (apiData?.url) return apiData.url;
+
+    return null;
+}
+
 export default {
     command: ['ytmp3', 'ytaudio', 'yta'],
     category: 'downloader',
@@ -22,13 +59,17 @@ export default {
         await msgData.react('🕓');
 
         try {
-            const { data } = await axios.get(`${config.API_RYZUMI}/api/downloader/ytmp3?url=${encodeURIComponent(videoUrl)}`);
+            const { data } = await axios.get(`${config.API_AMMARICANO}/api/download/youtube?url=${encodeURIComponent(videoUrl)}`);
 
-            if (!data || !data.url) {
-                throw new Error('Yahhh... Link audionya nggak ketemu di server Ryzumi (╥﹏╥)');
-            }
+            // Determine main payload container
+            const res = data?.result || data;
+            if (!res) throw new Error('Yahhh... Response dari server tidak valid (╥﹏╥)');
 
-            const { title, author, lengthSeconds, views, uploadDate, thumbnail } = data;
+            const { title, author } = res;
+            const lengthSeconds = res.lengthSeconds || res.length_seconds || res.video_details?.length_seconds || res.duration || 0;
+            const views = res.views || res.view_count || res.video_details?.view_count || 0;
+            const uploadDate = res.uploadDate || res.upload_date || res.video_details?.upload_date || '';
+            const thumbnail = res.thumbnail || res.thumbnails?.[0]?.url || res.video_details?.thumbnail || '';
             const safeTitle = (title || 'audio').replace(/[\\/:*?"<>|]/g, '').slice(0, 50);
             const tmpDir = path.join(process.cwd(), 'tmp');
 
@@ -38,10 +79,13 @@ export default {
 
             const filePath = path.join(tmpDir, `${Date.now()}_${safeTitle}.mp3`);
 
-            // Download audio file to tmp
+            // Select best audio URL and download
+            const audioUrl = selectBestAudioUrl(data);
+            if (!audioUrl) throw new Error('Yahhh... URL audio berkualitas tidak ditemukan di response (╥﹏╥)');
+
             const audioResponse = await axios({
                 method: 'get',
-                url: data.url,
+                url: audioUrl,
                 responseType: 'stream'
             });
 

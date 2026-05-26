@@ -19,23 +19,42 @@ export default {
         await sock.sendMessage(msgData.remoteJid, { react: { text: '⏳', key: m.key } });
 
         try {
-            const { data } = await axios.get(`${config.API_RYZUMI}/api/downloader/facebook?url=${encodeURIComponent(url)}`);
+            const { data } = await axios.get(`${config.API_AMMARICANO}/api/download/facebook?url=${encodeURIComponent(url)}`);
 
             if (!data.success || !data.result) {
                 throw new Error('Uwaaa, media dari Facebook-nya nggak ketemu atau link-nya rusak kak~ (╥﹏╥)');
             }
 
             const result = data.result;
-            const media = result.media;
 
-            // Filter videos: HD first, then fallback to SD
-            let selectedVideos = (media.videos || []).filter(v => v.quality === 'hd');
-            if (selectedVideos.length === 0) {
-                selectedVideos = (media.videos || []).filter(v => v.quality === 'sd');
+            // Prioritize HD over SD for video downloads
+            let videoUrl = null;
+            let videoQuality = '';
+            if (result.hd) {
+                videoUrl = result.hd;
+                videoQuality = 'HD';
+            } else if (result.sd) {
+                videoUrl = result.sd;
+                videoQuality = 'SD';
             }
 
-            const selectedImages = media.images || [];
-            const allMedia = [...selectedVideos, ...selectedImages];
+            // Prepare media array: video first (HD/SD), then images (old format support)
+            const allMedia = [];
+            if (videoUrl) {
+                allMedia.push({ type: 'video', url: videoUrl, quality: videoQuality });
+            }
+
+            // Support legacy media.videos + media.images structure
+            if (result.media) {
+                const media = result.media;
+                let videoItems = (media.videos || []).filter(v => v.quality === 'hd');
+                if (videoItems.length === 0) {
+                    videoItems = (media.videos || []).filter(v => v.quality === 'sd');
+                }
+                allMedia.push(...videoItems);
+                const imageItems = media.images || [];
+                allMedia.push(...imageItems);
+            }
 
             if (allMedia.length === 0) {
                 throw new Error('Maafin aku kak, nggak ada media yang bisa aku download nih~ (｡T ω T｡)');
@@ -43,7 +62,13 @@ export default {
 
             let first = true;
             for (const item of allMedia) {
-                const caption = first ? (result.caption || result.title || `Ini dia videonya buat kakak @${msgData.senderJid.split('@')[0]} tercinta~ (๑>ᴗ<๑)`) : '';
+                let caption = '';
+                if (first) {
+                    caption = result.caption || result.title || `Ini dia videonya buat kakak @${msgData.senderJid.split('@')[0]} tercinta~ (๑>ᴗ<๑)`;
+                    if (item.quality) {
+                        caption += `\n\n📺 Quality: ${item.quality}`;
+                    }
+                }
 
                 try {
                     const res = await axios.get(item.url, {

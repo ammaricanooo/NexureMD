@@ -23,12 +23,13 @@ Contoh:
 
         try {
             const keyName = args.join(' ');
+            const ownerNumber = senderJid.split('@')[0];
 
             // Cari API Key
             const apiKey = await ApiKey.findOne({
                 where: {
                     name: keyName,
-                    owner_number: senderJid
+                    owner_number: ownerNumber
                 }
             });
 
