@@ -36,7 +36,7 @@ export default {
                 const author = videoData.author || {};
                 info = `*Caption:* ${videoData.desc || '-'}\n*Upload:* ${uploadTime}\n*Uploader:* ${author.nickname || "unknown"}`;
             } else {
-                videoData = response.data?.result;
+                videoData = response?.result;
                 if (!videoData) throw new Error("Gagal mendownload video TikTok kak~ (╥﹏╥)");
                 const hdURL = videoData.hdplay;
                 videoURL = (args[1] === "hd" && hdURL) ? hdURL : videoData.play;

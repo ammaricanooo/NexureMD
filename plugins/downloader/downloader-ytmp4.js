@@ -12,25 +12,53 @@ async function fetchVideoWithFallback(videoUrl, preferredQuality = '1080') {
 
     let lastError = null;
 
-    for (const quality of qualityChain) {
-        try {
-            const apiUrl = `${config.API_AMMARICANO}/api/download/youtube?url=${encodeURIComponent(videoUrl)}&quality=${quality}`;
-            const { data } = await axios.get(apiUrl, {
-                headers: {
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36'
-                }
-            });
-
-            if (data && data.url && data.url !== 'Unknown Download URL' && data.url.startsWith('http')) {
-                return { data, usedQuality: quality };
+    try {
+        // Fetch once to get all available formats
+        const apiUrl = `${config.API_AMMARICANO}/api/download/youtube?url=${encodeURIComponent(videoUrl)}`;
+        const { data } = await axios.get(apiUrl, {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36'
             }
-        } catch (err) {
-            lastError = err;
-            continue;
-        }
-    }
+        });
 
-    throw lastError || new Error('Yahhh... Link videonya nggak ketemu atau semua resolusi nggak tersedia di server Ryzumi (╥﹏╥)');
+        if (!data || !data.result) {
+            throw new Error('Response API tidak valid');
+        }
+
+        const result = data.result;
+        const videoFormats = result.formats?.video || [];
+
+        // Try each quality in chain
+        for (const quality of qualityChain) {
+            const qualityStr = quality + 'p'; // Convert 1080 to 1080p
+            const format = videoFormats.find(f => f.quality === qualityStr);
+
+            if (format && format.url && format.url.startsWith('http')) {
+                return {
+                    data: result,
+                    videoUrl: format.url,
+                    usedQuality: quality,
+                    videoData: { ...result, url: format.url, quality }
+                };
+            }
+        }
+
+        // If no specific quality found, try muxed formats (best for quality)
+        const muxedFormats = result.formats?.muxed || [];
+        if (muxedFormats.length > 0) {
+            const bestMuxed = muxedFormats[0]; // Usually highest quality first
+            return {
+                data: result,
+                videoUrl: bestMuxed.url,
+                usedQuality: 'best-muxed',
+                videoData: { ...result, url: bestMuxed.url, quality: 'Muxed' }
+            };
+        }
+
+        throw new Error('Tidak ada format video yang ditemukan');
+    } catch (err) {
+        throw err.message || err;
+    }
 }
 
 export default {
@@ -50,10 +78,10 @@ export default {
         await msgData.react('🕓');
 
         try {
-            const { data, usedQuality } = await fetchVideoWithFallback(videoUrl, preferredQuality);
+            const { videoUrl: downloadUrl, usedQuality, videoData } = await fetchVideoWithFallback(videoUrl, preferredQuality);
 
-            if (!data || !data.url || data.url === 'Unknown Download URL' || !data.url.startsWith('http')) {
-                throw new Error('Yahhh... Link videonya nggak ketemu atau resolusi ini nggak tersedia di server Ryzumi (╥﹏╥)');
+            if (!downloadUrl || !downloadUrl.startsWith('http')) {
+                throw new Error('Yahhh... URL video tidak valid (╥﹏╥)');
             }
 
             const tmpDir = path.join(process.cwd(), 'tmp');
@@ -61,7 +89,7 @@ export default {
                 fs.mkdirSync(tmpDir, { recursive: true });
             }
 
-            const safeTitle = (data.title || 'video').replace(/[\\/:*?"<>|]/g, '').slice(0, 50);
+            const safeTitle = (videoData.title || 'video').replace(/[\\/:*?"<>|]/g, '').slice(0, 50);
             const filenameId = `${Date.now()}`;
             const filePath = path.join(tmpDir, `${filenameId}.mp4`);
             const fixedFilePath = path.join(tmpDir, `${filenameId}_fixed.mp4`);
@@ -69,7 +97,7 @@ export default {
             // Download video stream to tmp
             const writer = fs.createWriteStream(filePath);
             const downloadResponse = await axios({
-                url: data.url,
+                url: downloadUrl,
                 method: 'GET',
                 responseType: 'stream',
                 headers: {
@@ -102,9 +130,9 @@ export default {
 
             // Fetch thumbnail for adReply
             /* let thumbBuffer = null;
-            if (data.thumbnail) {
+            if (videoData.thumbnail) {
                 try {
-                    const res = await axios.get(data.thumbnail, { responseType: 'arraybuffer' });
+                    const res = await axios.get(videoData.thumbnail, { responseType: 'arraybuffer' });
                     thumbBuffer = Buffer.from(res.data);
                 } catch (e) {
                     console.error('Failed to fetch thumbnail:', e.message);
@@ -112,12 +140,12 @@ export default {
             } */
 
             const caption = `Ini videonya buat Kakak~! @${msgData.senderJid.split('@')[0]} (๑>ᴗ<๑)\n\n` +
-                `🎥 *Title:* ${data.title}\n` +
-                `👤 *Author:* ${data.author}\n` +
-                `⏳ *Duration:* ${data.lengthSeconds}\n` +
-                `📺 *Quality:* ${data.quality || usedQuality}\n` +
-                `👀 *Views:* ${data.views}\n` +
-                `📅 *Uploaded:* ${data.uploadDate}\n\n` +
+                `🎥 *Title:* ${videoData.title}\n` +
+                `👤 *Author:* ${videoData.author || 'Unknown'}\n` +
+                `⏳ *Duration:* ${videoData.length_seconds || videoData.lengthSeconds}\n` +
+                `📺 *Quality:* ${videoData.quality || usedQuality}\n` +
+                `👀 *Views:* ${videoData.view_count || videoData.views || 'N/A'}\n` +
+                `📅 *Uploaded:* ${videoData.upload_date || videoData.uploadDate || 'N/A'}\n\n` +
                 `Ryzumi sudah perbaiki videonya agar lancar diputar di WA Kakak~ ✨`;
 
             await sock.sendMessage(msgData.remoteJid, {
