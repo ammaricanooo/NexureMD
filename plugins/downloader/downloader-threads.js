@@ -18,7 +18,7 @@ export default {
 
         try {
             const url = msgData.args[0];
-            const { data } = await axios.get(`${config.API_RYZUMI}/api/downloader/threads?url=${encodeURIComponent(url)}`);
+            const { data } = await axios.get(`${config.API_AMMARICANO}/api/download/threads?url=${encodeURIComponent(url)}`);
 
             if (!data.success || !data.result) throw new Error('Gagal mengambil data dari Threads-nya kak~ (╥﹏╥)');
 

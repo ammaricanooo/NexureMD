@@ -21,7 +21,7 @@ export default {
         });
 
         try {
-            const url = `${config.API_RYZUMI}/api/tool/cek-pajak/jabar?plat=${encodeURIComponent(platInput)}`;
+            const url = `${config.API_AMMARICANO}/api/tools/cek-pajak/jabar?plat=${encodeURIComponent(platInput)}`;
             const res = await axios.get(url);
             const result = res.data;
 
@@ -32,7 +32,7 @@ export default {
                 }, { quoted: m });
             }
 
-            const d = result.data;
+            const d = result.result.data;
             const info = d['informasi-umum'] || {};
             const pkb = d['pembayaran-pkb-pnbp'] || {};
             const pkbNon = d['pembayaran-pkb-pnbp-non-program'] || {};
