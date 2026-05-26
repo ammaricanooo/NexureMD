@@ -8,10 +8,10 @@ const plugin = {
     execute: async (sock, m, msgData) => {
         try {
             await sock.groupRevokeInvite(msgData.remoteJid);
-            await msgData.reply('Yeay! Link grupnya sudah Ryzumi reset ya, Kakak~ (˶˃ ᵕ ˂˶) .ᐟ.ᐟ');
+            await msgData.reply('Yeay! Link grupnya sudah Nexure reset ya, Kakak~ (˶˃ ᵕ ˂˶) .ᐟ.ᐟ');
         } catch (error) {
             console.error(error);
-            await msgData.reply('Gomen ne Kak... Ryzumi gagal mereset link grupnya (╥﹏╥)');
+            await msgData.reply('Gomen ne Kak... Nexure gagal mereset link grupnya (╥﹏╥)');
         }
     }
 };

@@ -38,7 +38,7 @@ const config = {
   RYZUMI_WELCOME_BANNER: process.env.RYZUMI_WELCOME_BANNER,
   RYZUMI_LEAVE_BANNER: process.env.RYZUMI_LEAVE_BANNER,
 
-  // Ryzumi Message
+  // Nexure Message
   RYZUMI_MSG_REGISTER: process.env.RYZUMI_MSG_REGISTER,
   RYZUMI_MSG_DISABLE: process.env.RYZUMI_MSG_DISABLE,
   RYZUMI_MSG_GROUP: process.env.RYZUMI_MSG_GROUP,

@@ -20,7 +20,7 @@ export default {
             const { data } = await axios.get(`${config.API_RYZUMI}/api/downloader/danbooru?url=${encodeURIComponent(url)}`);
 
             if (!data || !data.url) {
-                throw new Error('Maafin Ryzumi kak, datanya nggak ketemu atau link-nya rusak.. (╥﹏╥)');
+                throw new Error('Maafin Nexure kak, datanya nggak ketemu atau link-nya rusak.. (╥﹏╥)');
             }
 
             const mimetype = mime.lookup(data.url) || 'application/octet-stream';
@@ -59,7 +59,7 @@ export default {
             console.error('Danbooru Downloader Error:', error);
             await msgData.react('❌');
             const errMsg = error.response?.data?.message || error.message;
-            await sock.sendMessage(msgData.remoteJid, { text: `Gawat kak! Ryzumi gagal download: ${errMsg}.. (⊙_⊙)` }, { quoted: m });
+            await sock.sendMessage(msgData.remoteJid, { text: `Gawat kak! Nexure gagal download: ${errMsg}.. (⊙_⊙)` }, { quoted: m });
         }
     }
 };

@@ -11,7 +11,7 @@ export default {
         let text = msgData.args[0];
         if (!text) {
             return sock.sendMessage(msgData.remoteJid, {
-                text: 'Uwaaa! URL-nya mana kak? Kasih tahu Ryzumi link yang mau diambil yaa~ (˶˃ ᵕ ˂˶)'
+                text: 'Uwaaa! URL-nya mana kak? Kasih tahu Nexure link yang mau diambil yaa~ (˶˃ ᵕ ˂˶)'
             }, { quoted: m });
         }
 
@@ -19,7 +19,7 @@ export default {
         if (!/^https?:\/\//.test(text)) text = 'https://' + text;
 
         try {
-            // Ryzumi pakai fetch dengan opsi redirect otomatis yaa~
+            // Nexure pakai fetch dengan opsi redirect otomatis yaa~
             const res = await fetch(text, {
                 redirect: 'follow',
                 timeout: 30000,
@@ -61,7 +61,7 @@ export default {
                         mimetype: contentType,
                         fileName: `fetch-result.${ext}`
                     }, { quoted: m });
-                    await sock.sendMessage(msgData.remoteJid, { text: `Kontennya kepanjangan kak, jadi Ryzumi kirim sebagai file yaa~ (˶˃ ᵕ ˂˶)` }, { quoted: m });
+                    await sock.sendMessage(msgData.remoteJid, { text: `Kontennya kepanjangan kak, jadi Nexure kirim sebagai file yaa~ (˶˃ ᵕ ˂˶)` }, { quoted: m });
                 } else {
                     await sock.sendMessage(msgData.remoteJid, { text: txt }, { quoted: m });
                 }
@@ -74,7 +74,7 @@ export default {
                     mimetype: 'text/html',
                     fileName: 'page.html'
                 }, { quoted: m });
-                await sock.sendMessage(msgData.remoteJid, { text: 'Itu file HTML-nya sudah Ryzumi ambilkan kak! (๑>ᴗ<๑)' }, { quoted: m });
+                await sock.sendMessage(msgData.remoteJid, { text: 'Itu file HTML-nya sudah Nexure ambilkan kak! (๑>ᴗ<๑)' }, { quoted: m });
             }
             // 4. Lain-lain (File umum)
             else {
@@ -88,7 +88,7 @@ export default {
         } catch (error) {
             console.error('Fetch Tool Error:', error);
             await sock.sendMessage(msgData.remoteJid, {
-                text: `Uwaaa gawat! Ryzumi gagal ambil datanya kak: ${error.message}.. (╥﹏╥)`
+                text: `Uwaaa gawat! Nexure gagal ambil datanya kak: ${error.message}.. (╥﹏╥)`
             }, { quoted: m });
         }
     }

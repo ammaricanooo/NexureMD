@@ -13,7 +13,7 @@ export default {
 
         if (!noResi) {
             return sock.sendMessage(msgData.remoteJid, {
-                text: `Uwaaa! Kakak lupa masukin nomor resinya ya? (｡T ω T｡)\n\nContoh: \`.${msgData.commandName} SPXID054330680586 shopee-express\`\n\nJangan lupa kasih tau Ryzumi nomornya yaa~ (๑>ᴗ<๑)`
+                text: `Uwaaa! Kakak lupa masukin nomor resinya ya? (｡T ω T｡)\n\nContoh: \`.${msgData.commandName} SPXID054330680586 shopee-express\`\n\nJangan lupa kasih tau Nexure nomornya yaa~ (๑>ᴗ<๑)`
             }, { quoted: m });
         }
 
@@ -57,11 +57,11 @@ export default {
                 if (!ekspedisi) {
                     const available = Object.keys(ekspedisiList).join('\n• ');
                     return sock.sendMessage(msgData.remoteJid, {
-                        text: `Aduuh, Ryzumi gagal deteksi ekspedisinya kak.. (╥﹏╥)\nCoba kakak sertakan nama ekspedisinya secara manual yaa~\n\n*Contoh:* \`.cekresi ${noResi} shopee-express\`\n\n*List Ekspedisi:* \n• ${available}\n\nSemangat nunggu paketnya kak! (๑>ᴗ<๑)`
+                        text: `Aduuh, Nexure gagal deteksi ekspedisinya kak.. (╥﹏╥)\nCoba kakak sertakan nama ekspedisinya secara manual yaa~\n\n*Contoh:* \`.cekresi ${noResi} shopee-express\`\n\n*List Ekspedisi:* \n• ${available}\n\nSemangat nunggu paketnya kak! (๑>ᴗ<๑)`
                     }, { quoted: m });
                 } else {
                     return sock.sendMessage(msgData.remoteJid, {
-                        text: `Uwaaa! Ryzumi nggak nemu resinya kak.. Mungkin nomor atau ekspedisinya salah? Cek lagi yaa~ (｡T ω T｡)`
+                        text: `Uwaaa! Nexure nggak nemu resinya kak.. Mungkin nomor atau ekspedisinya salah? Cek lagi yaa~ (｡T ω T｡)`
                     }, { quoted: m });
                 }
             }
@@ -99,7 +99,7 @@ Horeee! Itu tadi status paket kakak~ Semoga cepet sampe yaa! (๑>ᴗ<๑)
             const available = Object.keys(ekspedisiList).join('\n• ');
             await sock.sendMessage(msgData.remoteJid, { react: { text: '❌', key: m.key } });
             await sock.sendMessage(msgData.remoteJid, {
-                text: `Uwaaa gawat! Ryzumi lagi ada masalah pas mau cek resinya kak.. (╥﹏╥)\n\nKalau kakak mau coba lagi, pastiin formatnya bener ya:\n\`.cekresi ${noResi || '[nomor]'} [ekspedisi]\`\n\n*List Ekspedisi:* \n• ${available}`
+                text: `Uwaaa gawat! Nexure lagi ada masalah pas mau cek resinya kak.. (╥﹏╥)\n\nKalau kakak mau coba lagi, pastiin formatnya bener ya:\n\`.cekresi ${noResi || '[nomor]'} [ekspedisi]\`\n\n*List Ekspedisi:* \n• ${available}`
             }, { quoted: m });
         }
     }

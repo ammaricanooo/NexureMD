@@ -14,7 +14,7 @@ export default {
 
         if (!link || !link.includes('pixiv.net')) {
             return sock.sendMessage(msgData.remoteJid, {
-                text: `Uwaaa! Kasih Ryzumi link Pixiv-nya dong kak buat di-download~ (˶˃ ᵕ ˂˶)\n\nContoh: \`.${msgData.commandName} https://www.pixiv.net/en/artworks/92445569\``
+                text: `Uwaaa! Kasih Nexure link Pixiv-nya dong kak buat di-download~ (˶˃ ᵕ ˂˶)\n\nContoh: \`.${msgData.commandName} https://www.pixiv.net/en/artworks/92445569\``
             }, { quoted: m });
         }
 
@@ -29,7 +29,7 @@ export default {
 
             if (!data || !data.Media || !Array.isArray(data.Media) || data.Media.length < 1) {
                 return sock.sendMessage(msgData.remoteJid, {
-                    text: `Maafin Ryzumi kak, link Pixiv-nya nggak valid atau datanya nggak ketemu.. (｡T ω T｡)`
+                    text: `Maafin Nexure kak, link Pixiv-nya nggak valid atau datanya nggak ketemu.. (｡T ω T｡)`
                 }, { quoted: m });
             }
 
@@ -109,7 +109,7 @@ export default {
                                     text: `Horeee! Ini gambar dari link Pixiv kakak~ (˶˃ ᵕ ˂˶)\nTotal: ${images.length} halaman.`
                                 }),
                                 footer: proto.Message.InteractiveMessage.Footer.create({
-                                    text: `Ryzumi-WABot V2 • Pixiv Downloader`
+                                    text: `Nexure-WABot V2 • Pixiv Downloader`
                                 }),
                                 header: proto.Message.InteractiveMessage.Header.create({
                                     hasMediaAttachment: false
@@ -137,7 +137,7 @@ export default {
                 react: { text: '❌', key: m.key }
             });
             await sock.sendMessage(msgData.remoteJid, {
-                text: `Uwaaa gawat! Ryzumi gagal download gambarnya kak.. (╥﹏╥)\n\n*Error:* ${error.message || 'Internal Server Error'}`
+                text: `Uwaaa gawat! Nexure gagal download gambarnya kak.. (╥﹏╥)\n\n*Error:* ${error.message || 'Internal Server Error'}`
             }, { quoted: m });
         }
     }

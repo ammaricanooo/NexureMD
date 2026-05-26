@@ -141,12 +141,12 @@ export default {
 
             const caption = `Ini videonya buat Kakak~! @${msgData.senderJid.split('@')[0]} (๑>ᴗ<๑)\n\n` +
                 `🎥 *Title:* ${videoData.title}\n` +
-                `👤 *Author:* ${videoData.author || 'Unknown'}\n` +
+                `👤 *Author:* ${videoData.channel || 'Unknown'}\n` +
                 `⏳ *Duration:* ${videoData.length_seconds || videoData.lengthSeconds}\n` +
                 `📺 *Quality:* ${videoData.quality || usedQuality}\n` +
                 `👀 *Views:* ${videoData.view_count || videoData.views || 'N/A'}\n` +
                 `📅 *Uploaded:* ${videoData.upload_date || videoData.uploadDate || 'N/A'}\n\n` +
-                `Ryzumi sudah perbaiki videonya agar lancar diputar di WA Kakak~ ✨`;
+                `Nexure sudah perbaiki videonya agar lancar diputar di WA Kakak~ ✨`;
 
             await sock.sendMessage(msgData.remoteJid, {
                 video: { url: fixedFilePath },
@@ -157,7 +157,7 @@ export default {
                 /* contextInfo: {
                     externalAdReply: {
                         title: data.title,
-                        body: 'Ryzumi YouTube Downloader',
+                        body: 'Nexure YouTube Downloader',
                         mediaType: 2,
                         sourceUrl: data.videoUrl,
                         thumbnail: thumbBuffer
@@ -175,7 +175,7 @@ export default {
             console.error('YTMP4 Error:', error);
             await msgData.react('❌');
             const errMsg = error.response?.data?.message || error.message;
-            await msgData.reply(`Uwaaa gawat! Ryzumi gagal unduh videonya: ${errMsg}.. (╥﹏╥)`);
+            await msgData.reply(`Uwaaa gawat! Nexure gagal unduh videonya: ${errMsg}.. (╥﹏╥)`);
         }
     }
 };

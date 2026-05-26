@@ -19,7 +19,7 @@ export default {
             const { data } = await axios.get(`${config.API_RYZUMI}/api/downloader/pinterest?url=${encodeURIComponent(url)}`);
 
             if (!data || (!data.image && !data.video)) {
-                throw new Error('Maafin Ryzumi kak, datanya nggak ketemu atau medianya nggak ada.. (╥﹏╥)');
+                throw new Error('Maafin Nexure kak, datanya nggak ketemu atau medianya nggak ada.. (╥﹏╥)');
             }
 
             const { title, description, isImage, image, video } = data;
@@ -48,14 +48,14 @@ export default {
                         mentions: [msgData.senderJid]
                     }, { quoted: m });
                 } else {
-                    throw new Error('Yahhh... Ryzumi gagal mendownload gambarnya kak (╥﹏╥)');
+                    throw new Error('Yahhh... Nexure gagal mendownload gambarnya kak (╥﹏╥)');
                 }
             } else {
                 // Case: isImage = false -> Send image AND video
                 if (imageBuffer) {
                     await sock.sendMessage(msgData.remoteJid, {
                         image: imageBuffer,
-                        caption: `${caption}\n\n*Note:* Ryzumi kirim preview gambarnya dulu ya kak~ ✨`,
+                        caption: `${caption}\n\n*Note:* Nexure kirim preview gambarnya dulu ya kak~ ✨`,
                         mentions: [msgData.senderJid]
                     }, { quoted: m });
                 }
@@ -85,7 +85,7 @@ export default {
             console.error('Pinterest Downloader Error:', error);
             await msgData.react('❌');
             const errMsg = error.response?.data?.message || error.message;
-            await sock.sendMessage(msgData.remoteJid, { text: `Gawat kak! Ryzumi gagal: ${errMsg}.. (⊙_⊙)` }, { quoted: m });
+            await sock.sendMessage(msgData.remoteJid, { text: `Gawat kak! Nexure gagal: ${errMsg}.. (⊙_⊙)` }, { quoted: m });
         }
     }
 };

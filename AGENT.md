@@ -1,4 +1,4 @@
-# Ryzumi-WABot V2 - Agent Context & Guidelines
+# Nexure-WABot V2 - Agent Context & Guidelines
 
 ## Overview
 Project ini menggunakan [Whiskeysocket Baileys](https://baileys.wiki/docs) untuk berinteraksi dengan WhatsApp API.
@@ -51,6 +51,6 @@ Seluruh konfigurasi proyek (baik itu nomor bot, nama bot, database, hingga pesan
 - **Sentralisasi Pesan**: Gunakan variabel pesan dari `config.js` (seperti `config.RYZUMI_MSG_OWNER`, `config.RYZUMI_MSG_QUOTED`, dll) untuk respon standar. Hindari menulis ulang pesan (hardcoded) yang sudah didefinisikan di `.env`/`config.js`.
 - **Gunakan Message Helper**: Selalu gunakan `msgData.parseTargetJid()` untuk mengambil JID target (baik dari tag, reply pesan, kartu kontak/vcard, maupun input nomor manual). Dilarang menulis ulang logika deteksi JID di dalam plugin.
 - **Validasi Plugin**: Manfaatkan properti objek plugin seperti `isPrivate: true`, `isGroup: true`, atau `isRegistered: true` agar pengecekan dilakukan secara otomatis oleh middleware `validator.js`. Jangan melakukan pengecekan manual di dalam fungsi `execute` jika sudah tersedia di properti plugin.
-- **API Service**: Gunakan base URL `config.API_RYZUMI` untuk semua integrasi API Ryzumi.
+- **API Service**: Gunakan base URL `config.API_RYZUMI` untuk semua integrasi API Nexure.
 - **REUSE Logic**: Jika ada fungsi yang digunakan oleh lebih dari dua plugin, wajib dipindahkan ke `/libs/` atau `/libs/adapter/` agar bisa di-import dan digunakan kembali.
 

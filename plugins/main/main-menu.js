@@ -34,7 +34,7 @@ export default {
         }
 
         let menuText = `${greeting} ${name}~! (˶˃ ᵕ ˂˶)\n`;
-        menuText += `Aku Ryzumi-Bot, asisten pribadi kakak~ 🌸✨\n\n`;
+        menuText += `Aku Nexure-Bot, asisten pribadi kakak~ 🌸✨\n\n`;
 
         menuText += `╭─「 *STATUS KAKAK* 」\n`;
         menuText += `│ 👤 *Nama:* ${name}\n`;
@@ -79,7 +79,7 @@ export default {
             menuText += `\n*Note:* Gunakan bot dengan bijak yaa kak~ (๑>ᴗ<๑)`;
         } else {
             // Jika kategori tidak ditemukan
-            menuText += `Aduuh! Kategori *${arg}* nggak Ryzumi temukan kak.. (｡T ω T｡)\n\nKetik \`.menu\` saja untuk melihat daftar kategori yang tersedia yaa!`;
+            menuText += `Aduuh! Kategori *${arg}* nggak Nexure temukan kak.. (｡T ω T｡)\n\nKetik \`.menu\` saja untuk melihat daftar kategori yang tersedia yaa!`;
         }
 
 
@@ -139,7 +139,7 @@ export default {
             extendedTextMessage: {
                 text: menuText.trim() + `\n\n${config.SOC_WEBSITE}`,
                 matchedText: config.SOC_WEBSITE,
-                title: config.BOT_NAME || 'Ryzumi Starlette',
+                title: config.BOT_NAME || 'Nexure Starlette',
                 description: 'Haloo, Apa Kabar Kak? 🌸✨',
                 previewType: 0,
                 jpegThumbnail: thumb?.jpegThumbnail?.toString('base64') ?? '',

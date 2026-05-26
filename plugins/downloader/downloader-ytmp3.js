@@ -65,7 +65,7 @@ export default {
             const res = data?.result || data;
             if (!res) throw new Error('Yahhh... Response dari server tidak valid (╥﹏╥)');
 
-            const { title, author } = res;
+            const { title, channel } = res;
             const lengthSeconds = res.lengthSeconds || res.length_seconds || res.video_details?.length_seconds || res.duration || 0;
             const views = res.views || res.view_count || res.video_details?.view_count || 0;
             const uploadDate = res.uploadDate || res.upload_date || res.video_details?.upload_date || '';
@@ -104,7 +104,7 @@ export default {
 
             const caption = `Ini kak audionya buat Kakak~! @${msgData.senderJid.split('@')[0]} (๑>ᴗ<๑)\n\n` +
                 `🎵 *Title:* ${title}\n` +
-                `👤 *Author:* ${author}\n` +
+                `👤 *Author:* ${channel}\n` +
                 `⏳ *Duration:* ${lengthSeconds} sec\n` +
                 `👀 *Views:* ${views}\n` +
                 `📅 *Uploaded:* ${uploadDate}\n\n`;
@@ -119,7 +119,7 @@ export default {
                 /* contextInfo: {
                     externalAdReply: {
                         title: title,
-                        body: 'Ryzumi YouTube Downloader',
+                        body: 'Nexure YouTube Downloader',
                         mediaType: 2,
                         sourceUrl: videoUrl,
                         thumbnail: thumbBuffer

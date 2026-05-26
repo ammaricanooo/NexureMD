@@ -11,7 +11,7 @@ const plugin = {
             await msgData.reply('Sstt! Sekarang hanya admin yang bisa chat di grup ini ya, Kakak~ (๑>ᴗ<๑)');
         } catch (error) {
             console.error(error);
-            await msgData.reply('Gomen ne... Ryzumi gagal menutup grupnya (╥﹏╥)');
+            await msgData.reply('Gomen ne... Nexure gagal menutup grupnya (╥﹏╥)');
         }
     }
 };

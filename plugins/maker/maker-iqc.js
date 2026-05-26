@@ -41,7 +41,7 @@ export default {
         } catch (error) {
             console.error('IQC Error:', error);
             await msgData.react('❌');
-            await msgData.reply(`Aduuh gawat! Ryzumi gagal bikin gambarnya kak: ${error.message}.. (╥﹏╥)`);
+            await msgData.reply(`Aduuh gawat! Nexure gagal bikin gambarnya kak: ${error.message}.. (╥﹏╥)`);
         }
     }
 };

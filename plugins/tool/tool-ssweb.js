@@ -55,7 +55,7 @@ export default {
                 react: { text: '❌', key: m.key }
             });
             await sock.sendMessage(msgData.remoteJid, {
-                text: `Uwaaa gawat! Ryzumi gagal ambil screenshot websitenya kak.. (╥﹏╥)\n\n*Error:* ${error.message || 'Internal Server Error'}`
+                text: `Uwaaa gawat! Nexure gagal ambil screenshot websitenya kak.. (╥﹏╥)\n\n*Error:* ${error.message || 'Internal Server Error'}`
             }, { quoted: m });
         }
     }

@@ -21,7 +21,7 @@ const plugin = {
             await msgData.reply(`Selesai! Nama grupnya sekarang sudah ganti jadi "${newName}"~ (˶˃ ᵕ ˂˶)`);
         } catch (error) {
             console.error(error);
-            await msgData.reply('Gomen ne... Ryzumi gagal ganti nama grupnya (╥﹏╥)');
+            await msgData.reply('Gomen ne... Nexure gagal ganti nama grupnya (╥﹏╥)');
         }
     }
 };

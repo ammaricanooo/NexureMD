@@ -12,7 +12,7 @@ export default {
 
         if (!text) {
             return sock.sendMessage(msgData.remoteJid, {
-                text: `Uwaaa! Kakak mau cari lirik lagu apa? Kasih tahu Ryzumi yaa~ (˶˃ ᵕ ˂˶)\n\nContoh: \`.${msgData.commandName} Seven oops - Orange\``
+                text: `Uwaaa! Kakak mau cari lirik lagu apa? Kasih tahu Nexure yaa~ (˶˃ ᵕ ˂˶)\n\nContoh: \`.${msgData.commandName} Seven oops - Orange\``
             }, { quoted: m });
         }
 
@@ -27,7 +27,7 @@ export default {
 
             if (!results || results.length === 0) {
                 return sock.sendMessage(msgData.remoteJid, {
-                    text: `Maafin Ryzumi kak, lirik lagu yang kakak cari nggak ketemu.. (｡T ω T｡)`
+                    text: `Maafin Nexure kak, lirik lagu yang kakak cari nggak ketemu.. (｡T ω T｡)`
                 }, { quoted: m });
             }
 
@@ -60,7 +60,7 @@ ${data.plainLyrics || 'Liriknya nggak ada kak.. (╥﹏╥)'}
                 react: { text: '❌', key: m.key }
             });
             await sock.sendMessage(msgData.remoteJid, {
-                text: `Uwaaa gawat! Ryzumi gagal cari lirik lagunya kak.. (╥﹏╥)\n\n*Error:* ${error.message || 'Internal Server Error'}`
+                text: `Uwaaa gawat! Nexure gagal cari lirik lagunya kak.. (╥﹏╥)\n\n*Error:* ${error.message || 'Internal Server Error'}`
             }, { quoted: m });
         }
     }

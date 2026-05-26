@@ -78,7 +78,7 @@ async function writeExif(media, metadata) {
     let author = metadata?.packPublish || '';
 
     const json = {
-        'sticker-pack-id': 'Ryzumi-WABot-V2',
+        'sticker-pack-id': 'Nexure-WABot-V2',
         'sticker-pack-name': packname,
         'sticker-pack-publisher': author,
         'emojis': ['😊']

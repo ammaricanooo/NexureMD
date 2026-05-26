@@ -20,7 +20,7 @@ export default {
         if (['public', 'register', 'gconly'].includes(feature)) {
             if (!user.isOwner) {
                 return sock.sendMessage(msgData.remoteJid, {
-                    text: `Maaf ya kak, cuma Owner Ryzumi yang boleh atur fitur *${feature}*~ (｡T ω T｡)`
+                    text: `Maaf ya kak, cuma Owner Nexure yang boleh atur fitur *${feature}*~ (｡T ω T｡)`
                 }, { quoted: m });
             }
 
@@ -32,17 +32,17 @@ export default {
             if (feature === 'public') {
                 await setting.update({ is_public: status });
                 return sock.sendMessage(msgData.remoteJid, {
-                    text: `Selesai! Sekarang Ryzumi ${status ? 'bisa diakses semua orang' : 'hanya merespon Owner (Mode Maintenance)'} yaa~ (˶˃ ᵕ ˂˶)`
+                    text: `Selesai! Sekarang Nexure ${status ? 'bisa diakses semua orang' : 'hanya merespon Owner (Mode Maintenance)'} yaa~ (˶˃ ᵕ ˂˶)`
                 }, { quoted: m });
             } else if (feature === 'register') {
                 await setting.update({ is_register: status });
                 return sock.sendMessage(msgData.remoteJid, {
-                    text: `Selesai! Fitur *registrasi* sekarang sudah Ryzumi ${status ? 'aktifkan (wajib daftar)' : 'matikan (semua bebas akses)'} yaa~ (๑>ᴗ<๑)`
+                    text: `Selesai! Fitur *registrasi* sekarang sudah Nexure ${status ? 'aktifkan (wajib daftar)' : 'matikan (semua bebas akses)'} yaa~ (๑>ᴗ<๑)`
                 }, { quoted: m });
             } else if (feature === 'gconly') {
                 await setting.update({ is_gconly: status });
                 return sock.sendMessage(msgData.remoteJid, {
-                    text: `Selesai! Mode *Group Only* sekarang sudah Ryzumi ${status ? 'aktifkan (hanya merespon di grup)' : 'matikan (merespon di grup & private)'} yaa~ (๑>ᴗ<๑)`
+                    text: `Selesai! Mode *Group Only* sekarang sudah Nexure ${status ? 'aktifkan (hanya merespon di grup)' : 'matikan (merespon di grup & private)'} yaa~ (๑>ᴗ<๑)`
                 }, { quoted: m });
             }
         }
@@ -64,7 +64,7 @@ export default {
             if (feature === 'welcome') {
                 await group.update({ is_welcome: status });
                 await sock.sendMessage(msgData.remoteJid, {
-                    text: `Horeee! Fitur *welcome* sekarang sudah Ryzumi ${status ? 'aktifkan' : 'matikan'} buat grup ini yaa~ (˶˃ ᵕ ˂˶)`
+                    text: `Horeee! Fitur *welcome* sekarang sudah Nexure ${status ? 'aktifkan' : 'matikan'} buat grup ini yaa~ (˶˃ ᵕ ˂˶)`
                 }, { quoted: m });
             } else if (feature === 'limit') {
                 await group.update({ is_limited: status });

@@ -14,10 +14,10 @@ const plugin = {
 
         try {
             await sock.groupUpdateDescription(msgData.remoteJid, newDesc);
-            await msgData.reply('Yeay! Deskripsi grupnya sudah berhasil Ryzumi ganti~ (˶˃ ᵕ ˂˶) .ᐟ.ᐟ');
+            await msgData.reply('Yeay! Deskripsi grupnya sudah berhasil Nexure ganti~ (˶˃ ᵕ ˂˶) .ᐟ.ᐟ');
         } catch (error) {
             console.error(error);
-            await msgData.reply('Gomen ne... Ryzumi gagal ganti deskripsi grupnya (╥﹏╥)');
+            await msgData.reply('Gomen ne... Nexure gagal ganti deskripsi grupnya (╥﹏╥)');
         }
     }
 };

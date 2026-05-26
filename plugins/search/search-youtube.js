@@ -11,7 +11,7 @@ export default {
 
         if (!text) {
             return sock.sendMessage(msgData.remoteJid, {
-                text: `Uwaaa! Kakak mau cari apa di YouTube? Kasih tahu Ryzumi yaa~ (˶˃ ᵕ ˂˶)\n\nContoh: \`.${msgData.commandName} anime song\``
+                text: `Uwaaa! Kakak mau cari apa di YouTube? Kasih tahu Nexure yaa~ (˶˃ ᵕ ˂˶)\n\nContoh: \`.${msgData.commandName} anime song\``
             }, { quoted: m });
         }
 
@@ -25,7 +25,7 @@ export default {
 
             if (videos.length === 0) {
                 return sock.sendMessage(msgData.remoteJid, {
-                    text: `Maafin Ryzumi kak, video yang kakak cari nggak ketemu.. (｡T ω T｡)`
+                    text: `Maafin Nexure kak, video yang kakak cari nggak ketemu.. (｡T ω T｡)`
                 }, { quoted: m });
             }
 
@@ -56,7 +56,7 @@ Horeee! Itu tadi hasil pencariannya kak~ Pilih salah satu yaa! (๑>ᴗ<๑)
                 react: { text: '❌', key: m.key }
             });
             await sock.sendMessage(msgData.remoteJid, {
-                text: `Uwaaa gawat! Ryzumi lagi pusing pas nyari video di YouTube kak.. (╥﹏╥)\n\n*Error:* ${error.message || 'Internal Server Error'}`
+                text: `Uwaaa gawat! Nexure lagi pusing pas nyari video di YouTube kak.. (╥﹏╥)\n\n*Error:* ${error.message || 'Internal Server Error'}`
             }, { quoted: m });
         }
     }

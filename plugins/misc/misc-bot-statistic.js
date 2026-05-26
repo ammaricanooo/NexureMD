@@ -81,7 +81,7 @@ export default {
         statText += `│ *OS:* ${os.platform()} ${os.release()}\n`;
         statText += `╰─────────────┈\n\n`;
 
-        statText += `Statistik ini diambil secara real-time dari server Ryzumi. (๑>ᴗ<๑)`;
+        statText += `Statistik ini diambil secara real-time dari server Nexure. (๑>ᴗ<๑)`;
 
         await sock.sendMessage(msgData.remoteJid, { text: statText.trim() }, { quoted: m });
     }

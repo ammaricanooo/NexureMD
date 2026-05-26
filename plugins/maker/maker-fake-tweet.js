@@ -102,7 +102,7 @@ export default {
         } catch (error) {
             console.error('Fake Tweet Error:', error);
             await msgData.react('❌');
-            await msgData.reply(`Aduuh gawat! Ryzumi gagal bikin tweet-nya kak: ${error.message}.. (╥﹏╥)`);
+            await msgData.reply(`Aduuh gawat! Nexure gagal bikin tweet-nya kak: ${error.message}.. (╥﹏╥)`);
         }
     }
 };

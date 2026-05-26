@@ -13,7 +13,7 @@ export default {
 
         if (!query) {
             return sock.sendMessage(msgData.remoteJid, {
-                text: `Uwaaa! Kakak mau cari gambar apa di Pinterest? Kasih tahu Ryzumi yaa~ (˶˃ ᵕ ˂˶)\n\nContoh: \`.${msgData.commandName} Nao Tomori\``
+                text: `Uwaaa! Kakak mau cari gambar apa di Pinterest? Kasih tahu Nexure yaa~ (˶˃ ᵕ ˂˶)\n\nContoh: \`.${msgData.commandName} Nao Tomori\``
             }, { quoted: m });
         }
 
@@ -35,7 +35,7 @@ export default {
 
             if (!Array.isArray(data) || data.length < 1) {
                 return sock.sendMessage(msgData.remoteJid, {
-                    text: `Maafin Ryzumi kak, gambar Pinterest yang kakak cari nggak ketemu.. (｡T ω T｡)`
+                    text: `Maafin Nexure kak, gambar Pinterest yang kakak cari nggak ketemu.. (｡T ω T｡)`
                 }, { quoted: m });
             }
 
@@ -68,7 +68,7 @@ export default {
                             text: `Pencarian: ${query}`
                         }),
                         footer: proto.Message.InteractiveMessage.Footer.create({
-                            text: `Ryzumi-WABot V2 • Pinterest`
+                            text: `Nexure-WABot V2 • Pinterest`
                         }),
                         header: proto.Message.InteractiveMessage.Header.create({
                             title: '',
@@ -109,7 +109,7 @@ export default {
                                 text: `Horeee! Ini hasil pencarian Pinterest buat kakak~ (˶˃ ᵕ ˂˶)\nKetemu ${push.length} gambar.`
                             }),
                             footer: proto.Message.InteractiveMessage.Footer.create({
-                                text: `Ryzumi-WABot V2 • Pinterest Search`
+                                text: `Nexure-WABot V2 • Pinterest Search`
                             }),
                             header: proto.Message.InteractiveMessage.Header.create({
                                 hasMediaAttachment: false
@@ -136,7 +136,7 @@ export default {
                 react: { text: '❌', key: m.key }
             });
             await sock.sendMessage(msgData.remoteJid, {
-                text: `Uwaaa gawat! Ryzumi gagal cari gambar Pinterest-nya kak.. (╥﹏╥)\n\n*Error:* ${error.message || 'Internal Server Error'}`
+                text: `Uwaaa gawat! Nexure gagal cari gambar Pinterest-nya kak.. (╥﹏╥)\n\n*Error:* ${error.message || 'Internal Server Error'}`
             }, { quoted: m });
         }
     }

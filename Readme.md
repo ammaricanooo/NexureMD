@@ -1,8 +1,8 @@
 ![Banner](assets/images/banner_menu.jpg)
 
-# Ryzumi-WABot V2
+# Nexure-WABot V2
 
-Ryzumi-WABot V2 adalah asisten bot WhatsApp cerdas yang dibangun menggunakan NodeJS dan *library* `@whiskeysockets/baileys`. Bot ini menggunakan arsitektur *Plugin-Based* yang modern, sangat cepat, teroptimasi untuk lalu lintas pesan tingkat tinggi (High-Traffic), dan ringan untuk dijalankan di perangkat atau server dengan spesifikasi rendah.
+Nexure-WABot V2 adalah asisten bot WhatsApp cerdas yang dibangun menggunakan NodeJS dan *library* `@whiskeysockets/baileys`. Bot ini menggunakan arsitektur *Plugin-Based* yang modern, sangat cepat, teroptimasi untuk lalu lintas pesan tingkat tinggi (High-Traffic), dan ringan untuk dijalankan di perangkat atau server dengan spesifikasi rendah.
 
 ## Fitur Utama
 - **Arsitektur Modular (Plugins)**: Mudah diperluas dan di-*maintenance*.
@@ -38,8 +38,8 @@ Ryzumi-WABot V2 adalah asisten bot WhatsApp cerdas yang dibangun menggunakan Nod
 
 2. **Clone Repositori**
    ```bash
-   git clone https://github.com/ShirokamiRyzen/Ryzumi-WABot-V2.git
-   cd Ryzumi-WABot-V2
+   git clone https://github.com/ShirokamiRyzen/Nexure-WABot-V2.git
+   cd Nexure-WABot-V2
    ```
 
 2. **Install Dependensi**
@@ -66,7 +66,7 @@ Ryzumi-WABot V2 adalah asisten bot WhatsApp cerdas yang dibangun menggunakan Nod
 
 ## 🛠️ Cara Menambah Fitur / Plugin Baru
 
-Ryzumi V2 menggunakan sistem plugin yang sangat mudah dikembangkan. Semua fitur diletakkan di dalam folder `plugins/`. Setiap kali Anda membuat atau mengedit plugin, bot akan secara otomatis memuatnya secara *Hot-Reload* (tanpa perlu direstart).
+Nexure V2 menggunakan sistem plugin yang sangat mudah dikembangkan. Semua fitur diletakkan di dalam folder `plugins/`. Setiap kali Anda membuat atau mengedit plugin, bot akan secara otomatis memuatnya secara *Hot-Reload* (tanpa perlu direstart).
 
 ### Struktur Dasar Plugin
 Buat sebuah file Javascript (misalnya `tool-hello.js`) di dalam folder kategori yang sesuai (contoh: `plugins/tool/`).
@@ -80,7 +80,7 @@ export default {
     category: 'tool',
 
     // 3. Deskripsi fitur
-    description: 'Menyapa bot Ryzumi',
+    description: 'Menyapa bot Nexure',
 
     // 4. Konfigurasi Akses & Limitasi
     is_group: false,    // Apakah hanya bisa digunakan di grup?
@@ -99,7 +99,7 @@ export default {
         const { reply, pushName } = msgData;
 
         // Balas pesan pengguna
-        await reply(`Konbanwa, ${pushName} kak! Ryzumi siap membantu~ (˶˃ ᵕ ˂˶)`);
+        await reply(`Konbanwa, ${pushName} kak! Nexure siap membantu~ (˶˃ ᵕ ˂˶)`);
     }
 };
 ```
@@ -108,7 +108,7 @@ export default {
 Fungsi `execute` akan menerima 5 parameter utama:
 1. `sock`: Instance langsung dari Baileys socket. Anda bisa menggunakannya untuk kontrol penuh.
 2. `m`: Objek pesan asli mentah dari WhatsApp.
-3. `msgData`: **Adapter Super** bawaan Ryzumi yang merangkum semua fungsi dan properti.
+3. `msgData`: **Adapter Super** bawaan Nexure yang merangkum semua fungsi dan properti.
 4. `user`: Objek profil user pengirim dari database.
 5. `group`: Objek profil grup dari database (jika pesan dikirim di grup).
 
@@ -129,4 +129,4 @@ Fungsi `execute` akan menerima 5 parameter utama:
 Distribusi ulang dan penggunaan *source code* ini diizinkan mengikuti ketentuan [MIT License](LICENSE). 
 
 **PENGECUALIAN HAK CIPTA (COPYRIGHT EXCEPTION):**
-Ketentuan lisensi terbuka di atas **TIDAK BERLAKU** untuk semua *asset artwork*, karakter, dan konten visual/suara yang digunakan pada bot ini maupun yang di-*hosting* di server `s3.ryzumi.net`. Seluruh *asset* tersebut memiliki Hak Cipta penuh milik **Ryzumi Network**. Dilarang keras menjiplak, melakukan *tracing*, mereproduksi, atau mencuri *artwork* asli tersebut untuk keperluan bot lain atau komersial tanpa izin tertulis.
+Ketentuan lisensi terbuka di atas **TIDAK BERLAKU** untuk semua *asset artwork*, karakter, dan konten visual/suara yang digunakan pada bot ini maupun yang di-*hosting* di server `s3.ryzumi.net`. Seluruh *asset* tersebut memiliki Hak Cipta penuh milik **Nexure Network**. Dilarang keras menjiplak, melakukan *tracing*, mereproduksi, atau mencuri *artwork* asli tersebut untuk keperluan bot lain atau komersial tanpa izin tertulis.

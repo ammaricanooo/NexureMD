@@ -12,7 +12,7 @@ export default {
 
         if (!text) {
             return sock.sendMessage(msgData.remoteJid, {
-                text: `Uwaaa! Kakak mau cari mahasiswa siapa? Kasih tahu Ryzumi nama atau NIM-nya yaa~ (˶˃ ᵕ ˂˶)\n\nContoh: \`.${msgData.commandName} Budi Utomo\``
+                text: `Uwaaa! Kakak mau cari mahasiswa siapa? Kasih tahu Nexure nama atau NIM-nya yaa~ (˶˃ ᵕ ˂˶)\n\nContoh: \`.${msgData.commandName} Budi Utomo\``
             }, { quoted: m });
         }
 
@@ -27,7 +27,7 @@ export default {
 
             if (!Array.isArray(data) || data.length === 0) {
                 return sock.sendMessage(msgData.remoteJid, {
-                    text: `Maafin Ryzumi kak, data mahasiswa "${text}" nggak ketemu di PDDIKTI.. (｡T ω T｡)`
+                    text: `Maafin Nexure kak, data mahasiswa "${text}" nggak ketemu di PDDIKTI.. (｡T ω T｡)`
                 }, { quoted: m });
             }
 
@@ -42,7 +42,7 @@ export default {
                 message += `${index + 1}. *Nama:* ${nama}\n   *NIM:* ${nim}\n   *PT:* ${namaPt}\n   *Prodi:* ${namaProdi}\n\n`;
             });
 
-            message += `Horeee! Itu tadi data yang Ryzumi temukan kak~ (๑>ᴗ<๑)`;
+            message += `Horeee! Itu tadi data yang Nexure temukan kak~ (๑>ᴗ<๑)`;
 
             await sock.sendMessage(msgData.remoteJid, {
                 text: message.trim(),
@@ -58,7 +58,7 @@ export default {
                 react: { text: '❌', key: m.key }
             });
             await sock.sendMessage(msgData.remoteJid, {
-                text: `Uwaaa gawat! Ryzumi gagal cari data mahasiswanya kak.. (╥﹏╥)\n\n*Error:* ${error.message || 'Internal Server Error'}`
+                text: `Uwaaa gawat! Nexure gagal cari data mahasiswanya kak.. (╥﹏╥)\n\n*Error:* ${error.message || 'Internal Server Error'}`
             }, { quoted: m });
         }
     }

@@ -4,7 +4,7 @@ import { fileTypeFromBuffer } from 'file-type';
 import config from '../config.js';
 
 /**
- * Upload media to Ryzumi CDN
+ * Upload media to Nexure CDN
  * @param {Buffer|Array<Buffer>} inp 
  * @returns {Promise<any>} Response from the CDN
  */

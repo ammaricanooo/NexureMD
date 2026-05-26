@@ -12,7 +12,7 @@ export default {
 
         if (!id) {
             return sock.sendMessage(msgData.remoteJid, {
-                text: `Uwaaa! Kakak lupa masukin ID Pelanggan PLN-nya ya? (｡T ω T｡)\n\nContoh: \`.${msgData.commandName} 1234567890\`\n\nKasih tahu Ryzumi ID-nya yaa~ (๑>ᴗ<๑)`
+                text: `Uwaaa! Kakak lupa masukin ID Pelanggan PLN-nya ya? (｡T ω T｡)\n\nContoh: \`.${msgData.commandName} 1234567890\`\n\nKasih tahu Nexure ID-nya yaa~ (๑>ᴗ<๑)`
             }, { quoted: m });
         }
 
@@ -27,7 +27,7 @@ export default {
 
             if (!result.success || !result.result) {
                 return sock.sendMessage(msgData.remoteJid, {
-                    text: `Aduuh! Ryzumi nggak nemu data tagihan buat ID itu kak.. Mungkin salah ketik? Cek lagi yaa~ (｡T ω T｡)`
+                    text: `Aduuh! Nexure nggak nemu data tagihan buat ID itu kak.. Mungkin salah ketik? Cek lagi yaa~ (｡T ω T｡)`
                 }, { quoted: m });
             }
 
@@ -58,7 +58,7 @@ Itu tadi tagihan PLN kakak~ Jangan lupa dibayar yaa biar lampunya nggak mati! (�
             console.error('Cek PLN Error:', error);
             await sock.sendMessage(msgData.remoteJid, { react: { text: '❌', key: m.key } });
             await sock.sendMessage(msgData.remoteJid, {
-                text: `Uwaaa gawat! Ryzumi lagi ada kendala pas mau cek tagihan PLN-nya kak.. (╥﹏╥)\n\n*Error:* ${error.message || 'Internal Server Error'}\n\nCoba lagi nanti yaa kakak~`
+                text: `Uwaaa gawat! Nexure lagi ada kendala pas mau cek tagihan PLN-nya kak.. (╥﹏╥)\n\n*Error:* ${error.message || 'Internal Server Error'}\n\nCoba lagi nanti yaa kakak~`
             }, { quoted: m });
         }
     }

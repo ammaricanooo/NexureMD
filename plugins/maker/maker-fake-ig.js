@@ -93,7 +93,7 @@ export default {
         } catch (error) {
             console.error('Fake Story Error:', error);
             await msgData.react('❌');
-            await msgData.reply(`Aduuh gawat! Ryzumi gagal bikin story-nya kak: ${error.message}.. (╥﹏╥)`);
+            await msgData.reply(`Aduuh gawat! Nexure gagal bikin story-nya kak: ${error.message}.. (╥﹏╥)`);
         }
     }
 };

@@ -11,7 +11,7 @@ const plugin = {
             await msgData.reply('Sekarang semua peserta bisa edit info grup ini~ (๑>ᴗ<๑)');
         } catch (error) {
             console.error(error);
-            await msgData.reply('Gomen ne... Ryzumi gagal membuka info grupnya (╥﹏╥)');
+            await msgData.reply('Gomen ne... Nexure gagal membuka info grupnya (╥﹏╥)');
         }
     }
 };

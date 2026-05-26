@@ -11,7 +11,7 @@ const plugin = {
             await msgData.reply('Yeay! Grupnya sudah dibuka, sekarang semua bisa chat lagi deh~ (˶˃ ᵕ ˂˶) .ᐟ.ᐟ');
         } catch (error) {
             console.error(error);
-            await msgData.reply('Gomen ne... Ryzumi gagal membuka grupnya (╥﹏╥)');
+            await msgData.reply('Gomen ne... Nexure gagal membuka grupnya (╥﹏╥)');
         }
     }
 };

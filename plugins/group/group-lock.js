@@ -11,7 +11,7 @@ const plugin = {
             await msgData.reply('Sekarang hanya admin yang bisa edit info grup ini ya, Kakak~ (˶˃ ᵕ ˂˶)');
         } catch (error) {
             console.error(error);
-            await msgData.reply('Gomen ne... Ryzumi gagal mengunci info grupnya (╥﹏╥)');
+            await msgData.reply('Gomen ne... Nexure gagal mengunci info grupnya (╥﹏╥)');
         }
     }
 };

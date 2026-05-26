@@ -11,7 +11,7 @@ const plugin = {
             await msgData.reply(response);
         } catch (error) {
             console.error(error);
-            await msgData.reply('Aduhh, Ryzumi gagal ambil link grupnya... Gomen ne~ (╥﹏╥)');
+            await msgData.reply('Aduhh, Nexure gagal ambil link grupnya... Gomen ne~ (╥﹏╥)');
         }
     }
 };

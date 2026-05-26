@@ -56,7 +56,7 @@ export default {
                     const apiUrl = `${config.API_RYZUMI}/api/image/leave?username=${encodeURIComponent(username)}&group=${encodeURIComponent(metadata.subject)}&avatar=${encodeURIComponent(ppUrl)}&bg=${encodeURIComponent(bg_leave)}&member=${memberCount}`;
 
                     const leaveText = `Yahhh... Sayang sekali, Kakak @${resolvedJid.split('@')[0]} sudah meninggalkan grup.. (｡T ω T｡)\n\n` +
-                        `Selamat jalan ya kak, terima kasih sudah mampir! Ryzumi bakal kangen~ (╥﹏╥)`;
+                        `Selamat jalan ya kak, terima kasih sudah mampir! Nexure bakal kangen~ (╥﹏╥)`;
 
                     await sock.sendMessage(id, {
                         image: { url: apiUrl },

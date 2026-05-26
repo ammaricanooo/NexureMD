@@ -5,13 +5,13 @@ export default {
     category: 'tool',
     isRegistered: true,
     limit: 1,
-    description: 'Mengunggah berkas ke Ryzumi CDN untuk mendapatkan tautan (URL).',
+    description: 'Mengunggah berkas ke Nexure CDN untuk mendapatkan tautan (URL).',
     async execute(sock, m, msgData) {
         const buffer = await msgData.downloadMedia();
 
         if (!buffer) {
             return sock.sendMessage(msgData.remoteJid, {
-                text: `Kakak manis~ (˶˃ ᵕ ˂˶) Kirim atau balas berkas apa saja (gambar/video/audio/dokumen/stiker) dengan perintah *.upload* biar Ryzumi buatkan link-nya yaa! (๑>ᴗ<๑)`
+                text: `Kakak manis~ (˶˃ ᵕ ˂˶) Kirim atau balas berkas apa saja (gambar/video/audio/dokumen/stiker) dengan perintah *.upload* biar Nexure buatkan link-nya yaa! (๑>ᴗ<๑)`
             }, { quoted: m });
         }
 
@@ -32,7 +32,7 @@ export default {
             console.error('Upload Tool Error:', error);
             await sock.sendMessage(msgData.remoteJid, { react: { text: '❌', key: m.key } });
             await sock.sendMessage(msgData.remoteJid, {
-                text: `Aduuh gawat! Ryzumi gagal mengunggah berkasnya kak: ${error.message}.. (╥﹏╥)`
+                text: `Aduuh gawat! Nexure gagal mengunggah berkasnya kak: ${error.message}.. (╥﹏╥)`
             }, { quoted: m });
         }
     }

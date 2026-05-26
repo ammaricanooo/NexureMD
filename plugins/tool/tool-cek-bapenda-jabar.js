@@ -12,7 +12,7 @@ export default {
 
         if (!platInput) {
             return sock.sendMessage(msgData.remoteJid, {
-                text: `Uwaaa! Kakak mau cek pajak tapi plat nomornya nggak ada? (｡T ω T｡)\n\nContoh: \`.${msgData.commandName} T1234CD\`\n\nKasih tahu Ryzumi nomor platnya yaa~ (๑>ᴗ<๑)`
+                text: `Uwaaa! Kakak mau cek pajak tapi plat nomornya nggak ada? (｡T ω T｡)\n\nContoh: \`.${msgData.commandName} T1234CD\`\n\nKasih tahu Nexure nomor platnya yaa~ (๑>ᴗ<๑)`
             }, { quoted: m });
         }
 
@@ -28,7 +28,7 @@ export default {
             if (!result || !result.success) {
                 const msg = result && result.message ? result.message : 'Datanya nggak ketemu kak..';
                 return sock.sendMessage(msgData.remoteJid, {
-                    text: `Aduuh gawat! Ryzumi gagal ambil data pajaknya kak.. (╥﹏╥)\n\n*Pesan:* ${msg}\n\nCoba cek lagi plat nomornya yaa~`
+                    text: `Aduuh gawat! Nexure gagal ambil data pajaknya kak.. (╥﹏╥)\n\n*Pesan:* ${msg}\n\nCoba cek lagi plat nomornya yaa~`
                 }, { quoted: m });
             }
 
@@ -81,7 +81,7 @@ Horeee! Itu tadi data pajak kakak~ Jangan lupa bayar pajak yaa biar berkah! (˶�
             console.error('Cek Pajak Jabar Error:', error);
             await sock.sendMessage(msgData.remoteJid, { react: { text: '❌', key: m.key } });
             await sock.sendMessage(msgData.remoteJid, {
-                text: `Uwaaa! Ryzumi lagi pusing kak, gagal ambil data pajaknya.. (╥﹏╥)\n\n*Error:* ${error.message || 'Internal Server Error'}\n\nCoba lagi nanti yaa kakak~`
+                text: `Uwaaa! Nexure lagi pusing kak, gagal ambil data pajaknya.. (╥﹏╥)\n\n*Error:* ${error.message || 'Internal Server Error'}\n\nCoba lagi nanti yaa kakak~`
             }, { quoted: m });
         }
     }

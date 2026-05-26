@@ -20,7 +20,7 @@ export default {
             const { data } = await axios.get(`${config.API_RYZUMI}/api/downloader/mediafire?url=${encodeURIComponent(url)}`);
 
             if (!data.status || !data.data || !data.data.downloadUrl) {
-                throw new Error(data.message || 'Maafin Ryzumi kak, datanya nggak ketemu atau link-nya rusak.. (╥﹏╥)');
+                throw new Error(data.message || 'Maafin Nexure kak, datanya nggak ketemu atau link-nya rusak.. (╥﹏╥)');
             }
 
             const file = data.data;
@@ -28,7 +28,7 @@ export default {
             let caption = `--- *MEDIAFIRE DOWNLOADER* ---\n\n`;
             caption += `📄 *Nama:* ${file.filename}\n`;
             caption += `📦 *Ukuran:* ${file.filesize}\n\n`;
-            caption += `Sabar ya kak, Ryzumi sedang mendownload filenya buat Kakak~! (˶˃ ᵕ ˂˶)`;
+            caption += `Sabar ya kak, Nexure sedang mendownload filenya buat Kakak~! (˶˃ ᵕ ˂˶)`;
 
             await sock.sendMessage(msgData.remoteJid, { text: caption }, { quoted: m });
 
@@ -58,7 +58,7 @@ export default {
             console.error('Mediafire Downloader Error:', error);
             await msgData.react('❌');
             const errMsg = error.response?.data?.message || error.message;
-            await sock.sendMessage(msgData.remoteJid, { text: `Gawat kak! Ryzumi gagal download: ${errMsg}.. (⊙_⊙)` }, { quoted: m });
+            await sock.sendMessage(msgData.remoteJid, { text: `Gawat kak! Nexure gagal download: ${errMsg}.. (⊙_⊙)` }, { quoted: m });
         }
     }
 };

@@ -40,7 +40,7 @@ export default {
             let webpBuffer = isVideoLike ? await videoToWebp(buffer) : await imageToWebp(buffer);
 
             const exifData = {
-                packName: config.BOT_NAME || 'Ryzumi Bot',
+                packName: config.BOT_NAME || 'Nexure Bot',
                 packPublish: user.name || 'User'
             };
 
