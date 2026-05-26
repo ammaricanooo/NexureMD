@@ -14,7 +14,7 @@ const ApiKey = sequelize.define('ApiKey', {
         comment: 'Nama API Key (misal: Web App, Mobile App)'
     },
     key: {
-        type: DataTypes.TEXT,
+        type: DataTypes.STRING(255),
         allowNull: false,
         unique: true,
         comment: 'API Key string yang di-hash'
