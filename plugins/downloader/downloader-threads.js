@@ -22,24 +22,45 @@ export default {
 
             if (!data.success || !data.result) throw new Error('Gagal mengambil data dari Threads-nya kak~ (╥﹏╥)');
 
-            const medias = data.result.media || [];
-            if (medias.length === 0) throw new Error('Yaaah, nggak ada media yang bisa aku ambil dari Threads itu kak.. (｡T ω T｡)');
+            const result = data.result;
 
-            for (let i = 0; i < medias.length; i++) {
-                const item = medias[i];
-                const isVideo = item.type === 'video';
-                
-                let msgCaption = '';
-                if (i === 0) {
-                    msgCaption = `Ini pesanan Threads kakak @${msgData.senderJid.split('@')[0]}~! (๑>ᴗ<๑)\n\n*Caption:* ${data.result.caption || '-'}`;
-                }
+            // Support new API shape: result.image_urls (array of strings) and result.video_urls (array of strings)
+            const imageUrls = Array.isArray(result.image_urls) ? result.image_urls : (Array.isArray(result.images) ? result.images : []);
+            const videoUrls = Array.isArray(result.video_urls) ? result.video_urls : (Array.isArray(result.videos) ? result.videos : []);
+
+            if (imageUrls.length === 0 && videoUrls.length === 0) {
+                throw new Error('Yaaah, nggak ada media yang bisa aku ambil dari Threads itu kak.. (｡T ω T｡)');
+            }
+
+            let first = true;
+
+            // Send videos first (if any)
+            for (let i = 0; i < videoUrls.length; i++) {
+                const vurl = videoUrls[i];
+                const caption = first ? `Ini pesanan Threads kakak @${msgData.senderJid.split('@')[0]}~! (๑>ᴗ<๑)\n\n*Caption:* ${result.caption || '-'}` : '';
 
                 await sock.sendMessage(msgData.remoteJid, {
-                    [isVideo ? 'video' : 'image']: { url: item.url },
-                    caption: msgCaption.trim(),
-                    mentions: i === 0 ? [msgData.senderJid] : [],
-                    mimetype: isVideo ? 'video/mp4' : undefined
+                    video: { url: vurl },
+                    caption: caption.trim(),
+                    mentions: first ? [msgData.senderJid] : [],
+                    mimetype: 'video/mp4'
                 }, { quoted: m });
+
+                first = false;
+            }
+
+            // Then send images
+            for (let i = 0; i < imageUrls.length; i++) {
+                const iurl = imageUrls[i];
+                const caption = first ? `Ini pesanan Threads kakak @${msgData.senderJid.split('@')[0]}~! (๑>ᴗ<๑)\n\n*Caption:* ${result.caption || '-'}` : '';
+
+                await sock.sendMessage(msgData.remoteJid, {
+                    image: { url: iurl },
+                    caption: caption.trim(),
+                    mentions: first ? [msgData.senderJid] : []
+                }, { quoted: m });
+
+                first = false;
             }
 
             await sock.sendMessage(msgData.remoteJid, { react: { text: '✅', key: m.key } });
