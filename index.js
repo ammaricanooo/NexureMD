@@ -12,6 +12,7 @@ import { startCronJobs } from './libs/cronjob.js';
 import Group from './databases/orm/Group.js';
 import { setGroupMetadata } from './libs/groupCache.js';
 import Setting from './databases/orm/Setting.js';
+import Product from './databases/orm/Product.js';
 import express from 'express';
 import { setWhatsAppSocket, resetSocket } from './libs/socket-manager.js';
 import whatsappRouter from './api/whatsapp-gateway-api.js';

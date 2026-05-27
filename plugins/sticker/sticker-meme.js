@@ -13,10 +13,8 @@ export default {
 
         try {
             const hasMedia = (isQuoted && isQuotedMedia) || isMedia;
-            if (!hasMedia) return msgData.reply('Kirim atau balas gambar yang ingin dijadikan meme, tambahkan teks dengan format: atas|bawah');
-
             const fullText = args.join(' ');
-            if (!fullText) return msgData.reply('Tambahkan teks meme dengan format: atas|bawah');
+            if (!hasMedia || !fullText) return msgData.reply(`Duhh Kakak lupa ya? Kirim atau balas gambar yang ingin dijadikan sticker meme, tambahkan teks dengan format: atas|bawah yaa! Contoh: .${msgData.commandName} atas|bawah (˶˃ ᵕ ˂˶)`);
 
             let [topText, bottomText] = fullText.split('|');
             topText = (topText || '').trim();
@@ -30,7 +28,7 @@ export default {
             const type = (isQuoted && isQuotedMedia) ? quotedType : (msg.message || Object.keys(msg)[0]);
 
             const buffer = await msgData.downloadMedia();
-            if (!buffer) throw new Error('Gagal mengunduh media.');
+            if (!buffer) throw new Error('Yahh... Gagal mengunduh media (╥﹏╥)');
 
             // Upload ke CDN agar background dapat diakses oleh memegen
             const uploadResult = await ryzumiCDN(buffer);
@@ -39,7 +37,7 @@ export default {
                 // try common shapes
                 imageUrl = uploadResult.url || uploadResult.result || null;
             }
-            if (!imageUrl) throw new Error('Gagal mengunggah gambar ke CDN.');
+            if (!imageUrl) throw new Error('Yahh... Gagal mengunggah gambar ke CDN (╥﹏╥)');
 
             const encodedTop = encodeURIComponent(topText);
             const encodedBottom = encodeURIComponent(bottomText);
@@ -48,7 +46,7 @@ export default {
             const memeUrl = `https://api.memegen.link/images/custom/${encodedTop}/${encodedBottom}.png?background=${encodedBg}`;
 
             const res = await axios.get(memeUrl, { responseType: 'arraybuffer', timeout: 30000 });
-            if (!res.headers['content-type']?.includes('image')) throw new Error('API meme gagal mengembalikan gambar.');
+            if (!res.headers['content-type']?.includes('image')) throw new Error('Yahh... API meme gagal mengembalikan gambar (╥﹏╥)');
 
             const memeBuffer = Buffer.from(res.data);
             const webpBuffer = await imageToWebp(memeBuffer);
@@ -61,7 +59,7 @@ export default {
         } catch (error) {
             console.error('SMeme Sticker Error:', error);
             await msgData.react('❌');
-            await msgData.reply(`Gagal membuat stiker meme: ${error.message}`);
+            await msgData.reply(`Gawat kak! Gagal membuat stiker meme: ${error.message}`);
         }
     }
 };
