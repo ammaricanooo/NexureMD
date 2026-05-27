@@ -20,7 +20,7 @@ const User = sequelize.define('User', {
     },
     limit: {
         type: DataTypes.INTEGER,
-        defaultValue: 10,
+        defaultValue: 250,
     },
     is_registered: {
         type: DataTypes.BOOLEAN,

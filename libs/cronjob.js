@@ -9,11 +9,11 @@ export function startCronJobs() {
         try {
             // Update limit menjadi 10 HANYA untuk user yang limitnya berada di bawah 10
             const [updatedRows] = await User.update(
-                { limit: 10 },
+                { limit: 250 },
                 {
                     where: {
                         limit: {
-                            [Op.lt]: 10
+                            [Op.lt]: 250
                         }
                     }
                 }
