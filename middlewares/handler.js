@@ -18,10 +18,10 @@ export default async function botHandler(sock, m, msgData) {
         const { user, group, setting } = await processAuth(sock, msgData);
 
         // Logic is_public & is_gconly
-        if (!setting.is_public) {
-            if (!user.isOwner) return;
+        if (!setting?.is_public) {
+            if (!user?.isOwner) return;
         } else if (setting.is_gconly) {
-            if (!msgData.isGroup && !user.isOwner) return;
+            if (!msgData.isGroup && !user?.isOwner) return;
         }
 
         for (const plugin of plugins) {

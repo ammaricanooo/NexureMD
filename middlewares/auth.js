@@ -10,10 +10,29 @@ let cachedSetting = null;
 let lastCacheUpdate = 0;
 const CACHE_TTL = 30000; // 30 detik
 
+const getCachedSetting = async () => {
+    const now = Date.now();
+    if (!cachedSetting || (now - lastCacheUpdate) > CACHE_TTL) {
+        const [setting] = await Setting.findOrCreate({
+            where: { id: 1 },
+            defaults: { is_public: true, is_register: true, is_gconly: false }
+        });
+        cachedSetting = setting;
+        lastCacheUpdate = now;
+    }
+    return cachedSetting;
+};
+
 export const processAuth = async (sock, msgData) => {
+    const setting = await getCachedSetting();
+
     // Jangan simpan grup atau status broadcast ke tabel User
     if (msgData.senderJid.endsWith('@g.us') || msgData.senderJid === 'status@broadcast') {
-        return { is_registered: false, is_premium: false, is_banned: false, limit: 0 };
+        return {
+            user: { is_registered: false, is_premium: false, is_banned: false, limit: 0, isOwner: false },
+            group: null,
+            setting
+        };
     }
 
     const [user] = await User.findOrCreate({
@@ -99,17 +118,7 @@ export const processAuth = async (sock, msgData) => {
         msgData.isBotAdmin = botParticipant?.admin !== null && botParticipant?.admin !== undefined;
     }
 
-    const now = Date.now();
-    if (!cachedSetting || (now - lastCacheUpdate) > CACHE_TTL) {
-        const [setting] = await Setting.findOrCreate({
-            where: { id: 1 },
-            defaults: { is_public: true, is_register: true, is_gconly: false }
-        });
-        cachedSetting = setting;
-        lastCacheUpdate = now;
-    }
-
-    return { user, group, setting: cachedSetting };
+    return { user, group, setting };
 };
 
 
