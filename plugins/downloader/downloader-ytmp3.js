@@ -48,7 +48,7 @@ export default {
                 !data.success ||
                 !data.result ||
                 !data.result.download ||
-                !data.result.download.urlss
+                !data.result.download.url
             ) {
                 throw new Error(
                     'Yahhh... Link audionya nggak ketemu (╥﹏╥)'
@@ -95,17 +95,40 @@ export default {
             );
 
             // ================= CAPTION =================
+            
+            const durationSeconds = Number(metadata.duration || 0);
+            const formatDuration = (seconds) => {
+                const mins = Math.floor(seconds / 60);
+                const secs = seconds % 60;
+                return `${mins}:${secs.toString().padStart(2, '0')} menit`;
+            };
+
+            const parseUploadDate = (value) => {
+                if (!value) return 'N/A';
+                const normalized = String(value).replace(/[^0-9]/g, '');
+                if (normalized.length === 8) {
+                    const year = normalized.slice(0, 4);
+                    const month = normalized.slice(4, 6);
+                    const day = normalized.slice(6, 8);
+                    return `${day}-${month}-${year}`;
+                }
+                return String(value);
+            };
+
+            const durationText = formatDuration(durationSeconds);
+            const viewsText = metadata.views || 0;
+            const uploadDateText = parseUploadDate(metadata.uploadDate);
 
             const caption =
                 `Ini kak audionya buat Kakak~! ` +
                 `@${msgData.senderJid.split('@')[0]} (๑>ᴗ<๑)\n\n` +
 
                 `🎵 *Title:* ${metadata.title}\n` +
-                `👤 *Author:* ${metadata.author}\n` +
-                `⏳ *Duration:* ${metadata.lengthSeconds} sec\n` +
-                `📀 *Format:* ${metadata.quality}\n` +
-                `👀 *Views:* ${metadata.views}\n` +
-                `📅 *Uploaded:* ${metadata.uploadDate}\n`;
+                `👤 *Author:* ${metadata.author || metadata.channel || 'Unknown'}\n` +
+                `⏳ *Duration:* ${durationText}\n` +
+                `📀 *Format:* ${metadata.quality || 'mp3'}\n` +
+                `👀 *Views:* ${viewsText}\n` +
+                `📅 *Uploaded:* ${uploadDateText}\n`;
 
             // ================= SEND =================
 
