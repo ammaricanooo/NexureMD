@@ -46,7 +46,7 @@ export default {
                 !data.success ||
                 !data.result ||
                 !data.result.download ||
-                !data.result.download.path
+                !data.result.download.url
             ) {
                 throw new Error(
                     'Video tidak ditemukan atau kualitas tidak tersedia'

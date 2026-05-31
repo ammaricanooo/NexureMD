@@ -48,7 +48,7 @@ export default {
                 !data.success ||
                 !data.result ||
                 !data.result.download ||
-                !data.result.download.path
+                !data.result.download.urlss
             ) {
                 throw new Error(
                     'Yahhh... Link audionya nggak ketemu (╥﹏╥)'
