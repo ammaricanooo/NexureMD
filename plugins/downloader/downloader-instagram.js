@@ -25,108 +25,76 @@ export default {
         await sock.sendMessage(msgData.remoteJid, { react: { text: '⏳', key: m.key } });
 
         try {
-            const { data } = await axios.get(`${config.API_RYZUMI}/api/downloader/instagram?url=${encodeURIComponent(url)}`);
+            const { data } = await axios.get(`${config.API_AMMARICANO}/api/download/instagram?url=${encodeURIComponent(url)}`);
 
             if (!data.success || !data.result) {
                 throw new Error('Yahhh, media Instagram-nya nggak ketemu atau link-nya bermasalah kak~ (╥﹏╥)');
             }
 
             const result = data.result;
-            const media = result.media;
+            const videos = Array.isArray(result.video)
+                ? result.video.map(item => ({ type: 'video', url: item?.url || item }))
+                : [];
+            const images = Array.isArray(result.image)
+                ? result.image.map(item => ({ type: 'image', url: item?.url || item }))
+                : [];
+            const audios = Array.isArray(result.audio)
+                ? result.audio.map(item => ({ type: 'audio', url: item?.url || item, mimetype: item?.mimetype }))
+                : [];
 
-            let allMedia = [...(media.videos || []), ...(media.images || [])];
+            let allMedia = [...videos, ...images];
             if (withAudio) {
-                allMedia = [...allMedia, ...(media.audio || [])];
+                allMedia = [...allMedia, ...audios];
             }
 
             if (allMedia.length === 0) {
                 throw new Error('Waaa, nggak ada media yang bisa aku ambil dari sini~ (｡T ω T｡)');
             }
 
+            const headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36'
+            };
+
             let first = true;
             for (const item of allMedia) {
-                const caption = (first && item.type !== 'audio') ? (result.title || `Ini dia pesanan kakak @${msgData.senderJid.split('@')[0]}~ Spesial buat kakak! (๑>ᴗ<๑)`) : '';
+                const caption = (first && item.type !== 'audio')
+                    ? (result.title || `Ini dia pesanan kakak @${msgData.senderJid.split('@')[0]}~ Spesial buat kakak! (๑>ᴗ<๑)`)
+                    : '';
                 const mediaUrl = item.url;
 
                 try {
-                    const videoIndex = media.videos ? media.videos.findIndex(v => v.url === item.url) : -1;
-                    const hasMatchingAudio = videoIndex !== -1 && media.audio && media.audio.length > videoIndex;
+                    if (!mediaUrl) {
+                        throw new Error('URL media tidak tersedia');
+                    }
 
-                    // Logika penggabungan audio jika video tidak memiliki suara bawaan (untuk beberapa jenis post IG)
-                    if (item.type === 'video' && item.isAudio === false && hasMatchingAudio) {
-                        const videoUrl = item.url;
-                        const audioUrl = media.audio[videoIndex].url;
+                    const res = await axios.get(mediaUrl, {
+                        responseType: 'arraybuffer',
+                        timeout: 30000,
+                        headers
+                    });
+                    const buffer = Buffer.from(res.data);
 
-                        const headers = {
-                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36'
-                        };
-
-                        const [vidRes, audRes] = await Promise.all([
-                            axios.get(videoUrl, { responseType: 'arraybuffer', timeout: 30000, headers }),
-                            axios.get(audioUrl, { responseType: 'arraybuffer', timeout: 30000, headers })
-                        ]);
-
-                        const randStr = Math.random().toString(36).substring(7);
-                        const tmpVid = path.join(os.tmpdir(), `vid_${Date.now()}_${randStr}.mp4`);
-                        const tmpAud = path.join(os.tmpdir(), `aud_${Date.now()}_${randStr}.m4a`);
-                        const tmpOut = path.join(os.tmpdir(), `out_${Date.now()}_${randStr}.mp4`);
-
-                        try {
-                            fs.writeFileSync(tmpVid, Buffer.from(vidRes.data));
-                            fs.writeFileSync(tmpAud, Buffer.from(audRes.data));
-
-                            await new Promise((resolve, reject) => {
-                                exec(`ffmpeg -i "${tmpVid}" -i "${tmpAud}" -c:v copy -c:a aac -map 0:v:0 -map 1:a:0 -shortest "${tmpOut}"`, (err) => {
-                                    if (err) return reject(err);
-                                    resolve();
-                                });
-                            });
-
-                            const mergedBuffer = fs.readFileSync(tmpOut);
-                            await sock.sendMessage(msgData.remoteJid, {
-                                video: mergedBuffer,
-                                mimetype: "video/mp4",
-                                fileName: `video.mp4`,
-                                caption: caption,
-                                mentions: [msgData.senderJid],
-                            }, { quoted: m });
-                        } finally {
-                            if (fs.existsSync(tmpVid)) fs.unlinkSync(tmpVid);
-                            if (fs.existsSync(tmpAud)) fs.unlinkSync(tmpAud);
-                            if (fs.existsSync(tmpOut)) fs.unlinkSync(tmpOut);
-                        }
-                    } else {
-                        // Download langsung jika tidak butuh merge
-                        const res = await axios.get(mediaUrl, {
-                            responseType: 'arraybuffer',
-                            timeout: 30000,
-                            headers: {
-                                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36'
-                            }
-                        });
-                        const buffer = Buffer.from(res.data);
-
-                        if (item.type === 'video') {
-                            await sock.sendMessage(msgData.remoteJid, {
-                                video: buffer,
-                                mimetype: "video/mp4",
-                                fileName: `video.mp4`,
-                                caption: caption,
-                                mentions: [msgData.senderJid],
-                            }, { quoted: m });
-                        } else if (item.type === 'image') {
-                            await sock.sendMessage(msgData.remoteJid, {
-                                image: buffer,
-                                caption: caption,
-                                mentions: [msgData.senderJid],
-                            }, { quoted: m });
-                        } else if (item.type === 'audio') {
-                            await sock.sendMessage(msgData.remoteJid, {
-                                audio: buffer,
-                                mimetype: item.mimetype || "audio/mpeg",
-                                fileName: `audio.mp3`,
-                            }, { quoted: m });
-                        }
+                    if (item.type === 'video') {
+                        await sock.sendMessage(msgData.remoteJid, {
+                            video: buffer,
+                            mimetype: 'video/mp4',
+                            fileName: 'video.mp4',
+                            caption: caption,
+                            mentions: [msgData.senderJid],
+                        }, { quoted: m });
+                    } else if (item.type === 'image') {
+                        await sock.sendMessage(msgData.remoteJid, {
+                            image: buffer,
+                            caption: caption,
+                            mentions: [msgData.senderJid],
+                        }, { quoted: m });
+                    } else if (item.type === 'audio') {
+                        await sock.sendMessage(msgData.remoteJid, {
+                            audio: buffer,
+                            mimetype: item.mimetype || 'audio/mpeg',
+                            fileName: 'audio.mp3',
+                            caption: caption,
+                        }, { quoted: m });
                     }
                 } catch (e) {
                     console.error('Error sending media item:', e);

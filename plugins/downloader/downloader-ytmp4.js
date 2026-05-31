@@ -58,9 +58,6 @@ export default {
             const metadata = data.result.metadata;
             const download = data.result.download;
 
-            const downloadUrl =
-                `${config.API_AMMARICANO}/${download.path}`;
-
             // ================= TMP =================
 
             const tmpDir = path.join(process.cwd(), 'tmp');
@@ -86,7 +83,7 @@ export default {
             const writer = fs.createWriteStream(filePath);
 
             const downloadResponse = await axios({
-                url: downloadUrl,
+                url: download.url,
                 method: 'GET',
                 responseType: 'stream',
                 headers: {

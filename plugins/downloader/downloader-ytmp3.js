@@ -60,9 +60,6 @@ export default {
             const metadata = data.result.metadata;
             const download = data.result.download;
 
-            const downloadUrl =
-                `${config.API_AMMARICANO}/${download.path}`;
-
             // ================= TMP =================
 
             const tmpDir = path.join(process.cwd(), 'tmp');
@@ -84,7 +81,7 @@ export default {
 
             const audioResponse = await axios({
                 method: 'GET',
-                url: downloadUrl,
+                url: download.url,
                 responseType: 'stream',
                 headers: {
                     'User-Agent':

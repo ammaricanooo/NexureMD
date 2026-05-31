@@ -55,7 +55,8 @@ export default {
                 menuText += `  🌸 ${cat}\n`;
             });
             menuText += `\n  ✨ .menu all (Tampilkan semua)\n\n`;
-            menuText += `Silakan ketik *.menu [nama_kategori]* untuk melihat daftar perintahnya, atau ketik *.menu all* untuk melihat semua menu yaa kak! (๑>ᴗ<๑)`;
+            menuText += `Silakan ketik *.menu [nama_kategori]* untuk melihat daftar perintahnya, atau ketik *.menu all* untuk melihat semua menu yaa kak! (๑>ᴗ<๑)\n\n`;
+            menuText += `Ramaikan Official Group Nexure Bot\nhttps://chat.whatsapp.com/LtKd4gwbIsfASnAppmH2mF`
         } else if (arg === 'all') {
             // Tampilan Semua Command
             for (const [cat, commands] of Object.entries(categories).sort()) {
