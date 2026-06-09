@@ -14,7 +14,8 @@ export default {
                 text: `🚌 *Panduan Pencarian Rute Angkot Bogor* 🚌\n\n` +
                      `Gunakan format: \`.angkot [asal] ke [tujuan]\`\n` +
                      `*Contoh:* \`.angkot ciapus ke empang\` atau \`.angkot ciawi ke bubulak\`\n\n` +
-                     `*Catatan:* Jika rute tidak ditemukan secara langsung, Nexure akan mencarikan opsi rute transit/transfer (1x ganti angkot).`
+                     `*Catatan:* Jika rute tidak ditemukan secara langsung, Nexure akan mencarikan opsi rute transit/transfer (1x ganti angkot).
+*Catatan 2:* Pencarian arah balik juga didukung.`
             }, { quoted: m });
         }
 
@@ -50,6 +51,9 @@ export default {
                     responseText += `\n*Opsi ${index + 1}: Angkot No. ${r.trayek.kode} (${r.trayek.nama})*\n`;
                     responseText += `• 🚙 Warna: ${r.trayek.warna}\n`;
                     responseText += `• 🛣️ Rute Naik: ${r.dariStop} ➡️ ${r.keStop}\n`;
+                    if (r.reversed) {
+                        responseText += `• 🔁 Arah balik (naik sebaliknya)\n`;
+                    }
                     responseText += `• ⏱️ Estimasi Waktu: ~${r.trayek.waktu_menit} menit\n`;
                     responseText += `• 💰 Ongkos: Rp ${r.trayek.tarif.toLocaleString('id-ID')}\n`;
                     if (r.trayek.keterangan) {
