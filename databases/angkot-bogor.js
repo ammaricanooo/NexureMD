@@ -1462,6 +1462,60 @@ export const trayekAngkot = [
         "waktu_menit": 128,
         "tarif": 6000,
         "keterangan": "Trayek AK-23"
+    },
+    {
+        "kode": "03 (Kab)",
+        "nama": "Ciapus – Ramayana (BTM)",
+        "warna": "Biru (Kabupaten)",
+        "rute": [
+            "Ciapus",
+            "Kota Batu",
+            "Cikaret",
+            "Empang",
+            "Bondongan",
+            "Gang Aut",
+            "Pasar Cumpok",
+            "BTM"
+        ],
+        "jarak_km": 11,
+        "waktu_menit": 45,
+        "tarif": 6000,
+        "keterangan": "Menghubungkan Ciapus Kabupaten Bogor ke pusat Kota (BTM via Empang)"
+    },
+    {
+        "kode": "02 (Kab)",
+        "nama": "Cisarua – Sukasari",
+        "warna": "Biru (Kabupaten)",
+        "rute": [
+            "Cisarua",
+            "Tugu",
+            "Megamendung",
+            "Gadog",
+            "Terminal Ciawi",
+            "Tajur",
+            "Sukasari"
+        ],
+        "jarak_km": 22,
+        "waktu_menit": 70,
+        "tarif": 10000,
+        "keterangan": "Rute Puncak menuju Sukasari"
+    },
+    {
+        "kode": "02A (Kab)",
+        "nama": "Cicurug – Sukasari",
+        "warna": "Biru (Kabupaten)",
+        "rute": [
+            "Cicurug",
+            "Cigombong",
+            "Caringin",
+            "Terminal Ciawi",
+            "Tajur",
+            "Sukasari"
+        ],
+        "jarak_km": 25,
+        "waktu_menit": 80,
+        "tarif": 10000,
+        "keterangan": "Rute Sukabumi-Bogor via Ciawi"
     }
 ];
 
@@ -1821,7 +1875,20 @@ export const aliasLokasi = {
     "ciremai-jambudua": "ciremai-jambudua",
     "jambudua-1": "jambudua-1",
     "jambudua-2": "jambudua-2",
-    "jambudua-3": "jambudua-3"
+    "jambudua-3": "jambudua-3",
+    "kota batu": "Kota Batu",
+    "cikaret": "Cikaret",
+    "bondongan": "Bondongan",
+    "gang aut": "Gang Aut",
+    "pasar cumpok": "Pasar Cumpok",
+    "cisarua": "Cisarua",
+    "tugu": "Tugu",
+    "megamendung": "Megamendung",
+    "gadog": "Gadog",
+    "tajur": "Tajur",
+    "cicurug": "Cicurug",
+    "cigombong": "Cigombong",
+    "caringin": "Caringin"
 };
 
 export function cariRute(asal, tujuan) {
