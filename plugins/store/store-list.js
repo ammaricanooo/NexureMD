@@ -19,14 +19,26 @@ export default {
             });
 
             if (!products.length) {
-                return msgData.reply('Saat ini belum ada produk aktif di toko.');
+                return msgData.reply('Aduuh kak, saat ini belum ada produk aktif di toko kami.. (╥﹏╥)');
             }
 
-            const lines = products.map(product => `ID: ${product.id}\nNama: ${product.name}\nHarga: ${formatCurrency(product.price)}\nStok: ${product.stock}\nDeskripsi: ${product.description || '-'}\n---`);
-            return msgData.reply(`*Daftar Produk Toko*\n\n${lines.join('\n')}`);
+            let text = `🛍️ *DAFTAR PRODUK TOKO NEXURE* 🛍️\n\n`;
+            products.forEach(p => {
+                text += `┌─「 *${p.name}* 」\n`;
+                text += `│ 🆔 *ID     :* \`${p.id}\`\n`;
+                text += `│ 💰 *Harga  :* ${formatCurrency(p.price)}\n`;
+                text += `│ 📦 *Stok   :* ${p.stock}\n`;
+                if (p.description) text += `│ 📝 *Info   :* ${p.description}\n`;
+                text += `└─────────────┈\n\n`;
+            });
+            text += `Silakan hubungi admin untuk melakukan pemesanan yaa kak! (˶˃ ᵕ ˂˶) ✨`;
+
+            return msgData.reply(text.trim());
         } catch (error) {
             console.error('Store List Error:', error);
-            return msgData.reply(`Gagal menampilkan daftar produk: ${error.message}`);
+            await msgData.react('❌');
+            return msgData.reply(`Uwaaa gawat! Gagal menampilkan daftar produk: ${error.message}.. (╥﹏╥)`);
         }
     }
 };
+

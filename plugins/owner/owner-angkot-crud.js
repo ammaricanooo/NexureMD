@@ -15,7 +15,11 @@ function ensureCustomFile() {
     };
 
     if (!fs.existsSync(customPath)) {
-        fs.writeFileSync(customPath, JSON.stringify(defaultData, null, 2), 'utf-8');
+        try {
+            fs.writeFileSync(customPath, JSON.stringify(defaultData, null, 2), 'utf-8');
+        } catch (e) {
+            console.error('Failed to create custom angkot file:', e);
+        }
         return defaultData;
     }
 
@@ -23,7 +27,16 @@ function ensureCustomFile() {
 }
 
 function loadCustomData() {
+    const defaultData = {
+        trayekAngkot: [],
+        aliasLokasi: {},
+        deletedTrayekCodes: []
+    };
     try {
+        if (!fs.existsSync(customPath)) {
+            fs.writeFileSync(customPath, JSON.stringify(defaultData, null, 2), 'utf-8');
+            return defaultData;
+        }
         const raw = fs.readFileSync(customPath, 'utf-8');
         const data = JSON.parse(raw);
         return {
@@ -32,7 +45,8 @@ function loadCustomData() {
             deletedTrayekCodes: Array.isArray(data.deletedTrayekCodes) ? data.deletedTrayekCodes : []
         };
     } catch (err) {
-        return ensureCustomFile();
+        console.error('Failed to read/parse custom angkot data:', err);
+        return defaultData;
     }
 }
 
@@ -46,13 +60,22 @@ function normalizeKode(kode) {
 
 function parseStops(value) {
     return value
-        .split(/;|\n|\\|,/) 
+        .split(/;|\n|\\|,/)
         .map(stop => stop.trim())
         .filter(Boolean);
 }
 
 function formatRoute(trayek) {
-    return `*${trayek.kode}* - ${trayek.nama}\n• Warna: ${trayek.warna || 'N/A'}\n• Tarif: Rp ${Number(trayek.tarif || 0).toLocaleString('id-ID')}\n• Waktu: ${Number(trayek.waktu_menit || 0)} menit\n• Rute: ${trayek.rute.join(' ➜ ')}${trayek.keterangan ? `\n• Info: ${trayek.keterangan}` : ''}`;
+    return (
+        `🚌 *DETAIL RUTE ANGKOT ${trayek.kode}* 🚌\n\n` +
+        `• *Nama Rute :* ${trayek.nama}\n` +
+        `• *Warna     :* ${trayek.warna || 'N/A'}\n` +
+        `• *Tarif     :* Rp ${Number(trayek.tarif || 0).toLocaleString('id-ID')}\n` +
+        `• *Est. Waktu:* ${Number(trayek.waktu_menit || 0)} menit\n` +
+        `• *Jarak     :* ${Number(trayek.jarak_km || 0)} km\n` +
+        `• *Rute Stop :*\n  ${trayek.rute.join(' ➜ ')}` +
+        `${trayek.keterangan ? `\n\n📝 *Info Tambahan:* ${trayek.keterangan}` : ''}`
+    );
 }
 
 function findCustomIndex(data, kode) {
@@ -63,21 +86,20 @@ function findRoute(data, kode) {
     return data.find(item => normalizeKode(item.kode) === normalizeKode(kode));
 }
 
-function sendHelp(sock, remoteJid, quoted) {
-    return sock.sendMessage(remoteJid, {
-        text: `🛠️ *Angkot Admin Command Help* 🛠️
-
-` +
-              `*.angkotadmin add <kode> | <nama> | <warna> | <tarif> | <waktu_menit> | <jarak_km> | <rute stop1; stop2; ...> | <keterangan>*\n` +
-              `*.angkotadmin update <kode> | <field> | <nilai>*\n` +
-              `*.angkotadmin delete <kode>*\n` +
-              `*.angkotadmin addstop <kode> | <stop> | <posisi>*\n` +
-              `*.angkotadmin delstop <kode> | <stop>*\n` +
-              `*.angkotadmin alias <alias> | <tujuan>*\n` +
-              `*.angkotadmin list [kode]*\n
-` +
-              `*Fields update:* nama, warna, tarif, waktu_menit, jarak_km, keterangan, rute`.trim()
-    }, { quoted });
+function sendHelp(msgData) {
+    return msgData.reply(
+        `🛠️ *ANGKOT ADMIN MANAGEMENT* 🛠️\n\n` +
+        `Halo Owner ganteng/cantik~! Berikut daftar perintah kelola rute angkot Bogor:\n\n` +
+        `• *.angkotadmin add <kode> | <nama> | <warna> | <tarif> | <waktu_menit> | <jarak_km> | <rute stop1; stop2; ...> | <keterangan>*\n` +
+        `• *.angkotadmin update <kode> | <field> | <nilai>*\n` +
+        `• *.angkotadmin delete <kode>*\n` +
+        `• *.angkotadmin addstop <kode> | <stop> | <posisi>*\n` +
+        `• *.angkotadmin delstop <kode> | <stop>*\n` +
+        `• *.angkotadmin alias <alias> | <tujuan>*\n` +
+        `• *.angkotadmin list [kode]*\n\n` +
+        `*Pilihan field update:* \`nama\`, \`warna\`, \`tarif\`, \`waktu_menit\`, \`jarak_km\`, \`keterangan\`, \`rute\`\n\n` +
+        `Semangat mengelola data angkotnya yaa Bossku! (˶˃ ᵕ ˂˶) ✨`
+    );
 }
 
 export default {
@@ -91,7 +113,7 @@ export default {
         const payload = args.slice(1).join(' ').trim();
 
         if (!action || action === 'help') {
-            return sendHelp(sock, msgData.remoteJid, m);
+            return sendHelp(msgData);
         }
 
         const customData = ensureCustomFile();
@@ -102,22 +124,26 @@ export default {
             switch (action) {
                 case 'list': {
                     if (!parts[0]) {
-                        const list = trayekAngkot.slice(0, 50).map(trayek => `• ${trayek.kode} — ${trayek.nama}`).join('\n');
-                        return sock.sendMessage(msgData.remoteJid, {
-                            text: `📋 *Daftar 50 Rute Angkot Teratas*\n\n${list}\n\nGunakan *.angkotadmin list <kode>* untuk detail.`
-                        }, { quoted: m });
+                        const list = trayekAngkot.slice(0, 50).map(trayek => `• *${trayek.kode}* — ${trayek.nama}`).join('\n');
+                        return msgData.reply(
+                            `📋 *DAFTAR RUTE ANGKOT BOGOR (Top 50)*\n\n${list}\n\n` +
+                            `*Gunakan:* \`.angkotadmin list <kode>\` untuk detail rute yaa kak! (๑>ᴗ<๑)`
+                        );
                     }
 
                     const route = findRoute(trayekAngkot, code);
                     if (!route) {
-                        return sock.sendMessage(msgData.remoteJid, { text: `❌ Rute dengan kode ${parts[0]} tidak ditemukan.` }, { quoted: m });
+                        return msgData.reply(`Aduuh kak, rute angkot dengan kode *${parts[0]}* tidak ditemukan.. (╥﹏╥)`);
                     }
 
-                    return sock.sendMessage(msgData.remoteJid, { text: formatRoute(route) }, { quoted: m });
+                    return msgData.reply(formatRoute(route));
                 }
                 case 'add': {
                     if (parts.length < 7) {
-                        return sock.sendMessage(msgData.remoteJid, { text: '❌ Gunakan: .angkotadmin add <kode> | <nama> | <warna> | <tarif> | <waktu_menit> | <jarak_km> | <rute stop1; stop2; ...> | <keterangan>' }, { quoted: m });
+                        return msgData.reply(
+                            `Uwaaa! Format penambahan rute salah kak.. (｡T ω T｡)\n\n` +
+                            `*Gunakan:* \`.angkotadmin add <kode> | <nama> | <warna> | <tarif> | <waktu_menit> | <jarak_km> | <rute stop1; stop2; ...> | <keterangan>\``
+                        );
                     }
 
                     const [kode, nama, warna, tarifText, waktuText, jarakText, ruteText, keterangan = ''] = parts;
@@ -126,7 +152,7 @@ export default {
                     const jarak_km = Number(jarakText || 0);
                     const rute = parseStops(ruteText);
                     if (!kode || !nama || rute.length < 2) {
-                        return sock.sendMessage(msgData.remoteJid, { text: '❌ Pastikan kode, nama, dan minimal 2 stop rute terisi.' }, { quoted: m });
+                        return msgData.reply(`Aduuh kak, pastikan kode, nama, dan minimal 2 titik stop rute terisi yaa~ (╥﹏╥)`);
                     }
 
                     const entry = {
@@ -147,21 +173,25 @@ export default {
                         customData.trayekAngkot.push(entry);
                     }
 
-                    customData.deletedTrayekCodes = (customData.deletedTrayekCodes || []).filter(code => code.toUpperCase() !== entry.kode);
+                    customData.deletedTrayekCodes = (customData.deletedTrayekCodes || []).filter(c => c.toUpperCase() !== entry.kode);
                     saveCustomData(customData);
                     refreshAngkotData();
 
-                    return sock.sendMessage(msgData.remoteJid, { text: `✅ Rute angkot *${entry.kode}* berhasil ditambahkan / diubah.` }, { quoted: m });
+                    await msgData.react('✅');
+                    return msgData.reply(`Horeee! Rute angkot *${entry.kode}* berhasil ditambahkan / diperbarui~ (˶˃ ᵕ ˂˶) ✨`);
                 }
                 case 'update': {
                     if (parts.length < 3) {
-                        return sock.sendMessage(msgData.remoteJid, { text: '❌ Gunakan: .angkotadmin update <kode> | <field> | <nilai>' }, { quoted: m });
+                        return msgData.reply(
+                            `Uwaaa! Format update rute kurang lengkap kak.. (｡T ω T｡)\n\n` +
+                            `*Gunakan:* \`.angkotadmin update <kode> | <field> | <nilai>\``
+                        );
                     }
                     const [kode, field, value] = parts;
                     const routeCode = normalizeKode(kode);
                     const existingRoute = findRoute(trayekAngkot, routeCode);
                     if (!existingRoute) {
-                        return sock.sendMessage(msgData.remoteJid, { text: `❌ Rute ${kode} tidak ditemukan.` }, { quoted: m });
+                        return msgData.reply(`Aduuh kak, rute *${kode}* tidak ditemukan di database.. (╥﹏╥)`);
                     }
 
                     const customIndex = findCustomIndex(customData, routeCode);
@@ -179,7 +209,9 @@ export default {
                     } else if (targetField === 'nama' || targetField === 'warna' || targetField === 'keterangan') {
                         routeEntry[targetField] = value;
                     } else {
-                        return sock.sendMessage(msgData.remoteJid, { text: `❌ Field tidak dikenali: ${field}. Gunakan nama, warna, tarif, waktu_menit, jarak_km, keterangan, atau rute.` }, { quoted: m });
+                        return msgData.reply(
+                            `Field *${field}* tidak dikenali kak! Gunakan: \`nama\`, \`warna\`, \`tarif\`, \`waktu_menit\`, \`jarak_km\`, \`keterangan\`, atau \`rute\` yaa~ (๑>ᴗ<๑)`
+                        );
                     }
 
                     if (customIndex === -1) {
@@ -187,39 +219,47 @@ export default {
                     } else {
                         customData.trayekAngkot[customIndex] = routeEntry;
                     }
-                    customData.deletedTrayekCodes = (customData.deletedTrayekCodes || []).filter(code => code.toUpperCase() !== routeCode);
+                    customData.deletedTrayekCodes = (customData.deletedTrayekCodes || []).filter(c => c.toUpperCase() !== routeCode);
                     saveCustomData(customData);
                     refreshAngkotData();
 
-                    return sock.sendMessage(msgData.remoteJid, { text: `✅ Rute ${routeCode} berhasil diperbarui.` }, { quoted: m });
+                    await msgData.react('✅');
+                    return msgData.reply(`Yeay! Rute *${routeCode}* berhasil diperbarui yaa kak~ (˶˃ ᵕ ˂˶) ✨`);
                 }
                 case 'delete': {
                     if (!parts[0]) {
-                        return sock.sendMessage(msgData.remoteJid, { text: '❌ Gunakan: .angkotadmin delete <kode>' }, { quoted: m });
+                        return msgData.reply(
+                            `Uwaaa! Format hapus rute salah kak.. (｡T ω T｡)\n\n` +
+                            `*Gunakan:* \`.angkotadmin delete <kode>\``
+                        );
                     }
                     if (!findRoute(trayekAngkot, code)) {
-                        return sock.sendMessage(msgData.remoteJid, { text: `❌ Rute ${parts[0]} tidak ditemukan.` }, { quoted: m });
+                        return msgData.reply(`Aduuh kak, rute *${parts[0]}* tidak ditemukan.. (╥﹏╥)`);
                     }
                     customData.trayekAngkot = customData.trayekAngkot.filter(item => normalizeKode(item.kode) !== code);
                     customData.deletedTrayekCodes = Array.from(new Set([...(customData.deletedTrayekCodes || []).map(c => normalizeKode(c)), code]));
                     saveCustomData(customData);
                     refreshAngkotData();
 
-                    return sock.sendMessage(msgData.remoteJid, { text: `✅ Rute ${parts[0]} berhasil dihapus dari hasil pencarian.` }, { quoted: m });
+                    await msgData.react('✅');
+                    return msgData.reply(`Berhasil! Rute *${parts[0]}* telah dihapus dari sistem pencarian yaa kak~ (˶˃ ᵕ ˂˶)`);
                 }
                 case 'addstop': {
                     if (parts.length < 2) {
-                        return sock.sendMessage(msgData.remoteJid, { text: '❌ Gunakan: .angkotadmin addstop <kode> | <stop> | <posisi>' }, { quoted: m });
+                        return msgData.reply(
+                            `Uwaaa! Format tambah stop kurang lengkap kak.. (｡T ω T｡)\n\n` +
+                            `*Gunakan:* \`.angkotadmin addstop <kode> | <stop> | <posisi>\``
+                        );
                     }
                     const [kode, stop, positionText] = parts;
                     const routeCode = normalizeKode(kode);
                     const route = findRoute(trayekAngkot, routeCode);
                     if (!route) {
-                        return sock.sendMessage(msgData.remoteJid, { text: `❌ Rute ${kode} tidak ditemukan.` }, { quoted: m });
+                        return msgData.reply(`Aduuh kak, rute *${kode}* tidak ditemukan.. (╥﹏╥)`);
                     }
                     const stopName = stop.trim();
                     if (!stopName) {
-                        return sock.sendMessage(msgData.remoteJid, { text: '❌ Nama stop tidak boleh kosong.' }, { quoted: m });
+                        return msgData.reply(`Aduuh kak, nama titik stop tidak boleh kosong yaa~ (╥﹏╥)`);
                     }
 
                     const customIndex = findCustomIndex(customData, routeCode);
@@ -235,17 +275,22 @@ export default {
 
                     saveCustomData(customData);
                     refreshAngkotData();
-                    return sock.sendMessage(msgData.remoteJid, { text: `✅ Stop *${stopName}* berhasil ditambahkan ke ${routeCode}.` }, { quoted: m });
+
+                    await msgData.react('✅');
+                    return msgData.reply(`Yeay! Stop *${stopName}* berhasil ditambahkan ke rute *${routeCode}*~ (˶˃ ᵕ ˂˶)`);
                 }
                 case 'delstop': {
                     if (parts.length < 2) {
-                        return sock.sendMessage(msgData.remoteJid, { text: '❌ Gunakan: .angkotadmin delstop <kode> | <stop>' }, { quoted: m });
+                        return msgData.reply(
+                            `Uwaaa! Format hapus stop kurang lengkap kak.. (｡T ω T｡)\n\n` +
+                            `*Gunakan:* \`.angkotadmin delstop <kode> | <stop>\``
+                        );
                     }
                     const [kodeDel, stopDel] = parts;
                     const routeCodeDel = normalizeKode(kodeDel);
                     const routeDel = findRoute(trayekAngkot, routeCodeDel);
                     if (!routeDel) {
-                        return sock.sendMessage(msgData.remoteJid, { text: `❌ Rute ${kodeDel} tidak ditemukan.` }, { quoted: m });
+                        return msgData.reply(`Aduuh kak, rute *${kodeDel}* tidak ditemukan.. (╥﹏╥)`);
                     }
 
                     const customIndexDel = findCustomIndex(customData, routeCodeDel);
@@ -254,33 +299,41 @@ export default {
 
                     const remaining = routeEntryDel.rute.filter(stop => stop.toLowerCase() !== stopDel.toLowerCase());
                     if (remaining.length === routeEntryDel.rute.length) {
-                        return sock.sendMessage(msgData.remoteJid, { text: `❌ Stop ${stopDel} tidak ditemukan pada rute ${kodeDel}.` }, { quoted: m });
+                        return msgData.reply(`Aduuh kak, titik stop *${stopDel}* tidak ditemukan pada rute *${kodeDel}*.. (╥﹏╥)`);
                     }
                     routeEntryDel.rute = remaining;
                     saveCustomData(customData);
                     refreshAngkotData();
 
-                    return sock.sendMessage(msgData.remoteJid, { text: `✅ Stop *${stopDel}* berhasil dihapus dari ${kodeDel}.` }, { quoted: m });
+                    await msgData.react('✅');
+                    return msgData.reply(`Berhasil! Stop *${stopDel}* telah dihapus dari rute *${kodeDel}* yaa kak~ (˶˃ ᵕ ˂˶)`);
                 }
                 case 'alias': {
                     if (parts.length < 2) {
-                        return sock.sendMessage(msgData.remoteJid, { text: '❌ Gunakan: .angkotadmin alias <alias> | <tujuan>' }, { quoted: m });
+                        return msgData.reply(
+                            `Uwaaa! Format alias kurang lengkap kak.. (｡T ω T｡)\n\n` +
+                            `*Gunakan:* \`.angkotadmin alias <alias> | <tujuan>\``
+                        );
                     }
                     const [alias, target] = parts;
                     if (!alias || !target) {
-                        return sock.sendMessage(msgData.remoteJid, { text: '❌ Alias dan tujuan harus terisi.' }, { quoted: m });
+                        return msgData.reply(`Aduuh kak, alias dan tujuan harus terisi yaa~ (╥﹏╥)`);
                     }
                     customData.aliasLokasi[alias.toLowerCase()] = target;
                     saveCustomData(customData);
                     refreshAngkotData();
-                    return sock.sendMessage(msgData.remoteJid, { text: `✅ Alias *${alias}* sekarang mengarah ke *${target}*.` }, { quoted: m });
+
+                    await msgData.react('✅');
+                    return msgData.reply(`Horeee! Alias *${alias}* sekarang resmi terhubung ke *${target}* yaa kak~ (˶˃ ᵕ ˂˶) ✨`);
                 }
                 default:
-                    return sendHelp(sock, msgData.remoteJid, m);
+                    return sendHelp(msgData);
             }
         } catch (err) {
             console.error('Angkot Admin Error:', err);
-            return sock.sendMessage(msgData.remoteJid, { text: `❌ Terjadi kesalahan: ${err.message}` }, { quoted: m });
+            await msgData.react('❌');
+            return msgData.reply(`Uwaaa gawat! Terjadi kesalahan saat memproses perintah admin angkot: ${err.message}.. (╥﹏╥)`);
         }
     }
 };
+

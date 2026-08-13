@@ -5,10 +5,12 @@ export default {
     isPrivate: true,
     async execute(sock, m, msgData, user) {
         if (!user.is_registered) {
-            return msgData.reply('Kamu belum terdaftar sebelumnya!');
+            return msgData.reply('Aduuh kak, kamu belum terdaftar sebelumnya di database Nexure.. (╥﹏╥)');
         }
 
         await msgData.db.User.update({ is_registered: false }, { where: { jid: user.jid } });
-        await msgData.reply('Pendaftaran berhasil dihapus!');
+        await msgData.react('✅');
+        await msgData.reply('Pendaftaran kamu berhasil dihapus dari database Nexure yaa kak~ Sampai jumpa lagi! (｡T ω T｡)');
     }
 };
+
