@@ -31,6 +31,7 @@ const config = {
   // API Service
   API_RYZUMI: process.env.API_RYZUMI,
   API_AMMARICANO: process.env.API_AMMARICANO,
+  GEMINI_API_KEY: process.env.GEMINI_API_KEY,
 
   // Image Link
   RYZUMI_DEFAULT_PP: process.env.RYZUMI_DEFAULT_PP,

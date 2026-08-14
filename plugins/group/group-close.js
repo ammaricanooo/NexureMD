@@ -8,7 +8,8 @@ const plugin = {
     execute: async (sock, m, msgData) => {
         try {
             await sock.groupSettingUpdate(msgData.remoteJid, 'announcement');
-            await msgData.reply('Sstt! Sekarang hanya admin yang bisa chat di grup ini ya, Kakak~ (๑>ᴗ<๑)');
+            await msgData.react('✅');
+            await msgData.reply('✅ Selesai kak! Grup berhasil *ditutup*. Sekarang hanya Admin yang bisa mengirim pesan yaa~ (๑>ᴗ<๑)');
         } catch (error) {
             console.error(error);
             await msgData.reply('Gomen ne... Nexure gagal menutup grupnya (╥﹏╥)');

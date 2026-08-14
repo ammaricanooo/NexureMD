@@ -8,7 +8,8 @@ const plugin = {
     execute: async (sock, m, msgData) => {
         try {
             await sock.groupSettingUpdate(msgData.remoteJid, 'locked');
-            await msgData.reply('Sekarang hanya admin yang bisa edit info grup ini ya, Kakak~ (˶˃ ᵕ ˂˶)');
+            await msgData.react('✅');
+            await msgData.reply('✅ Selesai kak! Info grup berhasil *dikunci*. Sekarang hanya Admin yang bisa mengubah nama & deskripsi grup~ (˶˃ ᵕ ˂˶)');
         } catch (error) {
             console.error(error);
             await msgData.reply('Gomen ne... Nexure gagal mengunci info grupnya (╥﹏╥)');

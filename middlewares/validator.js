@@ -17,24 +17,24 @@ export const validatePlugin = async (sock, m, msgData, user, group, plugin, sett
     }
 
     // Logic is_register: Jika true, terapkan aturan register. Jika false, bebas akses & limit.
-    if (setting.is_register) {
-        if (plugin.isRegistered && !user.is_registered && !user.isOwner) {
-            await sock.sendMessage(msgData.remoteJid, { text: config.RYZUMI_MSG_REGISTER }, { quoted: m });
-            return false;
-        }
+    // if (setting.is_register) {
+    //     if (plugin.isRegistered && !user.is_registered && !user.isOwner) {
+    //         await sock.sendMessage(msgData.remoteJid, { text: config.RYZUMI_MSG_REGISTER }, { quoted: m });
+    //         return false;
+    //     }
 
-        if (plugin.limit) {
-            const isLimitBypassed = user.isOwner || user.is_premium || (group && !group.is_limited);
-            if (user.limit < plugin.limit && !isLimitBypassed) {
-                await sock.sendMessage(msgData.remoteJid, { text: config.RYZUMI_MSG_LIMIT }, { quoted: m });
-                return false;
-            }
-            if (!isLimitBypassed) {
-                user.limit -= plugin.limit;
-                await user.save();
-            }
-        }
-    }
+    //     if (plugin.limit) {
+    //         const isLimitBypassed = user.isOwner || user.is_premium || (group && !group.is_limited);
+    //         if (user.limit < plugin.limit && !isLimitBypassed) {
+    //             await sock.sendMessage(msgData.remoteJid, { text: config.RYZUMI_MSG_LIMIT }, { quoted: m });
+    //             return false;
+    //         }
+    //         if (!isLimitBypassed) {
+    //             user.limit -= plugin.limit;
+    //             await user.save();
+    //         }
+    //     }
+    // }
 
     if (plugin.isAdmin && !msgData.isAdmin && !user.isOwner) {
         await sock.sendMessage(msgData.remoteJid, { text: config.RYZUMI_MSG_ADMIN }, { quoted: m });

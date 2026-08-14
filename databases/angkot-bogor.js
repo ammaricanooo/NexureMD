@@ -2995,17 +2995,17 @@ export function cariRute(asal, tujuan) {
     const normalAsal = normalisasiLokasi(asal);
     const normalTujuan = normalisasiLokasi(tujuan);
 
-    const langsung = [];
-    const transfer = [];
+    const langsungRaw = [];
+    const transferRaw = [];
 
     // Cari rute langsung
     for (const trayek of trayekAngkot) {
         const idxAsal = temukan(trayek.rute, normalAsal);
         const idxTujuan = temukan(trayek.rute, normalTujuan);
 
-        if (idxAsal !== -1 && idxTujuan !== -1) {
+        if (idxAsal !== -1 && idxTujuan !== -1 && idxAsal !== idxTujuan) {
             const reversed = idxAsal > idxTujuan;
-            langsung.push({
+            langsungRaw.push({
                 trayek,
                 dariStop: trayek.rute[idxAsal],
                 keStop: trayek.rute[idxTujuan],
@@ -3017,53 +3017,117 @@ export function cariRute(asal, tujuan) {
         }
     }
 
+    // Deduplikasi Rute Langsung berdasarkan kode trayek
+    const langsungMap = new Map();
+    for (const item of langsungRaw) {
+        const kode = item.trayek.kode;
+        if (!langsungMap.has(kode)) {
+            langsungMap.set(kode, item);
+        } else {
+            const existing = langsungMap.get(kode);
+            if (item.stops.length < existing.stops.length) {
+                langsungMap.set(kode, item);
+            }
+        }
+    }
+    const langsung = [...langsungMap.values()];
+
     // Cari rute transfer (ganti angkot 1x) jika tidak ada rute langsung
     if (langsung.length === 0) {
         for (const t1 of trayekAngkot) {
             const idxAsal1 = temukan(t1.rute, normalAsal);
             if (idxAsal1 === -1) continue;
 
-            for (const stopTransfer of t1.rute.slice(idxAsal1 + 1)) {
+            const candidateStops = t1.rute.filter((_, idx) => idx !== idxAsal1);
+            for (const stopTransfer of candidateStops) {
                 for (const t2 of trayekAngkot) {
                     if (t1.kode === t2.kode) continue;
                     const idxTransfer2 = temukan(t2.rute, stopTransfer);
                     const idxTujuan2 = temukan(t2.rute, normalTujuan);
 
-                    if (idxTransfer2 !== -1 && idxTujuan2 !== -1 && idxTransfer2 < idxTujuan2) {
+                    if (idxTransfer2 !== -1 && idxTujuan2 !== -1 && idxTransfer2 !== idxTujuan2) {
                         const idxAsal1Real = temukan(t1.rute, normalAsal);
                         const idxTransfer1 = temukan(t1.rute, stopTransfer);
 
-                        const sudahAda = transfer.some(r =>
-                            r.t1.kode === t1.kode && r.t2.kode === t2.kode && r.transfer === stopTransfer
-                        );
-                        if (!sudahAda && idxTransfer1 > idxAsal1Real) {
-                            transfer.push({
+                        if (idxTransfer1 !== -1 && idxTransfer1 !== idxAsal1Real) {
+                            const stops1 = idxTransfer1 > idxAsal1Real
+                                ? t1.rute.slice(idxAsal1Real, idxTransfer1 + 1)
+                                : t1.rute.slice(idxTransfer1, idxAsal1Real + 1).reverse();
+
+                            const stops2 = idxTujuan2 > idxTransfer2
+                                ? t2.rute.slice(idxTransfer2, idxTujuan2 + 1)
+                                : t2.rute.slice(idxTujuan2, idxTransfer2 + 1).reverse();
+
+                            transferRaw.push({
                                 t1,
                                 t2,
                                 transfer: stopTransfer,
-                                stops1: t1.rute.slice(idxAsal1Real, idxTransfer1 + 1),
-                                stops2: t2.rute.slice(idxTransfer2, idxTujuan2 + 1)
+                                stops1,
+                                stops2
                             });
                         }
                     }
                 }
             }
         }
+
+        // Deduplikasi Rute Transfer berdasarkan pasangan (t1.kode, t2.kode)
+        const transferMap = new Map();
+        for (const item of transferRaw) {
+            const pairKey = `${item.t1.kode}->${item.t2.kode}`;
+            const totalStops = item.stops1.length + item.stops2.length;
+
+            if (!transferMap.has(pairKey)) {
+                transferMap.set(pairKey, { item, totalStops });
+            } else {
+                if (totalStops < transferMap.get(pairKey).totalStops) {
+                    transferMap.set(pairKey, { item, totalStops });
+                }
+            }
+        }
+
+        const transfer = [];
+        for (const val of transferMap.values()) {
+            transfer.push(val.item);
+        }
+
+        return { langsung, transfer: transfer.slice(0, 3) };
     }
 
-    return { langsung, transfer: transfer.slice(0, 3) };
+    return { langsung, transfer: [] };
 }
 
 function temukan(rute, target) {
     const targetSimplified = simplifyLocation(target);
-    return rute.findIndex(stop => {
-        const stopSimplified = simplifyLocation(stop);
-        return stopSimplified === targetSimplified ||
-            stopSimplified.includes(targetSimplified) ||
-            targetSimplified.includes(stopSimplified);
-    });
+    if (!targetSimplified) return -1;
+
+    // 1. Exact match
+    const exactIdx = rute.findIndex(stop => simplifyLocation(stop) === targetSimplified);
+    if (exactIdx !== -1) return exactIdx;
+
+    // 2. Substring match
+    if (targetSimplified.length >= 3) {
+        const subIdx = rute.findIndex(stop => {
+            const s = simplifyLocation(stop);
+            return s.includes(targetSimplified) || targetSimplified.includes(s);
+        });
+        if (subIdx !== -1) return subIdx;
+    }
+
+    // 3. Multi-word Token Match
+    const targetTokens = targetSimplified.split(' ').filter(t => t.length > 2);
+    if (targetTokens.length > 0) {
+        const tokenIdx = rute.findIndex(stop => {
+            const s = simplifyLocation(stop);
+            return targetTokens.every(tok => s.includes(tok));
+        });
+        if (tokenIdx !== -1) return tokenIdx;
+    }
+
+    return -1;
 }
 
 function capitalizeWords(str) {
     return str.replace(/\b\w/g, c => c.toUpperCase());
 }
+

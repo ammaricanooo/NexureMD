@@ -49,11 +49,11 @@ export default {
         });
 
         try {
-            const url = `${config.API_RYZUMI}/api/tool/cek-resi?resi=${noResi}${ekspedisi ? `&ekspedisi=${ekspedisi}` : ''}`;
+            const url = `${config.API_AMMARICANO}/api/tools/cekresi?noresi=${noResi}${ekspedisi ? `&ekspedisi=${ekspedisi}` : ''}`;
             const res = await axios.get(url);
             const result = res.data;
 
-            if (!result.success || !result.data) {
+            if (!result.success || !result.result) {
                 if (!ekspedisi) {
                     const available = Object.keys(ekspedisiList).join('\n• ');
                     return sock.sendMessage(msgData.remoteJid, {
@@ -66,7 +66,7 @@ export default {
                 }
             }
 
-            const data = result.data;
+            const data = result.result.data;
             const historyText = data.history?.slice(0, 5).map((item) => `• *${item.tanggal}*\n  ${item.keterangan}`).join('\n\n') || 'Belum ada histori nih kak..';
 
             const infoText = `

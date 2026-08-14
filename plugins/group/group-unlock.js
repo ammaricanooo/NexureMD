@@ -8,7 +8,8 @@ const plugin = {
     execute: async (sock, m, msgData) => {
         try {
             await sock.groupSettingUpdate(msgData.remoteJid, 'unlocked');
-            await msgData.reply('Sekarang semua peserta bisa edit info grup ini~ (๑>ᴗ<๑)');
+            await msgData.react('✅');
+            await msgData.reply('✅ Selesai kak! Info grup berhasil *dibuka*. Sekarang seluruh anggota bisa mengubah nama & deskripsi grup~ (๑>ᴗ<๑)');
         } catch (error) {
             console.error(error);
             await msgData.reply('Gomen ne... Nexure gagal membuka info grupnya (╥﹏╥)');

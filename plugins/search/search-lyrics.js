@@ -21,9 +21,9 @@ export default {
         });
 
         try {
-            const url = `${config.API_RYZUMI}/api/search/lyrics?query=${encodeURIComponent(text)}`;
+            const url = `${config.API_AMMARICANO}/api/search/lyrics?query=${encodeURIComponent(text)}`;
             const response = await axios.get(url);
-            const results = response.data;
+            const results = response.data.result;
 
             if (!results || results.length === 0) {
                 return sock.sendMessage(msgData.remoteJid, {
@@ -37,13 +37,16 @@ export default {
             const infoText = `
 🎵 *LIRIK LAGU* 🎵
 
-• *Judul:* ${data.name}
+• *Judul:* ${data.trackName}
 • *Artis:* ${data.artistName}
 • *Album:* ${data.albumName || '-'}
 • *Durasi:* ${duration}
 
 *Lyrics:*
 ${data.plainLyrics || 'Liriknya nggak ada kak.. (╥﹏╥)'}
+
+*Lyrics with Timestamps:*
+${data.syncedLyrics || 'Liriknya nggak ada kak.. (╥﹏╥)'}
 `.trim();
 
             await sock.sendMessage(msgData.remoteJid, {

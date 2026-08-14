@@ -19,6 +19,14 @@ export default {
             return sock.sendMessage(msgData.remoteJid, { text: `Tag atau balas pesan user yang ingin di-${msgData.commandName}` }, { quoted: m });
         }
 
+        if (users.includes(msgData.sender)) {
+            return sock.sendMessage(msgData.remoteJid, { text: `Kamu tidak bisa ${msgData.commandName} diri sendiri.` }, { quoted: m });
+        }
+
+        if (users.includes(sock.user.id)) {
+            return sock.sendMessage(msgData.remoteJid, { text: `Bot tidak bisa ${msgData.commandName} dirinya sendiri.` }, { quoted: m });
+        }
+
         const action = msgData.commandName; // 'promote' atau 'demote'
         
         try {

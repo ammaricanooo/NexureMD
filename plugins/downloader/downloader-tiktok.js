@@ -19,22 +19,20 @@ export default {
             const url = args[0];
             const isDouyin = url.includes("douyin");
             const apiEndpoint = isDouyin
-                ? `${config.API_RYZUMI}/api/downloader/douyin?url=${url}`
+                ? `${config.API_AMMARICANO}/api/download/douyin?url=${url}`
                 : `${config.API_AMMARICANO}/api/download/tiktok?url=${url}`;
 
             const { data: response } = await axios.get(apiEndpoint);
             let videoData, videoURL, info;
 
             if (isDouyin) {
-                if (!response.success || !response.data) throw new Error("Gagal mendownload video Douyin kak~ (╥﹏╥)");
-                videoData = response.data;
-                const videoInfo = videoData.video_data;
-                const hdURL = videoInfo.nwm_video_url_HQ;
-                videoURL = (args[1] === "hd" && hdURL) ? hdURL : videoInfo.nwm_video_url;
+                if (!response.success || !response.result) throw new Error("Gagal mendownload video Douyin kak~ (╥﹏╥)");
+                videoData = response.result;
+                const videoInfo = videoData;
+                const hdURL = videoInfo.downloadLinks[2]?.url || null;
+                videoURL = (args[1] === "hd" && hdURL) ? hdURL : videoInfo.downloadLinks[0]?.url || videoInfo.downloadLinks[1]?.url || null;
 
-                const uploadTime = new Date(videoData.create_time * 1000).toLocaleString();
-                const author = videoData.author || {};
-                info = `*Caption:* ${videoData.desc || '-'}\n*Upload:* ${uploadTime}\n*Uploader:* ${author.nickname || "unknown"}`;
+                info = `*Caption:* ${videoData.title || '-'}\n*Durasi:* ${videoData.duration || '-'}`;
             } else {
                 videoData = response?.result;
                 if (!videoData) throw new Error("Gagal mendownload video TikTok kak~ (╥﹏╥)");

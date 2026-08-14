@@ -105,17 +105,20 @@ export const processAuth = async (sock, msgData) => {
         const botLid = sock.user?.lid;
 
         const participant = metadata.participants.find(p => 
-            p.id === msgData.senderJid || 
+            p.id === msgData.senderJid ||
+            p.lid === msgData.senderJid ||
             jidToNum(resolveLidToJid(p.id)) === normalizedSender
         );
-        msgData.isAdmin = participant?.admin !== null && participant?.admin !== undefined;
+        // Baileys sets admin to 'admin' or 'superadmin' for admins, and null/undefined/false for regular members
+        msgData.isAdmin = participant?.admin === 'admin' || participant?.admin === 'superadmin';
 
         const botParticipant = metadata.participants.find(p => 
             p.id === botId || 
             p.id === botLid || 
             jidToNum(resolveLidToJid(p.id)) === normalizedBot
         );
-        msgData.isBotAdmin = botParticipant?.admin !== null && botParticipant?.admin !== undefined;
+        // Baileys sets admin to 'admin' or 'superadmin' for admins, and null/undefined/false for regular members
+        msgData.isBotAdmin = botParticipant?.admin === 'admin' || botParticipant?.admin === 'superadmin';
     }
 
     return { user, group, setting };

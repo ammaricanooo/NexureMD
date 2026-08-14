@@ -21,7 +21,7 @@ export default {
         });
 
         try {
-            const url = `${config.API_RYZUMI}/api/tool/cek-pln?id=${id}`;
+            const url = `${config.API_AMMARICANO}/api/tools/pln?id=${id}`;
             const res = await axios.get(url);
             const result = res.data;
 
