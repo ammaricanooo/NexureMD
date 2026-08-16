@@ -94,14 +94,19 @@ const plugin = {
             // Total pesan seluruh member di grup
             const totalMessages = topMembers.reduce((sum, item) => sum + item.message_count, 0);
 
-            // Format opsi poll untuk setiap member
+            // Format opsi poll: nama member untuk label, jumlah pesan untuk value poll
             const medals = ['🥇', '🥈', '🥉', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟', '1️⃣1️⃣', '1️⃣2️⃣'];
             const pollValues = topMembers.map((stat, idx) => {
-                const pct = totalMessages > 0 ? ((stat.message_count / totalMessages) * 100).toFixed(1) : '0.0';
                 const name = stat.member_name || stat.member_jid.split('@')[0];
                 const shortName = name.length > 18 ? name.slice(0, 16) + '..' : name;
-                return `${medals[idx] || `${idx + 1}.`} ${shortName} (${stat.message_count} msg | ${pct}%)`;
+                return `${medals[idx] || `${idx + 1}.`} ${shortName}`;
             });
+
+            // Jika ingin menampilkan jumlah pesan di teks tambahan, simpan di data terpisah
+            const pollMeta = topMembers.map((stat) => ({
+                name: stat.member_name || stat.member_jid.split('@')[0],
+                count: stat.message_count
+            }));
 
             // Kirim Poll Message dengan selectableCount: 0 (Voting/Pemilihan Nonaktif)
             await sock.sendMessage(remoteJid, {

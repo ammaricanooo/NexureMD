@@ -52,8 +52,8 @@ const plugin = {
             if (commandName === 'unpin') {
                 await sock.sendMessage(remoteJid, {
                     pin: quotedKey,
-                    type: 2, // 2 = unpin di Baileys
-                    time: 0
+                    type: 0, // 0 = unpin di Baileys
+                    time: 86400
                 });
 
                 await msgData.react('📌');
