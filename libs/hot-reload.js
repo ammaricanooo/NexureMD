@@ -38,12 +38,20 @@ export const loadPlugins = async (dir) => {
     plugins.length = 0;
     plugins.push(...tempPlugins);
 
-    console.log(`[Hot-Reload] ✅ Berhasil memuat ulang ${plugins.length} plugins.`);
+    console.log(`[Hot-Reload] ✅ Berhasil memuat ${plugins.length} plugins.`);
 };
 
 // Fungsi untuk me-watch file menggunakan fs.watch
+// ⚠️  PERINGATAN MEMORI: Setiap reload ESM menambah module baru ke V8 heap.
+//     Module lama tidak dapat di-GC oleh engine. Gunakan hanya saat development.
 export const watchPlugins = (dir) => {
-    console.log(`[Hot-Reload] 👀 Memantau perubahan di folder plugins...`);
+    // Guard: Hanya aktifkan hot-reload di mode development
+    if (process.env.NODE_ENV !== 'development') {
+        console.log('[Hot-Reload] ℹ️  Mode production: hot-reload dinonaktifkan untuk efisiensi memori.');
+        return;
+    }
+
+    console.log(`[Hot-Reload] 👀 Memantau perubahan di folder plugins... (development only)`);
 
     // Recursive watch tidak selalu didukung sempurna di OS lama, tapi bekerja baik di Windows/macOS
     fs.watch(dir, { recursive: true }, async (eventType, filename) => {

@@ -10,16 +10,21 @@ import { logMessage } from './libs/console.js';
 import fs from 'fs';
 import { startCronJobs } from './libs/cronjob.js';
 import Group from './databases/orm/Group.js';
-import { setGroupMetadata } from './libs/groupCache.js';
+import { setGroupMetadata, clearGroupCache } from './libs/groupCache.js';
 import Setting from './databases/orm/Setting.js';
 import Product from './databases/orm/Product.js';
 import express from 'express';
 import { setWhatsAppSocket, resetSocket } from './libs/socket-manager.js';
 import whatsappRouter from './api/whatsapp-gateway-api.js';
+import { trackMessage } from './plugins/group/group-topchat.js';
 
 
 // Pastikan inisialisasi database hanya berjalan sekali di luar loop agar tidak memanggil berkali-kali saat reconnect
 let isDbConnected = false;
+
+// Exponential backoff untuk reconnect — mencegah ban akun karena terlalu agresif
+let reconnectDelay = 2000;
+const MAX_RECONNECT_DELAY = 60000;
 
 /**
  * Sinkronisasi semua grup yang diikuti bot ke database secara otomatis.
@@ -140,21 +145,29 @@ async function connectToWhatsApp() {
             const reason = lastDisconnect.error?.output?.statusCode;
             console.log(`Koneksi terputus. Alasan: ${reason}`);
             
-            // Reset socket saat disconnect
+            // Bersihkan socket dan cache grup saat disconnect untuk membebaskan memori
             resetSocket();
+            clearGroupCache();
 
             if (reason === DisconnectReason.loggedOut) {
                 console.log('Sesi telah kedaluwarsa atau dilogout. Menghapus session...');
                 if (fs.existsSync('sessions')) {
                     fs.rmSync('sessions', { recursive: true, force: true });
                 }
+                // Reset backoff saat logout agar reconnect segera saat session baru
+                reconnectDelay = 2000;
                 setTimeout(connectToWhatsApp, 2000);
             } else {
-                console.log('Mencoba menyambungkan kembali...');
-                setTimeout(connectToWhatsApp, 2000);
+                console.log(`Mencoba menyambungkan kembali dalam ${reconnectDelay / 1000} detik...`);
+                setTimeout(connectToWhatsApp, reconnectDelay);
+                // Naikkan delay secara eksponensial, maksimal 60 detik
+                reconnectDelay = Math.min(reconnectDelay * 2, MAX_RECONNECT_DELAY);
             }
         } else if (connection === 'open') {
             console.log('✅ Bot berhasil terhubung ke WhatsApp! Sedang menyinkronkan data...');
+
+            // Reset delay backoff karena sudah berhasil connect
+            reconnectDelay = 2000;
 
             // Register socket ke API gateway
             setWhatsAppSocket(sock);
@@ -193,6 +206,12 @@ async function connectToWhatsApp() {
                 if (!msgData.commandName) continue;
             } else {
                 logMessage(sock, msgData);
+            }
+
+            // Tracking jumlah pesan member grup (non-blocking, fire-and-forget)
+            if (msgData.isGroup && !m.key.fromMe) {
+                trackMessage(msgData.remoteJid, msgData.senderJid, msgData.pushName)
+                    .catch(err => console.error('[TrackMsg Error]', err.message));
             }
 
             // Limpahkan pesan masuk ke handler secara paralel agar tidak saling menunggu (non-blocking)

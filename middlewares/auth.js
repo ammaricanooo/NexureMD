@@ -8,19 +8,30 @@ import { getGroupMetadata, setGroupMetadata } from '../libs/groupCache.js';
 
 let cachedSetting = null;
 let lastCacheUpdate = 0;
+let settingFetchPromise = null; // Mencegah burst DB query saat cache expired
 const CACHE_TTL = 30000; // 30 detik
 
 const getCachedSetting = async () => {
     const now = Date.now();
-    if (!cachedSetting || (now - lastCacheUpdate) > CACHE_TTL) {
-        const [setting] = await Setting.findOrCreate({
+    if (cachedSetting && (now - lastCacheUpdate) <= CACHE_TTL) {
+        return cachedSetting;
+    }
+    // Jika sudah ada promise yang sedang berjalan, tunggu hasilnya (jangan buat request baru)
+    if (!settingFetchPromise) {
+        settingFetchPromise = Setting.findOrCreate({
             where: { id: 1 },
             defaults: { is_public: true, is_register: true, is_gconly: false }
+        }).then(([setting]) => {
+            cachedSetting = setting;
+            lastCacheUpdate = Date.now();
+            settingFetchPromise = null;
+            return setting;
+        }).catch(err => {
+            settingFetchPromise = null;
+            throw err;
         });
-        cachedSetting = setting;
-        lastCacheUpdate = now;
     }
-    return cachedSetting;
+    return settingFetchPromise;
 };
 
 export const processAuth = async (sock, msgData) => {
@@ -60,11 +71,10 @@ export const processAuth = async (sock, msgData) => {
     let group = null;
     if (msgData.isGroup) {
         let metadata = getGroupMetadata(msgData.remoteJid);
-        
-        // Jika tidak ada di cache, coba ambil dari database dulu sebagai cadangan (biar cepet)
-        let dbGroup = await Group.findOne({ where: { jid: msgData.remoteJid } });
 
         if (!metadata) {
+            // Cache miss: coba DB dulu (cepat) sebagai cadangan nama grup
+            let dbGroup = await Group.findOne({ where: { jid: msgData.remoteJid } });
             try {
                 // Tambahkan timeout yang lebih singkat agar tidak membuat user menunggu lama
                 const timeout = (ms) => new Promise((_, reject) => setTimeout(() => reject(new Error('Fetch timeout')), ms));
@@ -72,7 +82,7 @@ export const processAuth = async (sock, msgData) => {
                     sock.groupMetadata(msgData.remoteJid),
                     timeout(2000) // 2 detik saja, lebih dari itu kelamaan
                 ]);
-                
+
                 setGroupMetadata(msgData.remoteJid, metadata);
             } catch (err) {
                 // Jika gagal fetch metadata (timeout/error), gunakan data dari DB atau dummy

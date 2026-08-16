@@ -17,7 +17,7 @@ async function callGeminiApi(promptText, temperature = 0.2) {
 
     try {
         const response = await axios.post(
-            `${GEMINI_API_URL}?key=${apiKey}`,
+            GEMINI_API_URL,
             {
                 contents: [
                     {
@@ -30,7 +30,10 @@ async function callGeminiApi(promptText, temperature = 0.2) {
                 }
             },
             {
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-goog-api-key': apiKey
+                },
                 timeout: 10000
             }
         );

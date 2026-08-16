@@ -114,11 +114,11 @@ export const extractMessageData = (m, sock) => {
                 mediaType === 'sticker' ? 'image' : mediaType
             ));
 
-            let buffer = Buffer.from([]);
+            const chunks = [];
             for await (const chunk of stream) {
-                buffer = Buffer.concat([buffer, chunk]);
+                chunks.push(chunk);
             }
-            return buffer;
+            return Buffer.concat(chunks);
         },
 
         reply: async (text) => sock.sendMessage(remoteJid, { text }, { quoted: m }),
