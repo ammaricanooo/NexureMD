@@ -2,7 +2,7 @@ import axios from 'axios';
 import config from '../../config.js';
 
 export default {
-    command: ['pinterest', 'pin'],
+    command: ['pinterest', 'pint'],
     category: 'downloader',
     isRegistered: true,
     limit: 1,
