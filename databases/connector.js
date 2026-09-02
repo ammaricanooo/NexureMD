@@ -6,7 +6,7 @@ let sequelize;
 if (config.DB_DRIVER === 'sqlite3') {
     sequelize = new Sequelize({
         dialect: 'sqlite',
-        storage: './databases/ryzumi_wa.sqlite',
+        storage: './databases/nexure_wa.sqlite',
         logging: false
     });
 } else {

@@ -80,7 +80,8 @@ const baseTrayekAngkot = [
     "jarak_km": 17.4,
     "waktu_menit": 73,
     "tarif": 6000,
-    "keterangan": "Sumber: website (majalah, lovelybogor, enterbogor)"
+    "keterangan": "Sumber: website (majalah, lovelybogor, enterbogor)",
+    "kategori": "Angkutan Kota Bogor"
   },
   {
     "kode": "AK-01A",
@@ -97,7 +98,8 @@ const baseTrayekAngkot = [
     "jarak_km": 3.6,
     "waktu_menit": 15,
     "tarif": 4000,
-    "keterangan": "Sumber: website (majalah, 2menit)"
+    "keterangan": "Sumber: website (majalah, 2menit)",
+    "kategori": "Angkutan Kota Bogor"
   },
   {
     "kode": "AK-02",
@@ -149,7 +151,8 @@ const baseTrayekAngkot = [
     "jarak_km": 24.6,
     "waktu_menit": 103,
     "tarif": 4000,
-    "keterangan": "Sumber: website (majalah, lovelybogor, 2menit, enterbogor)"
+    "keterangan": "Sumber: website (majalah, lovelybogor, 2menit, enterbogor)",
+    "kategori": "Angkutan Kota Bogor"
   },
   {
     "kode": "AK-03",
@@ -198,7 +201,8 @@ const baseTrayekAngkot = [
     "jarak_km": 22.8,
     "waktu_menit": 95,
     "tarif": 6000,
-    "keterangan": "Sumber: website (majalah, lovelybogor, 2menit, enterbogor)"
+    "keterangan": "Sumber: website (majalah, lovelybogor, 2menit, enterbogor)",
+    "kategori": "Angkutan Kota Bogor"
   },
   {
     "kode": "AK-04",
@@ -224,7 +228,8 @@ const baseTrayekAngkot = [
     "jarak_km": 9,
     "waktu_menit": 38,
     "tarif": 6000,
-    "keterangan": "Sumber: website (majalah, lovelybogor, 2menit)"
+    "keterangan": "Sumber: website (majalah, lovelybogor, 2menit)",
+    "kategori": "Angkutan Kota Bogor"
   },
   {
     "kode": "AK-05",
@@ -262,7 +267,8 @@ const baseTrayekAngkot = [
     "jarak_km": 16.2,
     "waktu_menit": 68,
     "tarif": 4000,
-    "keterangan": "Sumber: website (majalah, lovelybogor, 2menit, enterbogor)"
+    "keterangan": "Sumber: website (majalah, lovelybogor, 2menit, enterbogor)",
+    "kategori": "Angkutan Kota Bogor"
   },
   {
     "kode": "AK-06",
@@ -282,7 +288,8 @@ const baseTrayekAngkot = [
     "jarak_km": 5.4,
     "waktu_menit": 23,
     "tarif": 4000,
-    "keterangan": "Sumber: website (majalah, lovelybogor, 2menit, enterbogor)"
+    "keterangan": "Sumber: website (majalah, lovelybogor, 2menit, enterbogor)",
+    "kategori": "Angkutan Kota Bogor"
   },
   {
     "kode": "AK-07",
@@ -318,7 +325,8 @@ const baseTrayekAngkot = [
     "jarak_km": 15,
     "waktu_menit": 63,
     "tarif": 4000,
-    "keterangan": "Sumber: website (majalah, lovelybogor, 2menit)"
+    "keterangan": "Sumber: website (majalah, lovelybogor, 2menit)",
+    "kategori": "Angkutan Kota Bogor"
   },
   {
     "kode": "AK-07A",
@@ -335,7 +343,8 @@ const baseTrayekAngkot = [
     "jarak_km": 3.6,
     "waktu_menit": 15,
     "tarif": 4000,
-    "keterangan": "Sumber: website (majalah, 2menit)"
+    "keterangan": "Sumber: website (majalah, 2menit)",
+    "kategori": "Angkutan Kota Bogor"
   },
   {
     "kode": "AK-08",
@@ -366,7 +375,8 @@ const baseTrayekAngkot = [
     "jarak_km": 12,
     "waktu_menit": 50,
     "tarif": 4000,
-    "keterangan": "Sumber: website (majalah, lovelybogor, 2menit)"
+    "keterangan": "Sumber: website (majalah, lovelybogor, 2menit)",
+    "kategori": "Angkutan Kota Bogor"
   },
   {
     "kode": "AK-08A-23",
@@ -374,14 +384,21 @@ const baseTrayekAngkot = [
     "warna": "Silver",
     "rute": [
       "Ramayana",
-      "BTM",
+      "BTM Bogor Trade Mall",
+      "JL.Ir.H.Juanda",
+      "JL.Jalak Harupat",
+      "JL.Salak",
       "Taman Kencana",
+      "JL.Pangrango",
+      "JL.Pajajaran",
+      "Plaza Jambu Dua",
       "Warung Jambu"
     ],
-    "jarak_km": 2.4,
-    "waktu_menit": 10,
+    "jarak_km": 8,
+    "waktu_menit": 30,
     "tarif": 4000,
-    "keterangan": "Sumber: website (majalah)"
+    "keterangan": "Sumber: website (majalah)",
+    "kategori": "Angkutan Kota Bogor"
   },
   {
     "kode": "AK-09",
@@ -407,7 +424,8 @@ const baseTrayekAngkot = [
     "jarak_km": 9,
     "waktu_menit": 38,
     "tarif": 4000,
-    "keterangan": "Sumber: website (majalah, lovelybogor, 2menit, enterbogor)"
+    "keterangan": "Sumber: website (majalah, lovelybogor, 2menit, enterbogor)",
+    "kategori": "Angkutan Kota Bogor"
   },
   {
     "kode": "AK-10",
@@ -442,7 +460,8 @@ const baseTrayekAngkot = [
     "jarak_km": 14.4,
     "waktu_menit": 60,
     "tarif": 4000,
-    "keterangan": "Sumber: website (majalah, lovelybogor, 2menit, enterbogor)"
+    "keterangan": "Sumber: website (majalah, lovelybogor, 2menit, enterbogor)",
+    "kategori": "Angkutan Kota Bogor"
   },
   {
     "kode": "AK-11",
@@ -460,7 +479,8 @@ const baseTrayekAngkot = [
     "jarak_km": 4.2,
     "waktu_menit": 18,
     "tarif": 4000,
-    "keterangan": "Sumber: website (majalah, lovelybogor, 2menit, enterbogor)"
+    "keterangan": "Sumber: website (majalah, lovelybogor, 2menit, enterbogor)",
+    "kategori": "Angkutan Kota Bogor"
   },
   {
     "kode": "AK-12",
@@ -469,14 +489,19 @@ const baseTrayekAngkot = [
     "rute": [
       "Cimanggu Permai",
       "JL.Cimanggu",
+      "JL.Tentara Pelajar",
+      "JL.RE Martadinata",
+      "JL.Jendral Sudirman",
+      "JL.Pengadilan",
+      "Pasar Anyar",
       "JL.Merdeka",
-      "JL. MA Salmun",
-      "Pasar Anyar"
+      "JL.Moh A. Salmun"
     ],
-    "jarak_km": 3,
-    "waktu_menit": 13,
+    "jarak_km": 9.8,
+    "waktu_menit": 35,
     "tarif": 4000,
-    "keterangan": "Sumber: website (majalah, lovelybogor, 2menit)"
+    "keterangan": "Sumber: website (majalah, lovelybogor, 2menit)",
+    "kategori": "Angkutan Kota Bogor"
   },
   {
     "kode": "AK-13",
@@ -505,7 +530,8 @@ const baseTrayekAngkot = [
     "jarak_km": 10.8,
     "waktu_menit": 45,
     "tarif": 4000,
-    "keterangan": "Sumber: website (majalah, lovelybogor, 2menit, enterbogor)"
+    "keterangan": "Sumber: website (majalah, lovelybogor, 2menit, enterbogor)",
+    "kategori": "Angkutan Kota Bogor"
   },
   {
     "kode": "AK-14",
@@ -527,12 +553,14 @@ const baseTrayekAngkot = [
       "Pasar Laladon",
       "JL.Letjen Ibrahim Adjie",
       "JL.K.H.Abdullah Bin Nuh",
-      "Terminal Bubulak"
+      "Terminal Bubulak",
+      "jl.gn. batu"
     ],
     "jarak_km": 9.6,
     "waktu_menit": 40,
     "tarif": 4000,
-    "keterangan": "Sumber: website (majalah, lovelybogor, 2menit)"
+    "keterangan": "Sumber: website (majalah, lovelybogor, 2menit)",
+    "kategori": "Angkutan Kota Bogor"
   },
   {
     "kode": "AK-15",
@@ -562,7 +590,8 @@ const baseTrayekAngkot = [
     "jarak_km": 11.4,
     "waktu_menit": 48,
     "tarif": 4000,
-    "keterangan": "Sumber: website (majalah, lovelybogor, 2menit)"
+    "keterangan": "Sumber: website (majalah, lovelybogor, 2menit)",
+    "kategori": "Angkutan Kota Bogor"
   },
   {
     "kode": "AK-16",
@@ -612,7 +641,8 @@ const baseTrayekAngkot = [
     "jarak_km": 23.4,
     "waktu_menit": 98,
     "tarif": 4000,
-    "keterangan": "Sumber: website (majalah, lovelybogor, 2menit)"
+    "keterangan": "Sumber: website (majalah, lovelybogor, 2menit)",
+    "kategori": "Angkutan Kota Bogor"
   },
   {
     "kode": "AK-17",
@@ -630,7 +660,8 @@ const baseTrayekAngkot = [
     "jarak_km": 4.2,
     "waktu_menit": 18,
     "tarif": 4000,
-    "keterangan": "Sumber: website (majalah, lovelybogor, 2menit)"
+    "keterangan": "Sumber: website (majalah, lovelybogor, 2menit)",
+    "kategori": "Angkutan Kota Bogor"
   },
   {
     "kode": "AK-18",
@@ -638,14 +669,20 @@ const baseTrayekAngkot = [
     "warna": "Hijau",
     "rute": [
       "Ramayana",
-      "Empang",
+      "JL.Otista",
+      "JL.Lawang Saketeng",
+      "JL.Empang",
+      "JL.R.Aria Surialaga",
       "Cibeureum",
+      "JL.Mulyaharja",
+      "Pondok Bitung",
       "Mulyaharja"
     ],
-    "jarak_km": 2.4,
-    "waktu_menit": 10,
+    "jarak_km": 9,
+    "waktu_menit": 35,
     "tarif": 4000,
-    "keterangan": "Sumber: website (majalah, lovelybogor)"
+    "keterangan": "Sumber: website (majalah, lovelybogor)",
+    "kategori": "Angkutan Kota Bogor"
   },
   {
     "kode": "AK-19",
@@ -664,7 +701,8 @@ const baseTrayekAngkot = [
     "jarak_km": 4.8,
     "waktu_menit": 20,
     "tarif": 4000,
-    "keterangan": "Sumber: website (majalah, lovelybogor)"
+    "keterangan": "Sumber: website (majalah, lovelybogor)",
+    "kategori": "Angkutan Kota Bogor"
   },
   {
     "kode": "AK-20",
@@ -672,14 +710,20 @@ const baseTrayekAngkot = [
     "warna": "Hijau",
     "rute": [
       "Pasar Anyar",
+      "JL.Pengadilan",
+      "JL.Pemuda",
       "JL.Kebon Pedes",
-      "JL.Soleh Iskandar",
-      "Kencana"
+      "JL.KH.Soleh Iskandar",
+      "Kayumanis",
+      "JL.Mekarwangi",
+      "Kencana",
+      "Stasiun Cilebut"
     ],
-    "jarak_km": 2.4,
-    "waktu_menit": 10,
+    "jarak_km": 9.5,
+    "waktu_menit": 35,
     "tarif": 4000,
-    "keterangan": "Sumber: website (majalah, lovelybogor)"
+    "keterangan": "Sumber: website (majalah, lovelybogor)",
+    "kategori": "Angkutan Kota Bogor"
   },
   {
     "kode": "AP-01",
@@ -687,12 +731,30 @@ const baseTrayekAngkot = [
     "warna": "Biru",
     "rute": [
       "Terminal Merdeka",
-      "Cipaku"
+      "JL.Perintis Kemerdekaan",
+      "JL.Mawar",
+      "JL.Merdeka",
+      "JL.Moh A. Salmun",
+      "Stasiun Bogor",
+      "JL.Kapten Muslihat",
+      "JL.Dewi Sartika",
+      "JL.Ir.H.Juanda",
+      "JL.Suryakencana",
+      "JL.Siliwangi",
+      "JL.Lawang Gintung",
+      "JL.Pahlawan",
+      "JL.Batu Tulis",
+      "Stasiun Batutulis Bogor",
+      "JL Raya Cipaku",
+      "Cipaku",
+      "JL.RE.Soemanta Diredja",
+      "Cipinang Gading"
     ],
-    "jarak_km": 1.2,
-    "waktu_menit": 10,
+    "jarak_km": 17.4,
+    "waktu_menit": 70,
     "tarif": 6000,
-    "keterangan": "Sumber: website (majalah)"
+    "keterangan": "Sumber: website (majalah)",
+    "kategori": "Angkutan Perbatasan"
   },
   {
     "kode": "AP-02",
@@ -700,15 +762,28 @@ const baseTrayekAngkot = [
     "warna": "Biru",
     "rute": [
       "Sukasari",
-      "Jl.Siliwangi",
-      "Jl.Raya Tajur",
+      "JL.Siliwangi",
+      "JL.Raya Tajur",
+      "Mall Boxies 123",
       "Ciawi",
+      "JL.Raya Sukabumi",
+      "Pasir Muncang",
+      "Rancamaya",
+      "Cikereteg",
+      "Caringin",
+      "Maseng",
+      "Cigombong",
+      "Lido",
+      "Benda",
+      "Pasar Cicurug",
+      "Stasiun Cicurug",
       "Cicurug"
     ],
-    "jarak_km": 3,
-    "waktu_menit": 13,
+    "jarak_km": 26.5,
+    "waktu_menit": 85,
     "tarif": 6000,
-    "keterangan": "Sumber: website (majalah)"
+    "keterangan": "Sumber: website (majalah)",
+    "kategori": "Angkutan Perbatasan"
   },
   {
     "kode": "AP-02A",
@@ -716,14 +791,24 @@ const baseTrayekAngkot = [
     "warna": "Biru",
     "rute": [
       "Sukasari",
-      "Jl.Siliwangi",
-      "Jl.Raya Tajur",
+      "JL.Siliwangi",
+      "JL.Raya Tajur",
+      "Ciawi",
+      "JL.Raya Puncak",
+      "Bendungan",
+      "Gadog",
+      "Pasir Angin",
+      "Cipayung",
+      "Megamendung",
+      "Cimory Riverside",
+      "Pasar Cisarua",
       "Cisarua"
     ],
-    "jarak_km": 2.4,
-    "waktu_menit": 10,
+    "jarak_km": 20.2,
+    "waktu_menit": 60,
     "tarif": 6000,
-    "keterangan": "Sumber: website (majalah)"
+    "keterangan": "Sumber: website (majalah)",
+    "kategori": "Angkutan Perbatasan"
   },
   {
     "kode": "AP-02B",
@@ -731,15 +816,19 @@ const baseTrayekAngkot = [
     "warna": "Biru",
     "rute": [
       "Sukasari",
-      "Jl.Siliwangi",
-      "Jl.Raya Tajur",
+      "JL.Siliwangi",
+      "JL.Raya Tajur",
       "Ciawi",
+      "JL.Veteran III",
+      "Tapos",
+      "Cileungsi Hilir",
       "Cibedug"
     ],
-    "jarak_km": 3,
-    "waktu_menit": 13,
+    "jarak_km": 14.5,
+    "waktu_menit": 45,
     "tarif": 6000,
-    "keterangan": "Sumber: website (majalah)"
+    "keterangan": "Sumber: website (majalah)",
+    "kategori": "Angkutan Perbatasan"
   },
   {
     "kode": "AP-03",
@@ -756,7 +845,8 @@ const baseTrayekAngkot = [
     "jarak_km": 3.6,
     "waktu_menit": 15,
     "tarif": 6000,
-    "keterangan": "Sumber: website (majalah)"
+    "keterangan": "Sumber: website (majalah)",
+    "kategori": "Angkutan Perbatasan"
   },
   {
     "kode": "AP-04A",
@@ -776,7 +866,8 @@ const baseTrayekAngkot = [
     "jarak_km": 5.4,
     "waktu_menit": 23,
     "tarif": 6000,
-    "keterangan": "Sumber: website (majalah)"
+    "keterangan": "Sumber: website (majalah)",
+    "kategori": "Angkutan Perbatasan"
   },
   {
     "kode": "AP-05A",
@@ -797,7 +888,8 @@ const baseTrayekAngkot = [
     "jarak_km": 6,
     "waktu_menit": 25,
     "tarif": 6000,
-    "keterangan": "Sumber: website (majalah)"
+    "keterangan": "Sumber: website (majalah)",
+    "kategori": "Angkutan Perbatasan"
   },
   {
     "kode": "AP-06",
@@ -805,14 +897,23 @@ const baseTrayekAngkot = [
     "warna": "Biru",
     "rute": [
       "Terminal Merdeka",
-      "Jl.Dr.Semeru",
-      "Semplak",
+      "JL.Dr.Semeru",
+      "RSUD Kota Bogor",
+      "JL.Cilendek",
+      "JL.Raya Semplak",
+      "Lanud Atang Sendjaja",
+      "Kemang Bogor",
+      "Salabenda",
+      "Bilabong Permai",
+      "Jampang",
+      "Lebak Wangi",
       "Pasar Parung"
     ],
-    "jarak_km": 2.4,
-    "waktu_menit": 10,
+    "jarak_km": 19.5,
+    "waktu_menit": 60,
     "tarif": 6000,
-    "keterangan": "Sumber: website (majalah)"
+    "keterangan": "Sumber: website (majalah)",
+    "kategori": "Angkutan Perbatasan"
   },
   {
     "kode": "AP-06A",
@@ -820,14 +921,18 @@ const baseTrayekAngkot = [
     "warna": "Biru",
     "rute": [
       "Terminal Merdeka",
-      "Jl.Dr.Semeru",
-      "Semplak",
+      "JL.Dr.Semeru",
+      "RSUD Kota Bogor",
+      "JL.Cilendek",
+      "JL.Raya Semplak",
+      "Lanud Atang Sendjaja",
       "Bantar Kambing"
     ],
-    "jarak_km": 2.4,
-    "waktu_menit": 10,
+    "jarak_km": 12,
+    "waktu_menit": 40,
     "tarif": 6000,
-    "keterangan": "Sumber: website (majalah)"
+    "keterangan": "Sumber: website (majalah)",
+    "kategori": "Angkutan Perbatasan"
   },
   {
     "kode": "AP-07",
@@ -866,7 +971,8 @@ const baseTrayekAngkot = [
     "jarak_km": 16.8,
     "waktu_menit": 70,
     "tarif": 6000,
-    "keterangan": "Sumber: website (majalah)"
+    "keterangan": "Sumber: website (majalah)",
+    "kategori": "Angkutan Perbatasan"
   },
   {
     "kode": "AP-08",
@@ -941,7 +1047,8 @@ const baseTrayekAngkot = [
     "jarak_km": 38.4,
     "waktu_menit": 160,
     "tarif": 6000,
-    "keterangan": "Sumber: website (majalah)"
+    "keterangan": "Sumber: website (majalah)",
+    "kategori": "Angkutan Perbatasan"
   },
   {
     "kode": "AP-12",
@@ -965,7 +1072,8 @@ const baseTrayekAngkot = [
     "jarak_km": 7.8,
     "waktu_menit": 33,
     "tarif": 6000,
-    "keterangan": "Sumber: website (majalah)"
+    "keterangan": "Sumber: website (majalah)",
+    "kategori": "Angkutan Perbatasan"
   },
   {
     "kode": "AP-27",
@@ -1001,7 +1109,8 @@ const baseTrayekAngkot = [
     "jarak_km": 15,
     "waktu_menit": 63,
     "tarif": 6000,
-    "keterangan": "Sumber: website (majalah)"
+    "keterangan": "Sumber: website (majalah)",
+    "kategori": "Angkutan Perbatasan"
   },
   {
     "kode": "AP-106",
@@ -1020,11 +1129,12 @@ const baseTrayekAngkot = [
     "jarak_km": 4.8,
     "waktu_menit": 20,
     "tarif": 6000,
-    "keterangan": "Sumber: website (majalah)"
+    "keterangan": "Sumber: website (majalah)",
+    "kategori": "Angkutan Perbatasan"
   },
   {
     "kode": "AP-117",
-    "nama": "arung - Bojong Gede",
+    "nama": "Parung - Bojong Gede",
     "warna": "Biru",
     "rute": [
       "Pasar Parung",
@@ -1062,7 +1172,8 @@ const baseTrayekAngkot = [
     "jarak_km": 18.6,
     "waktu_menit": 78,
     "tarif": 6000,
-    "keterangan": "Sumber: website (majalah)"
+    "keterangan": "Sumber: website (majalah)",
+    "kategori": "Angkutan Perbatasan"
   },
   {
     "kode": "AP-53",
@@ -1071,13 +1182,19 @@ const baseTrayekAngkot = [
     "rute": [
       "Terminal Laladon",
       "Pasar Laladon",
+      "JL.Raya Dramaga",
+      "Cibanteng",
+      "Terminal Ciampea",
+      "Cikampak",
       "Segog",
-      "Gunung Salak"
+      "Pamijahan",
+      "Gunung Salak Endah"
     ],
-    "jarak_km": 2.4,
-    "waktu_menit": 10,
+    "jarak_km": 22,
+    "waktu_menit": 65,
     "tarif": 6000,
-    "keterangan": "Sumber: website (majalah)"
+    "keterangan": "Sumber: website (majalah)",
+    "kategori": "Angkutan Perbatasan"
   },
   {
     "kode": "AP-32",
@@ -1141,7 +1258,8 @@ const baseTrayekAngkot = [
     "jarak_km": 31.8,
     "waktu_menit": 133,
     "tarif": 6000,
-    "keterangan": "Sumber: website (majalah)"
+    "keterangan": "Sumber: website (majalah)",
+    "kategori": "Angkutan Perbatasan"
   },
   {
     "kode": "AP-31",
@@ -1149,28 +1267,38 @@ const baseTrayekAngkot = [
     "warna": "Biru",
     "rute": [
       "Stasiun Bojong Gede",
+      "JL.Raya Bojonggede",
       "Perumahan Gaperi",
+      "Perumahan Pura Bojonggede",
+      "Bumi Sentosa Nanggewer",
+      "JL.Raya Jakarta-Bogor",
+      "Simpang Pomad",
       "Ciluar"
     ],
-    "jarak_km": 1.8,
-    "waktu_menit": 10,
+    "jarak_km": 8.5,
+    "waktu_menit": 30,
     "tarif": 6000,
-    "keterangan": "Sumber: website (majalah)"
+    "keterangan": "Sumber: website (majalah)",
+    "kategori": "Angkutan Perbatasan"
   },
   {
     "kode": "AP-34",
     "nama": "Bambu Kuning - Gerbang Depan Pemda Cibinong",
     "warna": "Biru",
     "rute": [
-      "Pertigaan Bambu Kuning Bojonggede/ Pertigaan Jalan Baru Pemda Cibinong",
+      "Pertigaan Bambu Kuning Bojonggede",
       "JL.Raya Tegar Beriman",
       "Komplek Pemda Cibinong",
-      "Cibinong City Mall"
+      "Kantor Bupati Bogor",
+      "DPRD Kab Bogor",
+      "Cibinong City Mall",
+      "Stadion Pakansari"
     ],
-    "jarak_km": 2.4,
-    "waktu_menit": 10,
+    "jarak_km": 6.8,
+    "waktu_menit": 25,
     "tarif": 6000,
-    "keterangan": "Sumber: website (majalah)"
+    "keterangan": "Sumber: website (majalah)",
+    "kategori": "Angkutan Perbatasan"
   },
   {
     "kode": "AP-35",
@@ -1194,47 +1322,68 @@ const baseTrayekAngkot = [
     "jarak_km": 7.8,
     "waktu_menit": 33,
     "tarif": 6000,
-    "keterangan": "Sumber: website (majalah)"
+    "keterangan": "Sumber: website (majalah)",
+    "kategori": "Angkutan Perbatasan"
   },
   {
     "kode": "AP-44",
     "nama": "Citeureup - Babakan Madang",
     "warna": "Biru",
     "rute": [
-      "Citeureup",
+      "Pasar Citeureup",
+      "JL.Pahlawan Citeureup",
+      "Sirkuit Sentul",
       "Sentul City",
+      "AEON Mall Sentul",
       "Babakan Madang"
     ],
-    "jarak_km": 1.8,
-    "waktu_menit": 10,
+    "jarak_km": 10.2,
+    "waktu_menit": 35,
     "tarif": 6000,
-    "keterangan": "Sumber: website (majalah)"
+    "keterangan": "Sumber: website (majalah)",
+    "kategori": "Angkutan Perbatasan"
   },
   {
     "kode": "LB",
     "nama": "Leuwiliang - Bubulak Bogor",
     "warna": "Biru",
     "rute": [
-      "Leuwiliang",
-      "Bubulak Bogor"
+      "Terminal Leuwiliang",
+      "Barengkok",
+      "Ciampea",
+      "Cinangneng",
+      "Dramaga",
+      "Kampus IPB Dramaga",
+      "JL.KH.Abdullah Bin Nuh",
+      "Terminal Bubulak"
     ],
-    "jarak_km": 1.2,
-    "waktu_menit": 10,
+    "jarak_km": 18,
+    "waktu_menit": 55,
     "tarif": 6000,
-    "keterangan": "Sumber: website (majalah)"
+    "keterangan": "Sumber: website (majalah)",
+    "kategori": "Angkutan Khusus"
   },
   {
     "kode": "JB",
     "nama": "Jasinga - Bubulak",
     "warna": "Biru",
     "rute": [
-      "Jasinga",
-      "Bubulak"
+      "Terminal Jasinga",
+      "Cigudeg",
+      "Kalong",
+      "Sipak",
+      "Terminal Leuwiliang",
+      "Ciampea",
+      "Cinangneng",
+      "Dramaga",
+      "Kampus IPB Dramaga",
+      "Terminal Bubulak"
     ],
-    "jarak_km": 1.2,
-    "waktu_menit": 10,
+    "jarak_km": 36,
+    "waktu_menit": 90,
     "tarif": 6000,
-    "keterangan": "Sumber: website (majalah)"
+    "keterangan": "Sumber: website (majalah)",
+    "kategori": "Angkutan Khusus"
   },
   {
     "kode": "AK-01-A",
@@ -1251,7 +1400,8 @@ const baseTrayekAngkot = [
     "jarak_km": 3.6,
     "waktu_menit": 15,
     "tarif": 4000,
-    "keterangan": "Sumber: website (lovelybogor)"
+    "keterangan": "Sumber: website (lovelybogor)",
+    "kategori": "Angkutan Kota Bogor"
   },
   {
     "kode": "AK-21",
@@ -1259,13 +1409,20 @@ const baseTrayekAngkot = [
     "warna": "Hijau",
     "rute": [
       "Pasar Bogor",
+      "JL.Ir.H.Juanda",
+      "JL.Jalak Harupat",
+      "JL.Salak",
       "Taman Kencana",
-      "Ciremai Ujung"
+      "JL.Pangrango",
+      "JL.Cermai",
+      "JL.Ciremai Ujung",
+      "Bantarjati"
     ],
-    "jarak_km": 1.8,
-    "waktu_menit": 10,
+    "jarak_km": 6.5,
+    "waktu_menit": 25,
     "tarif": 4000,
-    "keterangan": "Sumber: website (lovelybogor, enterbogor)"
+    "keterangan": "Sumber: website (lovelybogor, enterbogor)",
+    "kategori": "Angkutan Kota Bogor"
   },
   {
     "kode": "AK-22",
@@ -1282,7 +1439,8 @@ const baseTrayekAngkot = [
     "jarak_km": 3.6,
     "waktu_menit": 15,
     "tarif": 4000,
-    "keterangan": "Sumber: website (lovelybogor)"
+    "keterangan": "Sumber: website (lovelybogor)",
+    "kategori": "Angkutan Kota Bogor"
   },
   {
     "kode": "AK-23",
@@ -1290,13 +1448,21 @@ const baseTrayekAngkot = [
     "warna": "Hijau",
     "rute": [
       "Ramayana",
+      "BTM Bogor Trade Mall",
+      "JL.Ir.H.Juanda",
+      "JL.Jalak Harupat",
+      "JL.Salak",
       "Taman Kencana",
+      "JL.Pangrango",
+      "JL.Pajajaran",
+      "Plaza Jambu Dua",
       "Warung Jambu"
     ],
-    "jarak_km": 1.8,
-    "waktu_menit": 10,
+    "jarak_km": 8,
+    "waktu_menit": 30,
     "tarif": 4000,
-    "keterangan": "Sumber: website (lovelybogor, enterbogor)"
+    "keterangan": "Sumber: website (lovelybogor, enterbogor)",
+    "kategori": "Angkutan Kota Bogor"
   },
   {
     "kode": "AK-04A",
@@ -1317,68 +1483,73 @@ const baseTrayekAngkot = [
     "jarak_km": 6,
     "waktu_menit": 25,
     "tarif": 4000,
-    "keterangan": "Sumber: website (2menit)"
+    "keterangan": "Sumber: website (2menit)",
+    "kategori": "Angkutan Kota Bogor"
   },
   {
     "kode": "AK-07_1",
-    "nama": "",
+    "nama": "Ciparigi - Terminal Merdeka (Via Sukasari / Otista)",
     "warna": "Hijau",
     "rute": [
       "Ciparigi",
-      "Jl. Raya Pemda",
-      "Kedunghalang",
+      "JL.Raya Pemda KD. Halang",
       "Simpang Talang",
       "Warung Jambu",
-      "Jl. A. Yani",
-      "Sudirman",
-      "Jalak Harupat",
-      "Pajajaran",
-      "Otista",
-      "Juanda"
+      "JL.Raya Pajajaran",
+      "JL.Sambu",
+      "JL.Bangka",
+      "JL.Otista",
+      "JL.Suryakencana",
+      "Pasar Anyar Bogor",
+      "JL.Perintis Kemerdekaan",
+      "Terminal Merdeka"
     ],
     "jarak_km": 6.6,
     "waktu_menit": 28,
     "tarif": 4000,
-    "keterangan": "Sumber: website (enterbogor)"
+    "keterangan": "Sumber: website (enterbogor)",
+    "kategori": "Angkutan Kota Bogor"
   },
   {
     "kode": "AK-07_2",
-    "nama": "",
+    "nama": "Ciparigi - Terminal Merdeka (Via Air Mancur)",
     "warna": "Hijau",
     "rute": [
       "Ciparigi",
-      "Jl. Raya Pemda",
+      "JL.Raya Pemda KD. Halang",
       "Kedunghalang",
       "Simpang Talang",
       "Warung Jambu",
-      "Jl. A. Yani",
-      "Air Mancur",
-      "Jl. R.E Martadinata",
-      "Jl. Merdeka",
+      "JL.Jendral Ahmad Yani",
+      "Taman Air Mancur Bogor",
+      "JL.RE Martadinata",
+      "JL.Merdeka",
       "Terminal Merdeka"
     ],
     "jarak_km": 6,
     "waktu_menit": 25,
     "tarif": 4000,
-    "keterangan": "Sumber: website (enterbogor)"
+    "keterangan": "Sumber: website (enterbogor)",
+    "kategori": "Angkutan Kota Bogor"
   },
   {
     "kode": "AK-07_3",
-    "nama": "",
+    "nama": "Ciparigi - Pemuda / Sudirman",
     "warna": "Hijau",
     "rute": [
       "Ciparigi",
-      "Jl. Raya Pemda",
+      "JL.Raya Pemda KD. Halang",
       "Simpang Talang",
       "Warung Jambu",
-      "Jl. A. Yani",
-      "Sudirman",
-      "Pemuda"
+      "JL.Jendral Ahmad Yani",
+      "JL.Jendral Sudirman",
+      "JL.Pemuda"
     ],
     "jarak_km": 4.2,
     "waktu_menit": 18,
     "tarif": 4000,
-    "keterangan": "Sumber: website (enterbogor)"
+    "keterangan": "Sumber: website (enterbogor)",
+    "kategori": "Angkutan Kota Bogor"
   },
   {
     "kode": "Kab-11",
@@ -1386,12 +1557,17 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Leuwiliang",
+      "JL.Raya Leuwiliang-Bogor",
+      "Barengkok",
+      "Cibeber",
+      "Pasar Ciampea",
       "Terminal Ciampea"
     ],
-    "jarak_km": 3,
-    "waktu_menit": 15,
+    "jarak_km": 7.5,
+    "waktu_menit": 25,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-I) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-I) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-12",
@@ -1411,7 +1587,8 @@ const baseTrayekAngkot = [
     "jarak_km": 13.5,
     "waktu_menit": 36,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-I) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-I) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-32",
@@ -1431,7 +1608,8 @@ const baseTrayekAngkot = [
     "jarak_km": 13.5,
     "waktu_menit": 36,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-I) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-I) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-33",
@@ -1449,7 +1627,8 @@ const baseTrayekAngkot = [
     "jarak_km": 10.5,
     "waktu_menit": 28,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-I) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-I) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-35",
@@ -1467,7 +1646,8 @@ const baseTrayekAngkot = [
     "jarak_km": 10.5,
     "waktu_menit": 28,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-I) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-I) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-38",
@@ -1485,7 +1665,8 @@ const baseTrayekAngkot = [
     "jarak_km": 10.5,
     "waktu_menit": 28,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-I) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-I) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-64",
@@ -1502,7 +1683,8 @@ const baseTrayekAngkot = [
     "jarak_km": 9,
     "waktu_menit": 24,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-I) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-I) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-65",
@@ -1510,15 +1692,18 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Cibinong",
+      "JL.Mayor Oking",
       "Citeureup",
-      "Jl.Raya Gn.Putri",
+      "JL.Raya Gunung Putri",
       "Proyek",
+      "Pasar Cileungsi",
       "Terminal Cileungsi"
     ],
     "jarak_km": 7.5,
     "waktu_menit": 20,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-I) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-I) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-77",
@@ -1538,7 +1723,8 @@ const baseTrayekAngkot = [
     "jarak_km": 13.5,
     "waktu_menit": 36,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-I) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-I) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-117",
@@ -1546,13 +1732,21 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Parung",
+      "JL.Raya Parung",
+      "Lebak Wangi",
+      "JL.Arco Raya",
+      "Kalisuren",
       "Sasak Panjang",
+      "Danau Tonjong",
+      "Bilabong Permai",
+      "JL.Kedung Waringin",
       "Terminal Bojonggede"
     ],
-    "jarak_km": 4.5,
-    "waktu_menit": 15,
+    "jarak_km": 15,
+    "waktu_menit": 45,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-I) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-I) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-05B_1",
@@ -1560,13 +1754,19 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Leuwiliang",
+      "Barengkok",
+      "Ciampea",
+      "Cinangneng",
       "Dramaga",
+      "Kampus IPB Dramaga",
+      "JL.KH.Abdullah Bin Nuh",
       "Terminal Bubulak"
     ],
-    "jarak_km": 4.5,
-    "waktu_menit": 15,
+    "jarak_km": 18,
+    "waktu_menit": 55,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-I) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-I) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-05B_2",
@@ -1574,13 +1774,18 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Leuwiliang",
+      "Barengkok",
+      "Ciampea",
+      "Cinangneng",
       "Dramaga",
+      "Kampus IPB Dramaga",
       "Terminal Laladon"
     ],
-    "jarak_km": 4.5,
-    "waktu_menit": 15,
+    "jarak_km": 17.5,
+    "waktu_menit": 50,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-I) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-I) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-05C_1",
@@ -1588,13 +1793,21 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Jasinga",
-      "Leuwiliang",
+      "Cigudeg",
+      "Kalong",
+      "Sipak",
+      "Terminal Leuwiliang",
+      "Ciampea",
+      "Cinangneng",
+      "Dramaga",
+      "Kampus IPB Dramaga",
       "Terminal Bubulak"
     ],
-    "jarak_km": 4.5,
-    "waktu_menit": 15,
+    "jarak_km": 36,
+    "waktu_menit": 90,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-I) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-I) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-05C_2",
@@ -1602,13 +1815,21 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Jasinga",
-      "Leuwiliang",
+      "Cigudeg",
+      "Kalong",
+      "Sipak",
+      "Terminal Leuwiliang",
+      "Ciampea",
+      "Cinangneng",
+      "Dramaga",
+      "Kampus IPB Dramaga",
       "Terminal Laladon"
     ],
-    "jarak_km": 4.5,
-    "waktu_menit": 15,
+    "jarak_km": 35.5,
+    "waktu_menit": 85,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-I) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-I) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-T05",
@@ -1627,7 +1848,8 @@ const baseTrayekAngkot = [
     "jarak_km": 12,
     "waktu_menit": 32,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-I) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-I) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten (Tol/Ekspres)"
   },
   {
     "kode": "Kab-13_1",
@@ -1635,15 +1857,18 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Laladon",
+      "JL.Raya Dramaga",
       "Cibanteng",
       "Situ Daun",
       "Gunung Malang",
+      "Curug Luhur",
       "Pangkalan Curug Luhur"
     ],
     "jarak_km": 7.5,
     "waktu_menit": 20,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-13_2",
@@ -1651,15 +1876,18 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Bubulak",
+      "JL.Raya Dramaga",
       "Cibanteng",
       "Situ Daun",
       "Gunung Malang",
+      "Curug Luhur",
       "Pangkalan Curug Luhur"
     ],
     "jarak_km": 7.5,
     "waktu_menit": 20,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-14",
@@ -1667,14 +1895,18 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Laladon",
-      "Pagelaran",
-      "Cibinong",
+      "Perumahan Taman Pagelaran",
+      "Ciomas",
+      "Ciapus",
+      "Sirnagalih",
+      "Gunung Malang",
       "Pangkalan Curug Luhur"
     ],
-    "jarak_km": 6,
-    "waktu_menit": 16,
+    "jarak_km": 14.5,
+    "waktu_menit": 45,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-15_1",
@@ -1692,7 +1924,8 @@ const baseTrayekAngkot = [
     "jarak_km": 10.5,
     "waktu_menit": 28,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-15_2",
@@ -1710,7 +1943,8 @@ const baseTrayekAngkot = [
     "jarak_km": 10.5,
     "waktu_menit": 28,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-16_1",
@@ -1718,15 +1952,18 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Laladon",
+      "JL.Raya Ciherang",
       "Ciherang",
       "Kuripan",
       "Nambo",
+      "Sukamantri",
       "Pangkalan Curug Nangka"
     ],
     "jarak_km": 7.5,
     "waktu_menit": 20,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-16_2",
@@ -1734,15 +1971,18 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Bubulak",
+      "JL.Raya Ciherang",
       "Ciherang",
       "Kuripan",
       "Nambo",
+      "Sukamantri",
       "Pangkalan Curug Nangka"
     ],
     "jarak_km": 7.5,
     "waktu_menit": 20,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-17_1",
@@ -1750,15 +1990,18 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Laladon",
+      "JL.Raya Dramaga",
       "Dramaga",
-      "Kampus Ipb",
+      "Kampus IPB Dramaga",
+      "Babakan Raya",
       "Cangkurawok",
       "Pangkalan Cangkrang"
     ],
     "jarak_km": 7.5,
     "waktu_menit": 20,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-17_2",
@@ -1766,15 +2009,18 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Bubulak",
+      "JL.Raya Dramaga",
       "Dramaga",
-      "Kampus Ipb",
+      "Kampus IPB Dramaga",
+      "Babakan Raya",
       "Cangkurawok",
       "Pangkalan Cangkrang"
     ],
     "jarak_km": 7.5,
     "waktu_menit": 20,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-22",
@@ -1782,12 +2028,19 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Jasinga",
+      "JL.Raya Jasinga-Tenjo",
+      "Sipak",
+      "Kalong Liud",
+      "Singabangsa",
+      "Cilaku",
+      "Stasiun Tenjo",
       "Pangkalan Tenjo"
     ],
-    "jarak_km": 3,
-    "waktu_menit": 15,
+    "jarak_km": 16,
+    "waktu_menit": 45,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-25",
@@ -1795,6 +2048,8 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Parung",
+      "JL.Raya Parung",
+      "JL.Raya Ciseeng",
       "Ciseeng",
       "Babakan",
       "Pasar Selasa",
@@ -1803,7 +2058,8 @@ const baseTrayekAngkot = [
     "jarak_km": 7.5,
     "waktu_menit": 20,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-26",
@@ -1811,13 +2067,17 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Parung",
+      "JL.Raya Parung-Bogor",
+      "Pasar Parung",
       "Prungpung",
+      "Kecamatan Ciseeng",
       "Pangkalan Ciseeng"
     ],
-    "jarak_km": 4.5,
-    "waktu_menit": 15,
+    "jarak_km": 8,
+    "waktu_menit": 25,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-27",
@@ -1825,14 +2085,17 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Parung",
+      "JL.Raya Ciseeng",
       "Ciseeng",
       "Babakan",
-      "Pasar Selasa -Pangkalan Jampang"
+      "Pasar Selasa",
+      "Pangkalan Jampang"
     ],
-    "jarak_km": 6,
-    "waktu_menit": 16,
+    "jarak_km": 11.5,
+    "waktu_menit": 35,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-28",
@@ -1840,13 +2103,16 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Parung",
+      "JL.Raya Ciseeng",
       "Ciseeng",
+      "Karihkil",
       "Pangkalan Kuripan"
     ],
-    "jarak_km": 4.5,
-    "waktu_menit": 15,
+    "jarak_km": 9,
+    "waktu_menit": 30,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-30",
@@ -1854,14 +2120,17 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Parung",
+      "JL.Raya Parung",
       "Lebak Wangi",
-      "Arco",
+      "JL.Arco Raya",
+      "Kalisuren",
       "Pangkalan Tajur Halang"
     ],
-    "jarak_km": 6,
-    "waktu_menit": 16,
+    "jarak_km": 10.5,
+    "waktu_menit": 35,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-31",
@@ -1879,7 +2148,8 @@ const baseTrayekAngkot = [
     "jarak_km": 10.5,
     "waktu_menit": 28,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-34",
@@ -1897,7 +2167,8 @@ const baseTrayekAngkot = [
     "jarak_km": 10.5,
     "waktu_menit": 28,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-40",
@@ -1905,14 +2176,16 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Cileungsi",
+      "JL.Raya Narogong",
       "Rawa Ingkik",
       "Perum Griya Alam Sentosa",
       "Pangkalan Limusnunggal"
     ],
-    "jarak_km": 6,
-    "waktu_menit": 16,
+    "jarak_km": 8,
+    "waktu_menit": 25,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-42",
@@ -1920,6 +2193,7 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Cileungsi",
+      "JL.Raya Narogong",
       "Klapanunggal",
       "Bojong",
       "Cikahuripan",
@@ -1928,7 +2202,8 @@ const baseTrayekAngkot = [
     "jarak_km": 7.5,
     "waktu_menit": 20,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-45",
@@ -1936,6 +2211,7 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Cileungsi",
+      "JL.Raya Narogong",
       "Samik",
       "Mampir",
       "Perum Puri Nyalindung",
@@ -1944,7 +2220,8 @@ const baseTrayekAngkot = [
     "jarak_km": 7.5,
     "waktu_menit": 20,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-46",
@@ -1952,15 +2229,17 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Jonggol",
+      "JL.Raya Cileungsi-Jonggol",
       "Terminal Cileungsi",
       "Proyek",
-      "Jl.Raya Gn.Putri",
+      "JL.Raya Gunung Putri",
       "Pangkalan Citeureup"
     ],
     "jarak_km": 7.5,
     "waktu_menit": 20,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-49",
@@ -1968,14 +2247,18 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Cileungsi",
-      "Pasar Lama",
-      "Nagrag",
+      "Pasar Cileungsi",
+      "JL.Raya Alternatif Cibubur",
+      "Nagrak",
+      "Kota Wisata Cibubur",
+      "Villa Nusa Indah",
       "Pangkalan Bojong Kulur"
     ],
-    "jarak_km": 6,
-    "waktu_menit": 16,
+    "jarak_km": 15,
+    "waktu_menit": 45,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-50_1",
@@ -1983,6 +2266,7 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Laladon",
+      "JL.Raya Dramaga",
       "Cinangneng",
       "Cibitung",
       "Tapos",
@@ -1991,7 +2275,8 @@ const baseTrayekAngkot = [
     "jarak_km": 7.5,
     "waktu_menit": 20,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-50_2",
@@ -1999,6 +2284,7 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Bubulak",
+      "JL.Raya Dramaga",
       "Cinangneng",
       "Cibitung",
       "Tapos",
@@ -2007,7 +2293,8 @@ const baseTrayekAngkot = [
     "jarak_km": 7.5,
     "waktu_menit": 20,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-52",
@@ -2024,7 +2311,8 @@ const baseTrayekAngkot = [
     "jarak_km": 9,
     "waktu_menit": 24,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-53",
@@ -2032,13 +2320,16 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Laladon",
-      "Cikampang",
+      "JL.Raya Dramaga",
+      "Ciampea",
+      "Cikampak",
       "Pangkalan Segog"
     ],
-    "jarak_km": 4.5,
-    "waktu_menit": 15,
+    "jarak_km": 12.5,
+    "waktu_menit": 40,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-60",
@@ -2046,13 +2337,16 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Cileungsi",
-      "Jonggol",
+      "JL.Raya Cileungsi-Jonggol",
+      "Taman Buah Mekarsari",
+      "Pasar Jonggol",
       "Pangkalan Pasir Tanjung"
     ],
-    "jarak_km": 4.5,
-    "waktu_menit": 15,
+    "jarak_km": 18,
+    "waktu_menit": 50,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-66",
@@ -2070,7 +2364,8 @@ const baseTrayekAngkot = [
     "jarak_km": 10.5,
     "waktu_menit": 28,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-68",
@@ -2078,14 +2373,17 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Cibinong",
+      "JL.Raya Jakarta-Bogor",
+      "Cilangkap",
       "Tapos",
       "Leuwinanggung",
       "Pangkalan Sanding"
     ],
-    "jarak_km": 6,
-    "waktu_menit": 16,
+    "jarak_km": 14,
+    "waktu_menit": 45,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-71",
@@ -2093,15 +2391,17 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Cibinong",
+      "JL.Raya Cikaret",
       "Cikaret",
-      "Puri Nirwana II",
-      "Al Falah",
+      "Perum Puri Nirwana 2",
+      "JL.Al Falah",
       "Pangkalan Kp.Bulak"
     ],
     "jarak_km": 7.5,
     "waktu_menit": 20,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-72",
@@ -2109,13 +2409,16 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Cibinong",
-      "Cikaret",
+      "JL.Raya Cikaret",
+      "Setu Cikaret",
+      "Pabuaran",
       "Pangkalan Kampung Sawah"
     ],
-    "jarak_km": 4.5,
-    "waktu_menit": 15,
+    "jarak_km": 8.5,
+    "waktu_menit": 30,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-86",
@@ -2123,12 +2426,20 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Parung",
+      "JL.Raya Parung",
+      "Sasak Panjang",
+      "Stasiun Bojonggede",
+      "JL.Tegar Beriman",
+      "Pemda Cibinong",
+      "Terminal Cibinong",
+      "JL.Mayor Oking",
       "Pangkalan Citeureup"
     ],
-    "jarak_km": 3,
-    "waktu_menit": 15,
+    "jarak_km": 24,
+    "waktu_menit": 75,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-88",
@@ -2145,7 +2456,8 @@ const baseTrayekAngkot = [
     "jarak_km": 9,
     "waktu_menit": 24,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-111",
@@ -2153,13 +2465,19 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Parung",
-      "Arco",
+      "JL.Raya Parung",
+      "Arco Raya",
+      "Kalisuren",
+      "Tajurhalang",
+      "Ragajaya",
+      "Stasiun Citayam",
       "Pangkalan Citayam"
     ],
-    "jarak_km": 4.5,
-    "waktu_menit": 15,
+    "jarak_km": 13.5,
+    "waktu_menit": 40,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-05_1",
@@ -2167,14 +2485,18 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Laladon",
-      "Dramaga",
+      "JL.Raya Dramaga",
+      "Cinangneng",
       "Terminal Ciampea",
+      "Cibitung",
+      "Rumpin",
       "Pangkalan Gobang"
     ],
-    "jarak_km": 6,
-    "waktu_menit": 16,
+    "jarak_km": 17,
+    "waktu_menit": 50,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-05_2",
@@ -2182,14 +2504,18 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Bubulak",
-      "Dramaga",
+      "JL.Raya Dramaga",
+      "Cinangneng",
       "Terminal Ciampea",
+      "Cibitung",
+      "Rumpin",
       "Pangkalan Gobang"
     ],
-    "jarak_km": 6,
-    "waktu_menit": 16,
+    "jarak_km": 18,
+    "waktu_menit": 55,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-40A",
@@ -2197,13 +2523,16 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Cileungsi",
+      "JL.Raya Narogong",
       "Rawa Ingkik",
+      "Cipeucang",
       "Pangkalan Pasir Angin"
     ],
-    "jarak_km": 4.5,
-    "waktu_menit": 15,
+    "jarak_km": 9.5,
+    "waktu_menit": 30,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-T.02",
@@ -2211,14 +2540,17 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Cileungsi",
-      "Pintu Toll Cibubur",
-      "Toll Jagowari",
+      "JL.Raya Alternatif Cibubur",
+      "Pintu Tol Cibubur",
+      "Tol Jagorawi",
+      "Pintu Tol Ciawi",
       "Pangkalan Ciawi"
     ],
-    "jarak_km": 6,
-    "waktu_menit": 16,
+    "jarak_km": 32,
+    "waktu_menit": 60,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-II) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten (Tol/Ekspres)"
   },
   {
     "kode": "Kab-02C",
@@ -2226,12 +2558,16 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Pangkalan Pasir Muncang",
+      "JL.Raya Sukabumi",
+      "Gadog",
+      "JL.Raya Tajur",
       "Pangkalan Ciawi"
     ],
-    "jarak_km": 3,
-    "waktu_menit": 15,
+    "jarak_km": 6.5,
+    "waktu_menit": 20,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-III) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-III) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-37",
@@ -2239,14 +2575,18 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Pangkalan Pasar Ciluar",
+      "JL.Raya Bogor",
       "Simpang Pomad",
+      "JL.Pangeran Sogiri",
       "Pasir Jambu",
+      "Stasiun Cilebut",
       "Pangkalan Cilebut"
     ],
-    "jarak_km": 6,
-    "waktu_menit": 16,
+    "jarak_km": 7.2,
+    "waktu_menit": 25,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-III) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-III) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-44",
@@ -2254,12 +2594,16 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Pangkalan Citeureup",
+      "JL.Pahlawan Citeureup",
+      "Sirkuit Sentul",
+      "Sentul City",
       "Pangkalan Babakan Madang"
     ],
-    "jarak_km": 3,
-    "waktu_menit": 15,
+    "jarak_km": 9,
+    "waktu_menit": 30,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-III) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-III) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-112",
@@ -2267,14 +2611,17 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Pangkalan Jampang",
+      "JL.H.Prabowo",
       "Ciseeng",
       "Prungpung",
+      "Gunung Sindur",
       "Pangkalan Pabuaran"
     ],
-    "jarak_km": 6,
-    "waktu_menit": 16,
+    "jarak_km": 12,
+    "waktu_menit": 35,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-III) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-III) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-44A",
@@ -2294,7 +2641,8 @@ const baseTrayekAngkot = [
     "jarak_km": 13.5,
     "waktu_menit": 36,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-III) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-III) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-44B",
@@ -2302,14 +2650,17 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Pangkalan Citeureup",
+      "JL.Pahlawan",
       "Babakan Madang",
-      "Karan Tenga",
+      "Karang Tengah",
+      "Gunung Pancar",
       "Pangkalan Cipanas"
     ],
-    "jarak_km": 6,
-    "waktu_menit": 16,
+    "jarak_km": 16.5,
+    "waktu_menit": 50,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-III) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-III) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten Bogor"
   },
   {
     "kode": "Kab-T.02A",
@@ -2317,13 +2668,17 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Pangkalan Ciawi",
-      "Toll Jagorawi",
+      "Pintu Tol Ciawi",
+      "Tol Jagorawi",
+      "Pintu Tol Gunung Putri",
+      "JL.Raya Gunung Putri",
       "Pangkalan Gunung Putri"
     ],
-    "jarak_km": 4.5,
-    "waktu_menit": 15,
+    "jarak_km": 26,
+    "waktu_menit": 50,
     "tarif": 7000,
-    "keterangan": "Trayek Kabupaten Bogor (Kat.-III) – Sumber: Dinas Perhubungan Kab. Bogor"
+    "keterangan": "Trayek Kabupaten Bogor (Kat.-III) – Sumber: Dinas Perhubungan Kab. Bogor",
+    "kategori": "Angkutan Kabupaten (Tol/Ekspres)"
   }
 ];
 
@@ -2941,7 +3296,76 @@ const baseAliasLokasi = {
   "karan tenga": "Karan Tenga",
   "pangkalan cipanas": "Pangkalan Cipanas",
   "toll jagorawi": "Toll Jagorawi",
-  "pangkalan gunung putri": "Pangkalan Gunung Putri"
+  "pangkalan gunung putri": "Pangkalan Gunung Putri",
+
+  // === Alias tambahan: singkatan & nama populer ===
+  "jembatan merah": "Jembatan Merah Bogor",
+  "jmb merah": "Jembatan Merah Bogor",
+  "jembatan merah bogor": "Jembatan Merah Bogor",
+  "pln": "Kantor PLN Bogor Kota",
+  "ipb": "Kampus IPB Pajajaran",
+  "kampus ipb": "Kampus IPB Pajajaran",
+  "ipb dramaga": "Kampus IPB Pajajaran",
+  "dramaga ipb": "Kampus IPB Pajajaran",
+  "dprd": "Gedung DPRD Kota Bogor",
+  "rs pmi": "Rumah Sakit PMI Bogor",
+  "rs azra": "Rumah Sakit RS. Azra Bogor",
+  "rs hermina": "Rumah Sakit Hermina Bogor",
+  "rsud bogor": "RSUD Kota Bogor",
+  "rs salak": "Rumah Sakit RS.Salak Bogor",
+  "marzoeki mahdi": "Rumah Sakit Dr.Marzoeki Mahdi Bogor",
+  "rs mm": "Rumah Sakit Dr.Marzoeki Mahdi Bogor",
+  "pgb": "Pusat Grosir Bogor PGB Merdeka",
+  "bogor trade mall": "BTM Bogor Trade Mall",
+  "botani": "Botani Square",
+  "terminal bogor": "Stasiun Bogor",
+  "st bogor": "Stasiun Bogor",
+  "laladon terminal": "Terminal Laladon",
+  "terminal laladon bogor": "Terminal Laladon",
+  "merdeka terminal": "Terminal Merdeka",
+  "terminal bara": "Terminal Baranangsiang",
+  "bara terminal": "Terminal Baranangsiang",
+  "empang bogor": "JL.Empang",
+  "jl empang": "JL.Empang",
+  "sukasari bogor": "Sukasari",
+  "pomad bogor": "Pomad",
+  "warung nangka bogor": "Warung Nangka",
+  "kota bogor": "Terminal Merdeka",
+  "pusat kota": "Terminal Merdeka",
+  "cibinong mall": "Cibinong City Mall",
+  "cibinong terminal": "Terminal Cibinong",
+  "leuwiliang terminal": "Terminal Leuwiliang",
+  "jasinga terminal": "Terminal Jasinga",
+  "ciampea terminal": "Ciampea",
+  "parung terminal": "Terminal Parung",
+  "jonggol terminal": "Terminal Jonggol",
+  "cileungsi terminal": "Terminal Cileungsi",
+  "bojonggede terminal": "Terminal Bojonggede",
+  "bogor square": "Bogor Square",
+  "lotte": "Lotte Mart Bogor",
+  "yasmin": "Taman Yasmin",
+  "taman yasmin": "Taman Yasmin",
+  "perumnas": "Perumahan Budi Agung Bogor",
+  "semplak": "Semplak",
+  "kedung halang": "JL.Raya Kedung Halang",
+  "kedunghalang": "JL.Raya Kedung Halang",
+  "tanah baru": "Pasar Tanah Baru Bogor",
+  "bantar jati": "Bantar Kemang",
+  "bantarjati": "Bantar Kemang",
+  "surya kencana": "JL.Surya Kencana",
+  "sempur": "Lapangan Sempur Bogor",
+  "tugu kujang": "Tugu Kujang Bogor",
+  "kujang": "Tugu Kujang Bogor",
+  "warna sari": "JL.Raya Pajajaran",
+  "ciawi terminal": "Ciawi",
+  "tajur bogor": "JL.Raya Tajur",
+  "taman topi": "Taman Topi Square",
+  "plaza bogor": "Plaza Bogor",
+  "gang aut bogor": "Gang Aut Bogor",
+  "museum zoologi": "Museum Zoologi Bogor",
+  "bogor zoological": "Museum Zoologi Bogor",
+  "kebun raya": "Kebun Raya Bogor",
+  "istana bogor": "Istana Kepresidenan Bogor"
 };
 
 export const aliasLokasi = {
@@ -2961,26 +3385,78 @@ function simplifyLocation(input) {
     return input
         .toLowerCase()
         .trim()
-        .replace(/[.,/]+/g, ' ')
-        .replace(/\b(jl|jalan|jln)\b/g, 'jalan')
+        .replace(/[.,/\-_]+/g, ' ')
+        .replace(/\b(jl|jalan|jln)\b/g, 'jl')
         .replace(/\b(gn|gunung)\b/g, 'gunung')
         .replace(/\b(dr|drs?)\b/g, 'dr')
+        .replace(/\b(rs|rumah sakit)\b/g, 'rs')
+        .replace(/\b(terminal|term)\b/g, 'terminal')
+        .replace(/\b(pasar|psr)\b/g, 'pasar')
+        .replace(/\b(stasiun|st)\b/g, 'stasiun')
+        .replace(/\b(perumahan|perum|prm)\b/g, 'perum')
         .replace(/\s+/g, ' ')
         .trim();
 }
 
-function normalisasiLokasi(input) {
-    const lower = input.toLowerCase().trim();
-    if (aliasLokasi[lower]) {
-        return aliasLokasi[lower];
-    }
-
-    const simplified = simplifyLocation(lower);
-    for (const key of Object.keys(aliasLokasi)) {
-        if (simplifyLocation(key) === simplified) {
-            return aliasLokasi[key];
+/**
+ * Hitung Levenshtein distance antara dua string
+ */
+function levenshtein(a, b) {
+    const m = a.length, n = b.length;
+    if (m === 0) return n;
+    if (n === 0) return m;
+    const dp = Array.from({ length: m + 1 }, (_, i) => [i, ...Array(n).fill(0)]);
+    for (let j = 0; j <= n; j++) dp[0][j] = j;
+    for (let i = 1; i <= m; i++) {
+        for (let j = 1; j <= n; j++) {
+            dp[i][j] = a[i - 1] === b[j - 1]
+                ? dp[i - 1][j - 1]
+                : 1 + Math.min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]);
         }
     }
+    return dp[m][n];
+}
+
+/**
+ * Fuzzy score: seberapa mirip dua string (0 = sama persis, makin besar makin beda)
+ * Toleransi typo proporsional terhadap panjang string.
+ */
+function fuzzyMatch(a, b) {
+    const sa = simplifyLocation(a);
+    const sb = simplifyLocation(b);
+    if (sa === sb) return 0;
+    const maxLen = Math.max(sa.length, sb.length);
+    if (maxLen === 0) return 0;
+    const dist = levenshtein(sa, sb);
+    return dist / maxLen; // 0.0 (sama) sampai 1.0 (beda total)
+}
+
+// Threshold typo: toleransi 2 karakter untuk kata pendek, 3 untuk panjang
+const FUZZY_THRESHOLD = 0.25;
+
+function normalisasiLokasi(input) {
+    const lower = input.toLowerCase().trim();
+
+    // 1. Exact alias
+    if (aliasLokasi[lower]) return aliasLokasi[lower];
+
+    // 2. Simplified exact alias
+    const simplified = simplifyLocation(lower);
+    for (const key of Object.keys(aliasLokasi)) {
+        if (simplifyLocation(key) === simplified) return aliasLokasi[key];
+    }
+
+    // 3. Fuzzy alias match (toleransi typo 1-2 karakter)
+    let bestAliasScore = Infinity;
+    let bestAliasVal = null;
+    for (const key of Object.keys(aliasLokasi)) {
+        const score = fuzzyMatch(lower, key);
+        if (score < bestAliasScore && score <= FUZZY_THRESHOLD) {
+            bestAliasScore = score;
+            bestAliasVal = aliasLokasi[key];
+        }
+    }
+    if (bestAliasVal) return bestAliasVal;
 
     return capitalizeWords(simplified);
 }
@@ -3034,44 +3510,60 @@ export function cariRute(asal, tujuan) {
 
     // Cari rute transfer (ganti angkot 1x) jika tidak ada rute langsung
     if (langsung.length === 0) {
-        for (const t1 of trayekAngkot) {
+        // Bangun index: stopKey (simplified) -> list trayek yang punya stop itu
+        const stopIndex = new Map(); // key: simplified stop name, value: Set of trayek index
+        trayekAngkot.forEach((trayek, tIdx) => {
+            trayek.rute.forEach(stop => {
+                const key = simplifyLocation(stop);
+                if (!stopIndex.has(key)) stopIndex.set(key, new Set());
+                stopIndex.get(key).add(tIdx);
+            });
+        });
+
+        for (let i = 0; i < trayekAngkot.length; i++) {
+            const t1 = trayekAngkot[i];
             const idxAsal1 = temukan(t1.rute, normalAsal);
             if (idxAsal1 === -1) continue;
 
-            const candidateStops = t1.rute.filter((_, idx) => idx !== idxAsal1);
-            for (const stopTransfer of candidateStops) {
-                for (const t2 of trayekAngkot) {
-                    if (t1.kode === t2.kode) continue;
+            // Untuk setiap stop di t1 setelah asal, cari trayek lain yang juga punya stop itu + tujuan
+            for (let s1 = 0; s1 < t1.rute.length; s1++) {
+                if (s1 === idxAsal1) continue;
+                const stopTransfer = t1.rute[s1];
+                const stopTransferKey = simplifyLocation(stopTransfer);
+
+                // Cari semua trayek t2 yang punya stop transfer ini (via index)
+                const candidateTrayekIdx = stopIndex.get(stopTransferKey);
+                if (!candidateTrayekIdx) continue;
+
+                for (const j of candidateTrayekIdx) {
+                    if (i === j) continue; // jangan trayek yang sama
+                    const t2 = trayekAngkot[j];
                     const idxTransfer2 = temukan(t2.rute, stopTransfer);
                     const idxTujuan2 = temukan(t2.rute, normalTujuan);
 
-                    if (idxTransfer2 !== -1 && idxTujuan2 !== -1 && idxTransfer2 !== idxTujuan2) {
-                        const idxAsal1Real = temukan(t1.rute, normalAsal);
-                        const idxTransfer1 = temukan(t1.rute, stopTransfer);
+                    if (idxTransfer2 === -1 || idxTujuan2 === -1 || idxTransfer2 === idxTujuan2) continue;
 
-                        if (idxTransfer1 !== -1 && idxTransfer1 !== idxAsal1Real) {
-                            const stops1 = idxTransfer1 > idxAsal1Real
-                                ? t1.rute.slice(idxAsal1Real, idxTransfer1 + 1)
-                                : t1.rute.slice(idxTransfer1, idxAsal1Real + 1).reverse();
+                    const stops1 = s1 > idxAsal1
+                        ? t1.rute.slice(idxAsal1, s1 + 1)
+                        : t1.rute.slice(s1, idxAsal1 + 1).reverse();
 
-                            const stops2 = idxTujuan2 > idxTransfer2
-                                ? t2.rute.slice(idxTransfer2, idxTujuan2 + 1)
-                                : t2.rute.slice(idxTujuan2, idxTransfer2 + 1).reverse();
+                    const stops2 = idxTujuan2 > idxTransfer2
+                        ? t2.rute.slice(idxTransfer2, idxTujuan2 + 1)
+                        : t2.rute.slice(idxTujuan2, idxTransfer2 + 1).reverse();
 
-                            transferRaw.push({
-                                t1,
-                                t2,
-                                transfer: stopTransfer,
-                                stops1,
-                                stops2
-                            });
-                        }
-                    }
+                    transferRaw.push({
+                        t1,
+                        t2,
+                        transfer: stopTransfer,
+                        stops1,
+                        stops2
+                    });
                 }
             }
         }
 
         // Deduplikasi Rute Transfer berdasarkan pasangan (t1.kode, t2.kode)
+        // Pilih rute dengan total stop paling pendek (paling efisien)
         const transferMap = new Map();
         for (const item of transferRaw) {
             const pairKey = `${item.t1.kode}->${item.t2.kode}`;
@@ -3086,12 +3578,12 @@ export function cariRute(asal, tujuan) {
             }
         }
 
-        const transfer = [];
-        for (const val of transferMap.values()) {
-            transfer.push(val.item);
-        }
+        // Sort by total stops (terpendek dulu) dan ambil max 5 opsi
+        const transfer = [...transferMap.values()]
+            .sort((a, b) => a.totalStops - b.totalStops)
+            .map(v => v.item);
 
-        return { langsung, transfer: transfer.slice(0, 3) };
+        return { langsung, transfer: transfer.slice(0, 5) };
     }
 
     return { langsung, transfer: [] };
@@ -3101,11 +3593,11 @@ function temukan(rute, target) {
     const targetSimplified = simplifyLocation(target);
     if (!targetSimplified) return -1;
 
-    // 1. Exact match
+    // 1. Exact match (simplified)
     const exactIdx = rute.findIndex(stop => simplifyLocation(stop) === targetSimplified);
     if (exactIdx !== -1) return exactIdx;
 
-    // 2. Substring match
+    // 2. Substring match (dua arah)
     if (targetSimplified.length >= 3) {
         const subIdx = rute.findIndex(stop => {
             const s = simplifyLocation(stop);
@@ -3114,15 +3606,40 @@ function temukan(rute, target) {
         if (subIdx !== -1) return subIdx;
     }
 
-    // 3. Multi-word Token Match
+    // 3. Multi-word token match (semua kata kunci harus ada)
     const targetTokens = targetSimplified.split(' ').filter(t => t.length > 2);
-    if (targetTokens.length > 0) {
+    if (targetTokens.length > 1) {
         const tokenIdx = rute.findIndex(stop => {
             const s = simplifyLocation(stop);
             return targetTokens.every(tok => s.includes(tok));
         });
         if (tokenIdx !== -1) return tokenIdx;
     }
+
+    // 4. Partial token match (minimal 60% token cocok)
+    if (targetTokens.length > 0) {
+        const partialIdx = rute.findIndex(stop => {
+            const s = simplifyLocation(stop);
+            const matched = targetTokens.filter(tok => s.includes(tok)).length;
+            return matched / targetTokens.length >= 0.6;
+        });
+        if (partialIdx !== -1) return partialIdx;
+    }
+
+    // 5. Fuzzy match (toleransi typo Levenshtein)
+    let bestScore = Infinity;
+    let bestIdx = -1;
+    rute.forEach((stop, idx) => {
+        const s = simplifyLocation(stop);
+        // Hanya fuzzy pada string yang panjangnya tidak terlalu jauh
+        if (Math.abs(s.length - targetSimplified.length) > 6) return;
+        const score = fuzzyMatch(stop, target);
+        if (score < bestScore && score <= FUZZY_THRESHOLD) {
+            bestScore = score;
+            bestIdx = idx;
+        }
+    });
+    if (bestIdx !== -1) return bestIdx;
 
     return -1;
 }

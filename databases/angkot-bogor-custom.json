@@ -1,34 +1,5 @@
 {
-  "trayekAngkot": [
-    {
-      "kode": "AK-14",
-      "nama": "Sukasari - Bubulak",
-      "warna": "Hijau",
-      "rute": [
-        "Sukasari",
-        "JL.Lawang Gintung",
-        "JL.Pahlawan",
-        "JL.Layungsari",
-        "JL.Sadane",
-        "JL.R.Aria Suriawinata",
-        "JL.R.Aria Surialaga",
-        "JL.R.E. Abdullah",
-        "SMP SMA SMK Pembangunan 1 Bogor",
-        "Komplek Pertanian Loji",
-        "JL.Mayjen Ishak Djuarsa",
-        "Terminal Laladon",
-        "Pasar Laladon",
-        "JL.Letjen Ibrahim Adjie",
-        "JL.K.H.Abdullah Bin Nuh",
-        "Terminal Bubulak",
-        "jl.gn. batu"
-      ],
-      "jarak_km": 9.6,
-      "waktu_menit": 40,
-      "tarif": 4000,
-      "keterangan": "Sumber: website (majalah, lovelybogor, 2menit)"
-    }
-  ],
+  "trayekAngkot": [],
   "aliasLokasi": {},
   "deletedTrayekCodes": []
 }
