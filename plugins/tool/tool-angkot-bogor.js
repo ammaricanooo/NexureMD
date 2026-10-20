@@ -25,8 +25,9 @@ export default {
         let asal = '';
         let tujuan = '';
 
-        if (query.toLowerCase().includes(' ke ')) {
-            const parts = query.split(/\s+ke\s+/i);
+        const splitRegex = /\s+(?:ke|sampai|->)\s+/i;
+        if (splitRegex.test(query)) {
+            const parts = query.split(splitRegex);
             asal = parts[0]?.trim() || '';
             tujuan = parts[1]?.trim() || '';
         }
@@ -96,8 +97,8 @@ export default {
             } else if (hasil.transfer.length > 0) {
                 responseText += `🔄 *Rute Transit (Ganti Angkot 1x):*\n`;
                 hasil.transfer.forEach((r, index) => {
-                    const totalTarif = r.t1.tarif + r.t2.tarif;
-                    const totalWaktu = r.t1.waktu_menit + r.t2.waktu_menit + 5;
+                    const totalTarif = r.totalTarif || (r.t1.tarif + r.t2.tarif);
+                    const totalWaktu = r.totalWaktu || (r.t1.waktu_menit + r.t2.waktu_menit + 5);
 
                     responseText += `\n*Opsi ${index + 1}: Naik 2 Angkot*\n`;
                     responseText += `1️⃣ Naik *Angkot ${r.t1.kode}* (${r.t1.nama}) - Warna ${r.t1.warna}\n`;

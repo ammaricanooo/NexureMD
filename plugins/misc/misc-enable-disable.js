@@ -1,76 +1,108 @@
 import Setting from '../../databases/orm/Setting.js';
+import config from '../../config.js';
 
 export default {
     command: ['enable', 'disable', 'on', 'off'],
     category: 'misc',
     description: 'Mengaktifkan atau menonaktifkan fitur bot',
     async execute(sock, m, msgData, user, group) {
-        const availableFeatures = ['welcome', 'limit', 'public', 'register', 'gconly'];
+        const availableFeatures = ['welcome', 'limit', 'public', 'register', 'gconly', 'autoai'];
         const feature = msgData.args[0]?.toLowerCase();
         const action = msgData.commandName;
         const status = (action === 'enable' || action === 'on');
 
         if (!feature || !availableFeatures.includes(feature)) {
-            let text = `Uwaaa! Kakak mau setting apa? (๑>ᴗ<๑)\n\nPenggunaan: \`.${action} <fitur>\`\n\n*Daftar fitur:* \n`;
-            availableFeatures.forEach(f => text += `• ${f}\n`);
-            return sock.sendMessage(msgData.remoteJid, { text: text.trim() }, { quoted: m });
+            let text = `Uwaaa! Kakak mau atur fitur apa? (๑>ᴗ<๑)\n\n` +
+                `*Penggunaan:* \`.${action} <fitur>\`\n\n` +
+                `*Daftar fitur:*\n`;
+            availableFeatures.forEach(f => {
+                text += `• *${f}*\n`;
+            });
+            return msgData.reply(text.trim());
         }
 
         // Fitur khusus Global (Owner Only)
         if (['public', 'register', 'gconly'].includes(feature)) {
             if (!user.isOwner) {
-                return sock.sendMessage(msgData.remoteJid, {
-                    text: `Maaf ya kak, cuma Owner Nexure yang boleh atur fitur *${feature}*~ (｡T ω T｡)`
-                }, { quoted: m });
+                return msgData.reply(
+                    config.RYZUMI_MSG_OWNER ||
+                    `Maafin aku kak.. (｡T ω T｡) Perintah untuk mengatur fitur *${feature}* cuma bisa dipakai sama Owner kesayangan Nexure aja.. (´･ᴗ･ \` )`
+                );
             }
 
-            const [setting] = await Setting.findOrCreate({ 
+            const [setting] = await Setting.findOrCreate({
                 where: { id: 1 },
                 defaults: { is_public: true, is_register: true, is_gconly: false }
             });
-            
+
             if (feature === 'public') {
                 await setting.update({ is_public: status });
-                return sock.sendMessage(msgData.remoteJid, {
-                    text: `Selesai! Sekarang Nexure ${status ? 'bisa diakses semua orang' : 'hanya merespon Owner (Mode Maintenance)'} yaa~ (˶˃ ᵕ ˂˶)`
-                }, { quoted: m });
+                await msgData.react('✅');
+                return msgData.reply(
+                    status
+                        ? `Selesai! Sekarang Nexure bisa diakses semua orang yaa~ (˶˃ ᵕ ˂˶) ✨`
+                        : `Selesai! Mode Maintenance aktif, Nexure hanya akan merespon Owner saja yaa.. (｡T ω T｡)`
+                );
             } else if (feature === 'register') {
                 await setting.update({ is_register: status });
-                return sock.sendMessage(msgData.remoteJid, {
-                    text: `Selesai! Fitur *registrasi* sekarang sudah Nexure ${status ? 'aktifkan (wajib daftar)' : 'matikan (semua bebas akses)'} yaa~ (๑>ᴗ<๑)`
-                }, { quoted: m });
+                await msgData.react('✅');
+                return msgData.reply(
+                    status
+                        ? `Selesai! Fitur *registrasi* sekarang sudah Nexure aktifkan (wajib daftar dulu) yaa~ (˶˃ ᵕ ˂˶)`
+                        : `Selesai! Fitur *registrasi* dinonaktifkan (semua teman bebas akses tanpa daftar) yaa~ (๑>ᴗ<๑)`
+                );
             } else if (feature === 'gconly') {
                 await setting.update({ is_gconly: status });
-                return sock.sendMessage(msgData.remoteJid, {
-                    text: `Selesai! Mode *Group Only* sekarang sudah Nexure ${status ? 'aktifkan (hanya merespon di grup)' : 'matikan (merespon di grup & private)'} yaa~ (๑>ᴗ<๑)`
-                }, { quoted: m });
+                await msgData.react('✅');
+                return msgData.reply(
+                    status
+                        ? `Selesai! Mode *Group Only* aktif, Nexure hanya merespon di dalam grup yaa~ (˶˃ ᵕ ˂˶)`
+                        : `Selesai! Mode *Group Only* mati, Nexure bisa merespon di grup dan private chat yaa~ (๑>ᴗ<๑)`
+                );
             }
         }
 
         // Fitur khusus Grup (Admin Only)
-        if (['welcome', 'limit'].includes(feature)) {
+        if (['welcome', 'limit', 'autoai'].includes(feature)) {
             if (!msgData.isGroup) {
-                return sock.sendMessage(msgData.remoteJid, {
-                    text: `Aduuh! Fitur *${feature}* cuma bisa dipake di dalam grup aja kak~ (｡T ω T｡)`
-                }, { quoted: m });
+                return msgData.reply(
+                    config.RYZUMI_MSG_GROUP ||
+                    `Aduuh gawat! (๑>ᴗ<๑) Fitur *${feature}* cuma bisa dipakai bareng teman-teman di dalam grup aja kak~ (˶˃ ᵕ ˂˶)`
+                );
             }
-            
+
             if (!msgData.isAdmin && !user.isOwner) {
-                 return sock.sendMessage(msgData.remoteJid, {
-                    text: `Hanya admin grup yang bisa mengatur fitur *${feature}* ya kak~ (｡T ω T｡)`
-                }, { quoted: m });
+                return msgData.reply(
+                    config.RYZUMI_MSG_ADMIN ||
+                    `Aduuh! (๑>ᴗ<๑) Cuma Kakak Admin grup aja yang boleh mengatur fitur *${feature}*.. Kakak jadi Admin dulu yaa~ (´･ᴗ･ \` )`
+                );
             }
 
             if (feature === 'welcome') {
                 await group.update({ is_welcome: status });
-                await sock.sendMessage(msgData.remoteJid, {
-                    text: `Horeee! Fitur *welcome* sekarang sudah Nexure ${status ? 'aktifkan' : 'matikan'} buat grup ini yaa~ (˶˃ ᵕ ˂˶)`
-                }, { quoted: m });
+                await msgData.react('✅');
+                return msgData.reply(
+                    status
+                        ? `Horeee! Fitur *welcome* sekarang sudah Nexure aktifkan buat grup ini yaa~ (˶˃ ᵕ ˂˶) 🎉`
+                        : `Selesai kak! Fitur *welcome* sekarang sudah dimatikan untuk grup ini yaa~ (｡T ω T｡)`
+                );
             } else if (feature === 'limit') {
                 await group.update({ is_limited: status });
-                await sock.sendMessage(msgData.remoteJid, {
-                    text: `Selesai kak! Sekarang fitur *limit* di grup ini sudah ${status ? 'aktif' : 'mati'}~ ${status ? 'Sekarang setiap command bakal ngurangin limit lagi yaa.. (｡T ω T｡)' : 'Horeee! Sekarang kakak bebas pakai command apa aja tanpa limit! (๑>ᴗ<๑)'}`
-                }, { quoted: m });
+                await msgData.react('✅');
+                return msgData.reply(
+                    status
+                        ? `Selesai kak! Fitur *limit* di grup ini sudah aktif~ Sekarang setiap command bakal mengurangi limit yaa.. (｡T ω T｡)`
+                        : `Horeee! Sekarang kakak bebas pakai command apa aja di grup ini tanpa limit! (๑>ᴗ<๑) ✨`
+                );
+            } else if (feature === 'autoai') {
+                await group.update({ is_autoai: status });
+                const botNum = sock.user?.id?.split(':')[0].split('@')[0] || 'bot';
+                await msgData.react('✅');
+                return msgData.reply(
+                    status
+                        ? `Horeee! Fitur *Auto AI* berhasil Nexure aktifkan untuk grup ini yaa~ (˶˃ ᵕ ˂˶) ✨\n\nSekarang kalau kakak *mention* Nexure (@${botNum}) atau *reply* pesan Nexure, Nexure bakal otomatis jawab! Kakak juga bisa kirim atau reply gambar yaa~ (๑>ᴗ<๑)`
+                        : `Fitur *Auto AI* sekarang sudah dinonaktifkan untuk grup ini yaa kak~ (｡T ω T｡)\nNexure nggak akan otomatis jawab lagi saat di-mention atau di-reply di grup ini.`
+                );
             }
         }
     }

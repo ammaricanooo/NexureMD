@@ -320,7 +320,7 @@ const baseTrayekAngkot = [
       "Plaza Jambu Dua",
       "Warung Jambu",
       "Ciparigi",
-      "Ada Yang Sampai Ke Kedung Halang Villa Bogor Indah."
+      "Villa Bogor Indah"
     ],
     "jarak_km": 15,
     "waktu_menit": 63,
@@ -335,8 +335,8 @@ const baseTrayekAngkot = [
     "rute": [
       "Pasar Anyar",
       "JL.Pengadilan",
-      "JL.Jend.Sudirman",
-      "Air Mancur",
+      "JL.Jendral Sudirman",
+      "Taman Air Mancur Bogor",
       "JL.RE Martadinata",
       "Pondok Rumput"
     ],
@@ -435,9 +435,11 @@ const baseTrayekAngkot = [
       "Bantar Kemang",
       "JL.Pajajaran",
       "JL.Siliwangi",
+      "Sukasari",
       "JL.Lawang Gintung",
       "JL.Pahlawan",
       "JL.Empang",
+      "BTM Bogor Trade Mall",
       "JL.Ir.H.Juanda",
       "JL.Paledang",
       "JL.Veteran",
@@ -447,15 +449,7 @@ const baseTrayekAngkot = [
       "JL.Mawar",
       "JL.Merdeka",
       "JL.Moh A. Salmun",
-      "Pasar Anyar Bogor",
-      "PGN Bogor",
-      "JL.Nyai Raja Permas",
-      "Masjid Agung Bogor",
-      "JL.Dewi Sartika",
-      "Bank BRI Cabang Bogor",
-      "JL.Kapten Muslihat",
-      "Gedung DPRD Kota Bogor",
-      "Bantar Kemang"
+      "Pasar Anyar Bogor"
     ],
     "jarak_km": 14.4,
     "waktu_menit": 60,
@@ -512,18 +506,17 @@ const baseTrayekAngkot = [
       "Kebun Raya Bogor",
       "JL.Otto Iskandardinata",
       "Tugu Kujang Bogor",
-      "Kampus IPB Bogr",
+      "Kampus IPB Bogor",
       "Botani Square",
       "Terminal Baranangsiang",
       "JL.Raya Pajajaran",
-      "Puri Begawan Bogor Wedding",
+      "Puri Begawan Bogor",
       "Amaris Hotel Pakuan Bogor",
       "Bale Binarum Bogor",
       "JL.Durian Raya",
-      "Kampus 1 Pondok Pesantren Modern Daarul Uluum Bogor",
+      "Pondok Pesantren Modern Daarul Uluum Bogor",
       "JL.Rambutan",
-      "Stasiun Tas Bogor",
-      "SKI Tas Tajur",
+      "Sentra Tas Tajur SKI",
       "JL.Raya Parung Banteng",
       "Mutiara Bogor Raya"
     ],
@@ -546,15 +539,15 @@ const baseTrayekAngkot = [
       "JL.R.Aria Suriawinata",
       "JL.R.Aria Surialaga",
       "JL.R.E. Abdullah",
-      "SMP SMA SMK Pembangunan 1 Bogor",
-      "Komplek Pertanian Loji",
+      "Pasar Gunung Batu",
       "JL.Mayjen Ishak Djuarsa",
-      "Terminal Laladon",
-      "Pasar Laladon",
+      "Loji",
+      "Sindangbarang",
       "JL.Letjen Ibrahim Adjie",
-      "JL.K.H.Abdullah Bin Nuh",
-      "Terminal Bubulak",
-      "jl.gn. batu"
+      "Pasar Laladon",
+      "Terminal Laladon",
+      "JL.KH.Abdullah Bin Nuh",
+      "Terminal Bubulak"
     ],
     "jarak_km": 9.6,
     "waktu_menit": 40,
@@ -650,8 +643,7 @@ const baseTrayekAngkot = [
     "warna": "Hijau",
     "rute": [
       "Pomad",
-      "JL.Pengera Sogiri (Tanah Baru)",
-      "JL.R.Kan An",
+      "JL.Pangeran Sogiri",
       "Pasar Tanah Baru",
       "JL.Pandu Raya",
       "JL.Padi",
@@ -690,12 +682,11 @@ const baseTrayekAngkot = [
     "warna": "Hijau",
     "rute": [
       "Terminal Bubulak",
-      "JL.R",
-      "1",
-      "JL.Yasmin",
-      "JL.Soleh Iskandar",
-      "JL.Kayu Manis",
-      "JL.Mekar Wangi",
+      "JL.KH.Abdullah Bin Nuh",
+      "Taman Yasmin",
+      "JL.KH.Soleh Iskandar",
+      "Kayumanis",
+      "JL.Mekarwangi",
       "Kencana"
     ],
     "jarak_km": 4.8,
@@ -835,15 +826,26 @@ const baseTrayekAngkot = [
     "nama": "Ramayana - Ciapus",
     "warna": "Biru",
     "rute": [
-      "Ramayana",
-      "Jl.Otista",
-      "Lw.Saketeng",
-      "Jl.Lolongok",
+      "Ciapus",
+      "JL.Raya Ciapus",
+      "Pasir Eurih",
+      "Sirnagalih",
+      "Kotabatu",
       "Pulo Empang",
-      "Ciapus"
+      "JL.Empang",
+      "BTM Bogor Trade Mall",
+      "JL.Ir.H.Juanda",
+      "Plaza Bogor",
+      "Pasar Bogor",
+      "JL.Otista",
+      "JL.Surya Kencana",
+      "Gang Aut Bogor",
+      "JL.Pahlawan",
+      "JL.Lawang Saketeng",
+      "Ramayana"
     ],
-    "jarak_km": 3.6,
-    "waktu_menit": 15,
+    "jarak_km": 9.5,
+    "waktu_menit": 35,
     "tarif": 6000,
     "keterangan": "Sumber: website (majalah)",
     "kategori": "Angkutan Perbatasan"
@@ -853,18 +855,25 @@ const baseTrayekAngkot = [
     "nama": "Ramayana - Cihideung",
     "warna": "Biru",
     "rute": [
-      "Ramayana",
-      "Jl.Otista",
-      "Lw.Saketeng",
-      "Jl.Roda",
-      "Jl.Raya Pahlawan",
-      "Stasiun Batutulis Bogor",
-      "Jl.Batu Tulis",
-      "Cipaku",
-      "Cihideung"
+      "Cihideung",
+      "JL.Raya Cihideung",
+      "Ciapus",
+      "Kotabatu",
+      "Pulo Empang",
+      "JL.Empang",
+      "BTM Bogor Trade Mall",
+      "JL.Ir.H.Juanda",
+      "Plaza Bogor",
+      "Pasar Bogor",
+      "JL.Otista",
+      "JL.Surya Kencana",
+      "Gang Aut Bogor",
+      "JL.Pahlawan",
+      "JL.Lawang Saketeng",
+      "Ramayana"
     ],
-    "jarak_km": 5.4,
-    "waktu_menit": 23,
+    "jarak_km": 12,
+    "waktu_menit": 45,
     "tarif": 6000,
     "keterangan": "Sumber: website (majalah)",
     "kategori": "Angkutan Perbatasan"
@@ -875,14 +884,13 @@ const baseTrayekAngkot = [
     "warna": "Biru",
     "rute": [
       "Terminal Merdeka",
+      "Stasiun Bogor",
       "JL.Perintis Kemerdekaan",
-      "Bogor Golf Club",
-      "Rumah Sakit Dr.Marzoeki Mahdi Bogor",
-      "Akademi Keperawatan Departemen Kesehatan Bogor",
       "RSUD Kota Bogor",
       "JL.Darul Quran",
       "Pasar Gunung Batu",
       "JL.Gunung Batu",
+      "Pasir Kuda",
       "Ciomas"
     ],
     "jarak_km": 6,
@@ -897,6 +905,7 @@ const baseTrayekAngkot = [
     "warna": "Biru",
     "rute": [
       "Terminal Merdeka",
+      "Stasiun Bogor",
       "JL.Dr.Semeru",
       "RSUD Kota Bogor",
       "JL.Cilendek",
@@ -921,6 +930,7 @@ const baseTrayekAngkot = [
     "warna": "Biru",
     "rute": [
       "Terminal Merdeka",
+      "Stasiun Bogor",
       "JL.Dr.Semeru",
       "RSUD Kota Bogor",
       "JL.Cilendek",
@@ -1167,7 +1177,7 @@ const baseTrayekAngkot = [
       "Perumahan Bukit Waringin Bojong Gede",
       "JL.Kedung Waringin",
       "JL.Raya Bojong Gede",
-      "Stasiu Bojong Gede"
+      "Stasiun Bojong Gede"
     ],
     "jarak_km": 18.6,
     "waktu_menit": 78,
@@ -1430,10 +1440,10 @@ const baseTrayekAngkot = [
     "warna": "Hijau",
     "rute": [
       "Pondok Rumput",
-      "Jl.Re Martadinata",
-      "Air Mancur",
-      "Jl. Jend. Sudirman",
-      "Jl.Sawojajar",
+      "JL.RE Martadinata",
+      "Taman Air Mancur Bogor",
+      "JL.Jendral Sudirman",
+      "JL.Sawojajar",
       "Pasar Anyar"
     ],
     "jarak_km": 3.6,
@@ -1575,11 +1585,11 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Ciampea",
-      "Ranca Bungur",
+      "Rancabungur",
       "Candali",
-      "Kemang",
-      "Tonjong",
-      "Pasar Salasa",
+      "Kemang Bogor",
+      "Danau Tonjong",
+      "Pasar Selasa",
       "Susukan",
       "Perum Griya Yasa Lestari",
       "Terminal Bojonggede"
@@ -1597,13 +1607,13 @@ const baseTrayekAngkot = [
     "rute": [
       "Terminal Cibinong",
       "Cikaret",
-      "Ds.Tengah",
+      "Desa Tengah",
       "Karadenan",
-      "K.B. Talang",
-      "K.B. Jl. S.Iskander",
-      "K.B. Jl.Kh.Abd Bin Nuh",
+      "Simpang Talang",
+      "JL.KH.Soleh Iskandar",
+      "JL.KH.Abdullah Bin Nuh",
       "Terminal Laladon",
-      "Tmn.Pagelaran"
+      "Taman Pagelaran"
     ],
     "jarak_km": 13.5,
     "waktu_menit": 36,
@@ -1617,8 +1627,8 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Cibinong",
-      "Jl.Baru",
-      "Jl.Raya Gn.Putri",
+      "JL.Mayor Oking",
+      "JL.Raya Gunung Putri",
       "Cicadas",
       "Wanaherang",
       "Cikuda",
@@ -1636,11 +1646,11 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Cibinong",
-      "Cikaret",
-      "Rm.Sakit",
-      "Ds.Tengah",
-      "Btn",
-      "Pdam",
+      "JL.Raya Cikaret",
+      "RSUD Cibinong",
+      "Desa Tengah",
+      "Komplek Pemda Cibinong",
+      "PDAM Kab Bogor",
       "Pangkalan Bambu Kuning"
     ],
     "jarak_km": 10.5,
@@ -1657,10 +1667,10 @@ const baseTrayekAngkot = [
       "Terminal Cileungsi",
       "Nagrak",
       "Wanaherang",
-      "Jl.Raya Gn.Putri",
+      "JL.Raya Gunung Putri",
       "Citeureup",
       "Terminal Cibinong",
-      "Ds.Tengah (Pengadilan Agama)"
+      "Pengadilan Agama Cibinong"
     ],
     "jarak_km": 10.5,
     "waktu_menit": 28,
@@ -1675,9 +1685,10 @@ const baseTrayekAngkot = [
     "rute": [
       "Terminal Cibinong",
       "Citeureup",
-      "Jl.Raya Gn.Putri",
-      "Proyek",
-      "Cileungsi",
+      "JL.Raya Gunung Putri",
+      "Proyek Cileungsi",
+      "Terminal Cileungsi",
+      "Pasar Jonggol",
       "Terminal Jonggol"
     ],
     "jarak_km": 9,
@@ -1711,13 +1722,13 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Bojonggede",
-      "Billabong",
+      "Bilabong Permai",
       "Villa Mutiara",
-      "Bmw",
-      "Prempatan Kayu Manis",
-      "Selabanda",
-      "Jl.Ry Semplak",
-      "Jl.Abd B Nuh",
+      "BMW Salabenda",
+      "Kayumanis",
+      "Salabenda",
+      "JL.Raya Semplak",
+      "JL.KH.Abdullah Bin Nuh",
       "Terminal Laladon"
     ],
     "jarak_km": 13.5,
@@ -1838,11 +1849,11 @@ const baseTrayekAngkot = [
     "rute": [
       "Terminal Cileungsi",
       "Pintu Tol Cibubur",
-      "Toll Jarorawi",
-      "Pintu Toll Sentul City",
-      "Borr",
-      "K.B. Jl.S. Iskander",
-      "K.B. Jl.Kh.Abd Bin Nuh",
+      "Tol Jagorawi",
+      "Pintu Tol Sentul City",
+      "BORR Tol Lingkar Luar Bogor",
+      "JL.KH.Soleh Iskandar",
+      "JL.KH.Abdullah Bin Nuh",
       "Terminal Laladon"
     ],
     "jarak_km": 12,
@@ -1897,7 +1908,7 @@ const baseTrayekAngkot = [
       "Terminal Laladon",
       "Perumahan Taman Pagelaran",
       "Ciomas",
-      "Ciapus",
+      "Kotabatu",
       "Sirnagalih",
       "Gunung Malang",
       "Pangkalan Curug Luhur"
@@ -2134,16 +2145,15 @@ const baseTrayekAngkot = [
   },
   {
     "kode": "Kab-31",
-    "nama": "Pangkalan Pasar Ciluar – Pangkalan Perum Pura Bojonggede (Gaveri)",
+    "nama": "Pangkalan Pasar Ciluar – Pangkalan Perum Pura Bojonggede (Gaperi)",
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Pangkalan Pasar Ciluar",
-      "Smp Uswatan Hasanah",
+      "SMP Uswatun Hasanah",
       "Kandang Roda",
       "Muara Beres",
-      "Slb",
       "Karadenan",
-      "Pangkalan Perum Pura Bojonggede (Gaveri)"
+      "Pangkalan Perum Pura Bojonggede (Gaperi)"
     ],
     "jarak_km": 10.5,
     "waktu_menit": 28,
@@ -2157,11 +2167,10 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Pangkalan Bambu Kuning",
-      "Ds.Tengah",
-      "Jl.Bersih",
-      "Jl.Tegar Beriman",
-      "Daralon",
-      "Asr.Angmor",
+      "Desa Tengah",
+      "JL.Bersih Pemda",
+      "JL.Tegar Beriman",
+      "Cibinong",
       "Pangkalan Jl.Dr.Nurdin"
     ],
     "jarak_km": 10.5,
@@ -2354,11 +2363,11 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Terminal Cibinong",
-      "Jl.Rh.Lukman",
-      "Jl.Kayu Manis",
-      "Jl.Dr.Nurdin",
-      "Jl.Mayor Oking",
-      "Jl.Kranggan",
+      "JL.RH.Lukman",
+      "JL.Kayu Manis Cibinong",
+      "JL.Dr.Nurdin",
+      "JL.Mayor Oking",
+      "JL.Kranggan",
       "Pangkalan Perum Gunung Putri"
     ],
     "jarak_km": 10.5,
@@ -2375,7 +2384,7 @@ const baseTrayekAngkot = [
       "Terminal Cibinong",
       "JL.Raya Jakarta-Bogor",
       "Cilangkap",
-      "Tapos",
+      "Tapos Cibinong",
       "Leuwinanggung",
       "Pangkalan Sanding"
     ],
@@ -2446,11 +2455,10 @@ const baseTrayekAngkot = [
     "nama": "Kodim – Terminal Bojonggede",
     "warna": "Biru (Kabupaten)",
     "rute": [
-      "Kodim",
-      "Prempatan Bunda",
-      "Slb",
+      "Kodim Bogor",
+      "Perempatan Sukahati",
       "Karadenan",
-      "Pangkalan Perum Pura Bojonggede",
+      "Perum Pura Bojonggede",
       "Terminal Bojonggede"
     ],
     "jarak_km": 9,
@@ -2631,7 +2639,7 @@ const baseTrayekAngkot = [
       "Pangkalan Jl.Sirojul Munir",
       "Bogor Asri",
       "Kandang Roda",
-      "Jl.Baru",
+      "JL.Baru Sentul",
       "Tol Jagorawi",
       "Sentul Selatan",
       "Babakan Madang",
@@ -2650,7 +2658,7 @@ const baseTrayekAngkot = [
     "warna": "Biru (Kabupaten)",
     "rute": [
       "Pangkalan Citeureup",
-      "JL.Pahlawan",
+      "JL.Pahlawan Citeureup",
       "Babakan Madang",
       "Karang Tengah",
       "Gunung Pancar",
@@ -3551,12 +3559,21 @@ export function cariRute(asal, tujuan) {
                         ? t2.rute.slice(idxTransfer2, idxTujuan2 + 1)
                         : t2.rute.slice(idxTujuan2, idxTransfer2 + 1).reverse();
 
+                    const waktu1 = Math.max(8, Math.round((t1.waktu_menit || 30) * (stops1.length / (t1.rute.length || 1))));
+                    const waktu2 = Math.max(8, Math.round((t2.waktu_menit || 30) * (stops2.length / (t2.rute.length || 1))));
+                    const totalWaktu = waktu1 + waktu2 + 5;
+                    const totalTarif = (t1.tarif || 4000) + (t2.tarif || 4000);
+                    const totalJarak = Number((((t1.jarak_km || 8) * (stops1.length / (t1.rute.length || 1))) + ((t2.jarak_km || 8) * (stops2.length / (t2.rute.length || 1)))).toFixed(1));
+
                     transferRaw.push({
                         t1,
                         t2,
                         transfer: stopTransfer,
                         stops1,
-                        stops2
+                        stops2,
+                        totalWaktu,
+                        totalTarif,
+                        totalJarak
                     });
                 }
             }

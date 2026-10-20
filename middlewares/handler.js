@@ -3,6 +3,7 @@ import { plugins, loadPlugins, watchPlugins } from '../libs/hot-reload.js';
 import { processAuth } from './auth.js';
 import { validatePlugin } from './validator.js';
 import config from '../config.js';
+import { handleAutoAiMessage } from '../libs/autoai.js';
 
 // Inisialisasi Hot-Reload untuk Plugins
 const pluginDir = path.join(process.cwd(), 'plugins');
@@ -13,7 +14,10 @@ export default async function botHandler(sock, m, msgData) {
     try {
         // Cek apakah ini command atau bukan sebelum melakukan proses Auth yang berat (DB/Metadata)
         // Ini mencegah bot 'bengong' karena antrean DB/Network saat grup sangat ramai
-        if (!msgData.commandName) return;
+        if (!msgData.commandName) {
+            await handleAutoAiMessage(sock, m, msgData);
+            return;
+        }
 
         const { user, group, setting } = await processAuth(sock, msgData);
 
@@ -35,9 +39,11 @@ export default async function botHandler(sock, m, msgData) {
         }
     } catch (error) {
         console.error('Global Handler Error:', error);
-        const ownerJid = config.OWNER_NUMBER.includes('@') ? config.OWNER_NUMBER : `${config.OWNER_NUMBER}@s.whatsapp.net`;
-        await sock.sendMessage(ownerJid, {
-            text: `[SYSTEM ERROR]\n\nMsg: ${error.message}\n\nStack:\n${error.stack}`
-        });
+        if (config.OWNER_NUMBER) {
+            const ownerJid = config.OWNER_NUMBER.includes('@') ? config.OWNER_NUMBER : `${config.OWNER_NUMBER}@s.whatsapp.net`;
+            await sock.sendMessage(ownerJid, {
+                text: `[SYSTEM ERROR]\n\nMsg: ${error.message}\n\nStack:\n${error.stack}`
+            }).catch(() => {});
+        }
     }
 }

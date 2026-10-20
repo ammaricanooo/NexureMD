@@ -1,56 +1,74 @@
 import axios from 'axios';
 import config from '../config.js';
 
-const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
+export const GEMINI_MODELS = [
+    'gemini-3.1-flash-lite',
+    'gemini-flash-latest',
+    'gemini-3.8-flash',
+    'gemini-3.5-flash-lite'
+];
 
 /**
- * Memanggil REST API Google Gemini
- * @param {string} promptText
- * @param {number} temperature
- * @returns {Promise<string|null>}
+ * Memanggil REST API Google Gemini dengan fallback model otomatis jika error/overloaded
+ * @param {Object} options
+ * @param {Array} options.contents - Format standar Gemini contents [{ role, parts }]
+ * @param {string} [options.systemInstruction] - Instruksi sistem
+ * @param {number} [options.temperature=0.7] - Nilai kreativitas
+ * @param {number} [options.maxTokens=1500] - Maksimal token output
+ * @returns {Promise<string>}
  */
-async function callGeminiApi(promptText, temperature = 0.2) {
+export async function callGemini({
+    contents,
+    systemInstruction = null,
+    temperature = 0.7,
+    maxTokens = 1500
+}) {
     const apiKey = config.GEMINI_API_KEY;
     if (!apiKey) {
-        return null;
+        throw new Error('GEMINI_API_KEY belum dikonfigurasi di file .env');
     }
 
-    try {
-        const response = await axios.post(
-            GEMINI_API_URL,
-            {
-                contents: [
-                    {
-                        parts: [{ text: promptText }]
-                    }
-                ],
-                generationConfig: {
-                    temperature: temperature,
-                    maxOutputTokens: 1024
-                }
-            },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'x-goog-api-key': apiKey
-                },
-                timeout: 10000
-            }
-        );
-
-        const candidates = response.data?.candidates;
-        if (candidates && candidates.length > 0) {
-            return candidates[0].content?.parts[0]?.text?.trim() || null;
+    const payload = {
+        contents,
+        generationConfig: {
+            temperature,
+            maxOutputTokens: maxTokens
         }
-        return null;
-    } catch (error) {
-        console.error('Gemini API Error:', error?.response?.data || error.message);
-        return null;
+    };
+
+    if (systemInstruction) {
+        payload.systemInstruction = {
+            parts: [{ text: systemInstruction }]
+        };
     }
+
+    let lastError = null;
+
+    for (const model of GEMINI_MODELS) {
+        try {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+            const response = await axios.post(url, payload, {
+                headers: { 'Content-Type': 'application/json' },
+                timeout: 25000
+            });
+
+            const candidates = response.data?.candidates;
+            if (candidates && candidates.length > 0) {
+                const text = candidates[0].content?.parts?.[0]?.text?.trim();
+                if (text) return text;
+            }
+        } catch (error) {
+            lastError = error;
+            const errMsg = error.response?.data?.error?.message || error.message;
+            console.warn(`[Gemini] Gagal memanggil ${model}:`, errMsg);
+        }
+    }
+
+    throw lastError || new Error('Semua model Gemini sedang tidak dapat diakses');
 }
 
 /**
- * Mengekstrak lokasi asal dan tujuan dari kalimat bahasa bebas pengguna menggunakan Gemini AI
+ * Mengekstrak lokasi asal dan tujuan dari kalimat bahasa bebas pengguna
  * @param {string} userText
  * @returns {Promise<{ asal: string|null, tujuan: string|null }|null>}
  */
@@ -69,10 +87,15 @@ Jika tidak ditemukan asal atau tujuan, isi dengan null.
 Pertanyaan pengguna: "${userText}"
 `.trim();
 
-    const rawResponse = await callGeminiApi(prompt, 0.1);
-    if (!rawResponse) return null;
-
     try {
+        const rawResponse = await callGemini({
+            contents: [{ parts: [{ text: prompt }] }],
+            temperature: 0.1,
+            maxTokens: 512
+        });
+
+        if (!rawResponse) return null;
+
         const cleaned = rawResponse.replace(/```json|```/g, '').trim();
         const json = JSON.parse(cleaned);
         return {
@@ -85,7 +108,7 @@ Pertanyaan pengguna: "${userText}"
 }
 
 /**
- * Memberikan saran navigasi alternatif AI jika rute lokal angkot tidak ditemukan di database
+ * Memberikan saran navigasi alternatif AI jika rute lokal angkot tidak ditemukan
  * @param {string} asal
  * @param {string} tujuan
  * @returns {Promise<string|null>}
@@ -104,5 +127,14 @@ Gaya penulisan:
 - Gunakan ringkas dan poin-poin tebal (*).
 `.trim();
 
-    return await callGeminiApi(prompt, 0.7);
+    try {
+        return await callGemini({
+            contents: [{ parts: [{ text: prompt }] }],
+            temperature: 0.7,
+            maxTokens: 1024
+        });
+    } catch (error) {
+        console.error('[Gemini] Gagal mendapatkan saran navigasi:', error.message);
+        return null;
+    }
 }
