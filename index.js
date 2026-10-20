@@ -266,6 +266,20 @@ app.use(express.urlencoded({ extended: true }));
 // Register WhatsApp API routes
 app.use('/api/whatsapp', whatsappRouter);
 
+// Root info endpoint
+app.get('/', (req, res) => {
+    res.json({
+        success: true,
+        message: 'Nexure WhatsApp API Gateway is active & running! (˶˃ ᵕ ˂˶) ✨',
+        endpoints: {
+            health: 'GET /health',
+            whatsappStatus: 'GET /api/whatsapp/status (Headers: x-api-key: <key>)',
+            sendText: 'POST /api/whatsapp/send-text (Headers: x-api-key: <key>)',
+            sendBulk: 'POST /api/whatsapp/send-bulk (Headers: x-api-key: <key>)'
+        }
+    });
+});
+
 // Health check endpoint
 app.get('/health', (req, res) => {
     res.json({ status: 'ok', message: 'Bot API running' });
