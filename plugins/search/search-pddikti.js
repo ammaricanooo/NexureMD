@@ -23,7 +23,7 @@ export default {
         try {
             const url = `${config.API_AMMARICANO}/api/search/pddikti?query=${encodeURIComponent(text)}&type=mahasiswa`;
             const res = await axios.get(url);
-            const data = res.data.result.mahasiswa;
+            const data = Array.isArray(res.data?.result) ? res.data.result : (res.data?.result?.mahasiswa || []);
 
             if (!Array.isArray(data) || data.length === 0) {
                 return sock.sendMessage(msgData.remoteJid, {
