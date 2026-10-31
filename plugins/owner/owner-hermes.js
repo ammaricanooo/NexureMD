@@ -19,24 +19,16 @@ export default {
             }, { quoted: m });
         }
 
-        await sock.sendMessage(msgData.remoteJid, { react: { text: '🧠', key: m.key } });
-
-        await sock.sendMessage(msgData.remoteJid, {
-            text: `🧠 *Hermes Agent sedang memproses instruksi Anda...*\n\n_Agent sedang bekerja secara otonom di server. Mohon tunggu sebentar._`
-        }, { quoted: m });
+        sock.sendPresenceUpdate('composing', msgData.remoteJid).catch(() => {});
+        await sock.sendMessage(msgData.remoteJid, { react: { text: '⏳', key: m.key } });
 
         const result = await runHermes(prompt);
 
         if (result.success) {
-            await sock.sendMessage(msgData.remoteJid, { react: { text: '✅', key: m.key } });
+            await sock.sendMessage(msgData.remoteJid, { react: { text: '', key: m.key } });
 
-            const output = result.output || 'Tugas telah selesai dijalankan (tanpa output teks).';
-            let messageText = `⚡ *HASIL HERMES AGENT* ⚡\n\n${output}`;
-            if (messageText.length > 4000) {
-                messageText = `⚡ *HASIL HERMES AGENT* ⚡\n\n${output.slice(0, 3800)}\n\n_... (output dipotong karena batasan panjang pesan WhatsApp)_`;
-            }
-
-            await sock.sendMessage(msgData.remoteJid, { text: messageText }, { quoted: m });
+            const replyText = result.output || 'Tugas telah selesai dijalankan.';
+            await sock.sendMessage(msgData.remoteJid, { text: replyText }, { quoted: m });
         } else {
             await sock.sendMessage(msgData.remoteJid, { react: { text: '❌', key: m.key } });
 

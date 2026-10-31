@@ -15,6 +15,38 @@ export function stripAnsi(str) {
 }
 
 /**
+ * Membersihkan banner, garis pemisah, dan session metadata dari Hermes CLI
+ * agar menghasilkan teks balasan langsung seperti mengobrol biasa.
+ */
+export function extractCleanResponse(rawText) {
+    if (!rawText) return '';
+    let text = stripAnsi(rawText).trim();
+
+    // 1. Ekstrak teks di dalam kotak '─── ☤ Hermes ... ───' jika ada
+    const boxMatch = text.match(/[─━=-]{10,}\s*(?:☤\s*Hermes|Hermes)?\s*\n([\s\S]*?)\n\s*[─━=-]{10,}/i);
+    if (boxMatch && boxMatch[1]?.trim()) {
+        let content = boxMatch[1].trim();
+        content = content.replace(/^(?:☤\s*)?Hermes\s*\n?/i, '').trim();
+        if (content) return content;
+    }
+
+    // 2. Potong metadata footer (Resume this session with, Session, Title, Duration, Messages)
+    const resumeIndex = text.search(/\n\s*(?:Resume this session with:|Session:\s+local-)/i);
+    if (resumeIndex !== -1) {
+        text = text.substring(0, resumeIndex).trim();
+    }
+
+    // Potong header "Query: ..." di awal jika ada
+    text = text.replace(/^Query:\s*.*?\n+/i, '').trim();
+
+    // Hapus garis pemisah pembuka/penutup dan teks "☤ Hermes"
+    text = text.replace(/^[─━=-]{10,}\s*\n?/gm, '').trim();
+    text = text.replace(/^(?:☤\s*)?Hermes\s*\n?/gim, '').trim();
+
+    return text.trim();
+}
+
+/**
  * Mencari path binary hermes di berbagai lokasi umum di Linux / Windows
  */
 export function findHermesBinary() {
@@ -90,9 +122,11 @@ export async function runHermes(prompt, { cwd = process.cwd(), timeout = 180000 
         });
 
         const rawOutput = (stdout || '') + (stderr ? `\n\n[Stderr Output]:\n${stderr}` : '');
+        const cleanResponse = extractCleanResponse(rawOutput);
+
         return {
             success: true,
-            output: stripAnsi(rawOutput).trim(),
+            output: cleanResponse || stripAnsi(rawOutput).trim(),
         };
     } catch (error) {
         console.error('[Hermes Run Error Detail]:', {
@@ -128,7 +162,7 @@ export async function runHermes(prompt, { cwd = process.cwd(), timeout = 180000 
 
 /**
  * Handler pesan otomatis untuk Agent Mode (Khusus Owner)
- * Jika aktif, pesan teks dari owner akan langsung diproses oleh Hermes Agent tanpa perlu command prefix.
+ * Jika aktif, pesan teks dari owner akan langsung dijawab seperti mengobrol dengan orang biasa.
  */
 export async function handleAgentMessage(sock, m, msgData) {
     try {
@@ -159,7 +193,7 @@ export async function handleAgentMessage(sock, m, msgData) {
             await setting.update({ is_agent: false });
             await sock.sendMessage(msgData.remoteJid, { react: { text: '✅', key: m.key } });
             await sock.sendMessage(msgData.remoteJid, {
-                text: `Selesai! *Mode Agent* telah dinonaktifkan. Nexure kembali ke mode normal.`
+                text: `Selesai! *Mode Agent* telah dinonaktifkan. Nexure kembali ke mode percakapan biasa.`
             }, { quoted: m });
             return true;
         }
@@ -175,24 +209,20 @@ export async function handleAgentMessage(sock, m, msgData) {
 
         if (!prompt) return false;
 
-        // Beri indikator bahwa agent sedang bekerja
-        await sock.sendMessage(msgData.remoteJid, { react: { text: '🧠', key: m.key } });
-        await sock.sendMessage(msgData.remoteJid, {
-            text: `🧠 *[Agent Mode Active]* Hermes Agent sedang mengeksekusi instruksi di server...\n\n_Mohon tunggu sebentar..._`
-        }, { quoted: m });
+        // Indikator mengetik (composing) & reaksi emoji agar terasa seperti orang biasa
+        sock.sendPresenceUpdate('composing', msgData.remoteJid).catch(() => {});
+        await sock.sendMessage(msgData.remoteJid, { react: { text: '⏳', key: m.key } });
 
         const result = await runHermes(prompt);
 
         if (result.success) {
-            await sock.sendMessage(msgData.remoteJid, { react: { text: '✅', key: m.key } });
+            // Hapus reaksi loading setelah selesai
+            await sock.sendMessage(msgData.remoteJid, { react: { text: '', key: m.key } });
 
-            const output = result.output || 'Tugas telah selesai dijalankan (tanpa output teks).';
-            let messageText = `⚡ *HASIL HERMES AGENT* ⚡\n\n${output}`;
-            if (messageText.length > 4000) {
-                messageText = `⚡ *HASIL HERMES AGENT* ⚡\n\n${output.slice(0, 3800)}\n\n_... (output dipotong karena batas panjang pesan WhatsApp)_`;
-            }
+            const replyText = result.output || 'Tugas telah selesai dijalankan.';
 
-            await sock.sendMessage(msgData.remoteJid, { text: messageText }, { quoted: m });
+            // Kirim langsung respon murni tanpa banner bot
+            await sock.sendMessage(msgData.remoteJid, { text: replyText }, { quoted: m });
         } else {
             await sock.sendMessage(msgData.remoteJid, { react: { text: '❌', key: m.key } });
 
