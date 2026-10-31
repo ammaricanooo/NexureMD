@@ -39,10 +39,11 @@ export default {
                 const namaPt = mahasiswa.nama_pt || '-';
                 const namaProdi = mahasiswa.nama_prodi || '-';
 
-                message += `${index + 1}. *Nama:* ${nama}\n   *NIM:* ${nim}\n   *PT:* ${namaPt}\n   *Prodi:* ${namaProdi}\n\n`;
+                const id = mahasiswa.id ? `\n   *ID:* \`${mahasiswa.id}\`` : '';
+                message += `${index + 1}. *Nama:* ${nama}\n   *NIM:* ${nim}\n   *PT:* ${namaPt}\n   *Prodi:* ${namaProdi}${id}\n\n`;
             });
 
-            message += `Horeee! Itu tadi data yang Nexure temukan kak~ (๑>ᴗ<๑)`;
+            message += `💡 _Ketik \`.pddiktidetail <ID>\` untuk melihat detail mahasiswa._\n\nHoreee! Itu tadi data yang Nexure temukan kak~ (๑>ᴗ<๑)`;
 
             await sock.sendMessage(msgData.remoteJid, {
                 text: message.trim(),

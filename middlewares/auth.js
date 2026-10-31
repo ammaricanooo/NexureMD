@@ -20,7 +20,7 @@ const getCachedSetting = async () => {
     if (!settingFetchPromise) {
         settingFetchPromise = Setting.findOrCreate({
             where: { id: 1 },
-            defaults: { is_public: true, is_register: true, is_gconly: false }
+            defaults: { is_public: true, is_register: true, is_gconly: false, is_agent: false }
         }).then(([setting]) => {
             cachedSetting = setting;
             lastCacheUpdate = Date.now();

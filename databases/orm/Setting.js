@@ -19,6 +19,10 @@ const Setting = sequelize.define('Setting', {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
     },
+    is_agent: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+    },
     fonnte_token: {
         type: DataTypes.TEXT,
         allowNull: true,
