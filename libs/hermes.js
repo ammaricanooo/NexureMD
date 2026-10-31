@@ -15,6 +15,34 @@ export function stripAnsi(str) {
 }
 
 /**
+ * Mencari path binary hermes di berbagai lokasi umum di Linux / Windows
+ */
+export function findHermesBinary() {
+    const home = os.homedir();
+    const isWindows = process.platform === 'win32';
+    const ext = isWindows ? '.exe' : '';
+
+    const candidates = [
+        path.join(home, '.local', 'bin', `hermes${ext}`),
+        path.join(home, '.cargo', 'bin', `hermes${ext}`),
+        path.join(home, '.hermes', 'bin', `hermes${ext}`),
+        path.join(home, 'hermes-agent', 'venv', 'bin', `hermes${ext}`),
+        path.join('/usr', 'local', 'bin', `hermes${ext}`),
+        path.join('/usr', 'bin', `hermes${ext}`),
+    ];
+
+    for (const candidate of candidates) {
+        try {
+            if (fs.existsSync(candidate)) {
+                return candidate;
+            }
+        } catch (_) {}
+    }
+
+    return 'hermes';
+}
+
+/**
  * Menjalankan perintah Hermes Agent via CLI
  */
 export async function runHermes(prompt, { cwd = process.cwd(), timeout = 180000 } = {}) {
@@ -24,16 +52,41 @@ export async function runHermes(prompt, { cwd = process.cwd(), timeout = 180000 
     }
 
     const queryFilePath = path.join(tempDir, `query-${Date.now()}-${Math.random().toString(36).substring(7)}.txt`);
+    const hermesBin = findHermesBinary();
+
+    // Pastikan PATH mencakup folder tempat instalasi Hermes di Linux (~/.local/bin, ~/.cargo/bin)
+    const home = os.homedir();
+    const extraPaths = [
+        path.join(home, '.local', 'bin'),
+        path.join(home, '.cargo', 'bin'),
+        path.join(home, '.hermes', 'bin'),
+        path.join(home, 'hermes-agent', 'venv', 'bin'),
+        '/usr/local/bin',
+        '/usr/bin',
+        '/bin'
+    ];
+
+    const currentPath = process.env.PATH || '';
+    const enhancedPath = extraPaths.concat(currentPath.split(path.delimiter)).filter(Boolean).join(path.delimiter);
+
+    const env = {
+        ...process.env,
+        PATH: enhancedPath,
+        HERMES_YOLO_MODE: '1', // Otomatis bypass konfirmasi tool approval di server unattended
+        PYTHONUNBUFFERED: '1',
+    };
 
     try {
         await fs.promises.writeFile(queryFilePath, prompt, 'utf8');
-        const cmd = `hermes chat --query-file "${queryFilePath}"`;
+
+        // --yolo agar tidak hang meminta konfirmasi interaktif [y/N]
+        const cmd = `"${hermesBin}" chat --yolo --query-file "${queryFilePath}"`;
 
         const { stdout, stderr } = await execPromise(cmd, {
             cwd,
             timeout,
             maxBuffer: 1024 * 1024 * 20,
-            env: { ...process.env },
+            env,
         });
 
         const rawOutput = (stdout || '') + (stderr ? `\n\n[Stderr Output]:\n${stderr}` : '');
@@ -42,13 +95,27 @@ export async function runHermes(prompt, { cwd = process.cwd(), timeout = 180000 
             output: stripAnsi(rawOutput).trim(),
         };
     } catch (error) {
+        console.error('[Hermes Run Error Detail]:', {
+            message: error.message,
+            stderr: error.stderr,
+            stdout: error.stdout,
+            code: error.code,
+        });
+
         const isNotFound = error.message?.includes('not found') ||
                            error.message?.includes('is not recognized') ||
                            error.code === 127;
+
+        const combinedError = [
+            error.stderr ? `[STDERR]:\n${error.stderr}` : '',
+            error.stdout ? `[STDOUT]:\n${error.stdout}` : '',
+            `[MESSAGE]: ${error.message || 'Unknown Error'}`
+        ].filter(Boolean).join('\n\n');
+
         return {
             success: false,
             isNotFound,
-            error: stripAnsi(error.stderr || error.message || 'Unknown Error').trim(),
+            error: stripAnsi(combinedError).trim(),
         };
     } finally {
         try {
@@ -138,7 +205,7 @@ export async function handleAgentMessage(sock, m, msgData) {
                                  `3. \`hermes setup\`\n\n` +
                                  `Setelah selesai setup, fitur ini siap digunakan langsung dari WhatsApp.`;
             } else {
-                errorResponse += `*Detail Error:*\n\`\`\`\n${result.error.slice(0, 1000)}\n\`\`\``;
+                errorResponse += `*Detail Error:*\n\`\`\`\n${result.error.slice(0, 1500)}\n\`\`\``;
             }
 
             await sock.sendMessage(msgData.remoteJid, { text: errorResponse }, { quoted: m });
@@ -150,4 +217,3 @@ export async function handleAgentMessage(sock, m, msgData) {
         return false;
     }
 }
-
