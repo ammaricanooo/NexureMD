@@ -5,6 +5,7 @@ import { validatePlugin } from './validator.js';
 import config from '../config.js';
 import { handleAutoAiMessage } from '../libs/autoai.js';
 import { handleAgentMessage } from '../libs/hermes.js';
+import { handleInteractiveReply } from '../libs/interactive.js';
 
 // Inisialisasi Hot-Reload untuk Plugins
 const pluginDir = path.join(process.cwd(), 'plugins');
@@ -16,13 +17,23 @@ export default async function botHandler(sock, m, msgData) {
         // Cek apakah ini command atau bukan sebelum melakukan proses Auth yang berat (DB/Metadata)
         // Ini mencegah bot 'bengong' karena antrean DB/Network saat grup sangat ramai
         if (!msgData.commandName) {
-            // 1. Cek apakah Mode Agent aktif dan pengirim adalah Owner
+            // 1. Cek apakah ini balasan angka interaktif (misal angka 1-10 untuk PDDIKTI)
+            const isInteractive = await handleInteractiveReply(sock, m, msgData);
+            if (isInteractive) return;
+
+            // 2. Cek apakah Mode Agent aktif dan pengirim adalah Owner
             const isHandledByAgent = await handleAgentMessage(sock, m, msgData);
             if (isHandledByAgent) return;
 
-            // 2. Jika bukan agent, jalankan Auto AI biasa (grup)
+            // 3. Jika bukan agent, jalankan Auto AI biasa (grup)
             await handleAutoAiMessage(sock, m, msgData);
             return;
+        }
+
+        // Cek jika command yang diketik adalah angka dengan prefix (misal .1, .2, dst.) untuk sesi interaktif
+        if (/^[1-9]$|^10$/.test(msgData.commandName)) {
+            const isInteractive = await handleInteractiveReply(sock, m, msgData, parseInt(msgData.commandName, 10));
+            if (isInteractive) return;
         }
 
         const { user, group, setting } = await processAuth(sock, msgData);

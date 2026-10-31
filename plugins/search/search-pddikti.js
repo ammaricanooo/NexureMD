@@ -1,5 +1,6 @@
 import axios from 'axios';
 import config from '../../config.js';
+import { setPddiktiSession } from '../../libs/interactive.js';
 
 export default {
     command: ['mahasiswa', 'pddikti'],
@@ -8,7 +9,7 @@ export default {
     limit: 1,
     description: 'Mencari data mahasiswa di PDDIKTI',
     async execute(sock, m, msgData) {
-        const text = msgData.args.join(' ');
+        const text = msgData.args.join(' ').trim();
 
         if (!text) {
             return sock.sendMessage(msgData.remoteJid, {
@@ -31,23 +32,37 @@ export default {
                 }, { quoted: m });
             }
 
-            let message = `🔍 *HASIL PENCARIAN MAHASISWA* 🔍\n\nHasil untuk: "${text}"\n\n`;
+            // Batasi hasil maksimal 10 mahasiswa
+            const list = data.slice(0, 10);
 
-            data.forEach((mahasiswa, index) => {
+            let message = `🔍 *HASIL PENCARIAN MAHASISWA* 🔍\n\n` +
+                `Hasil pencarian untuk: *"${text}"*\n\n` +
+                `💡 *Petunjuk:* Balas (reply) pesan ini dengan angka (*1 - ${list.length}*) untuk melihat detail lengkap mahasiswa yang dipilih yaa~ (˶˃ ᵕ ˂˶) ✨\n\n` +
+                `────────────────────────────\n\n`;
+
+            list.forEach((mahasiswa, index) => {
                 const nama = mahasiswa.nama || '-';
                 const nim = mahasiswa.nim || '-';
                 const namaPt = mahasiswa.nama_pt || '-';
                 const namaProdi = mahasiswa.nama_prodi || '-';
 
-                const id = mahasiswa.id ? `\n   *ID:* \`${mahasiswa.id}\`` : '';
-                message += `${index + 1}. *Nama:* ${nama}\n   *NIM:* ${nim}\n   *PT:* ${namaPt}\n   *Prodi:* ${namaProdi}${id}\n\n`;
+                message += `${index + 1}. *Nama:* ${nama}\n   *NIM:* ${nim}\n   *PT:* ${namaPt}\n   *Prodi:* ${namaProdi}\n\n`;
             });
 
-            message += `💡 _Ketik \`.pddiktidetail <ID>\` untuk melihat detail mahasiswa._\n\nHoreee! Itu tadi data yang Nexure temukan kak~ (๑>ᴗ<๑)`;
+            message += `────────────────────────────\n` +
+                       `Horeee! Itu tadi data yang Nexure temukan kak~ (๑>ᴗ<๑)`;
 
-            await sock.sendMessage(msgData.remoteJid, {
+            const sentMsg = await sock.sendMessage(msgData.remoteJid, {
                 text: message.trim(),
             }, { quoted: m });
+
+            // Simpan sesi pencarian agar user bisa membalas dengan angka 1-10
+            setPddiktiSession({
+                messageId: sentMsg?.key?.id,
+                remoteJid: msgData.remoteJid,
+                senderJid: msgData.senderJid,
+                items: list
+            });
 
             await sock.sendMessage(msgData.remoteJid, {
                 react: { text: '✅', key: m.key }

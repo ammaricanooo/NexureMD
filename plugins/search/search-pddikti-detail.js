@@ -1,5 +1,6 @@
 import axios from 'axios';
 import config from '../../config.js';
+import { formatMahasiswaDetail } from '../../libs/interactive.js';
 
 export default {
     command: ['pddiktidetail', 'detailmhs', 'mahasiswadetail'],
@@ -31,17 +32,7 @@ export default {
                 }, { quoted: m });
             }
 
-            const message = `🎓 *DETAIL MAHASISWA PDDIKTI* 🎓\n\n` +
-                `👤 *Nama:* ${detail.nama || '-'}\n` +
-                `🔢 *NIM:* ${detail.nim || '-'}\n` +
-                `⚧ *Jenis Kelamin:* ${detail.jenis_kelamin === 'L' ? 'Laki-laki' : detail.jenis_kelamin === 'P' ? 'Perempuan' : (detail.jenis_kelamin || '-')}\n` +
-                `🏫 *Perguruan Tinggi:* ${detail.nama_pt || '-'} (${detail.kode_pt || '-'})\n` +
-                `📚 *Program Studi:* ${detail.prodi || '-'} (${detail.kode_prodi || '-'})\n` +
-                `🎓 *Jenjang:* ${detail.jenjang || '-'}\n` +
-                `📌 *Status Saat Ini:* ${detail.status_saat_ini || '-'}\n` +
-                `📝 *Jenis Pendaftaran:* ${detail.jenis_daftar || '-'}\n` +
-                `📅 *Tanggal Masuk:* ${detail.tanggal_masuk || '-'}\n\n` +
-                `Horeee! Itu tadi detail lengkapnya kak~ (๑>ᴗ<๑)`;
+            const message = formatMahasiswaDetail(detail);
 
             await sock.sendMessage(msgData.remoteJid, {
                 text: message.trim(),
@@ -63,4 +54,3 @@ export default {
         }
     }
 };
-
