@@ -10,7 +10,7 @@ import { logMessage } from './libs/console.js';
 import fs from 'fs';
 import { startCronJobs } from './libs/cronjob.js';
 import Group from './databases/orm/Group.js';
-import { setGroupMetadata, clearGroupCache } from './libs/groupCache.js';
+import { setGroupMetadata, clearGroupCache, deleteGroupMetadata } from './libs/groupCache.js';
 import Setting from './databases/orm/Setting.js';
 import Product from './databases/orm/Product.js';
 import express from 'express';
@@ -244,7 +244,18 @@ async function connectToWhatsApp() {
         }
     });
 
+    sock.ev.on('groups.update', async (updates) => {
+        for (const update of updates) {
+            if (update?.id) {
+                deleteGroupMetadata(update.id);
+            }
+        }
+    });
+
     sock.ev.on('group-participants.update', async (update) => {
+        if (update?.id) {
+            deleteGroupMetadata(update.id);
+        }
         const { plugins } = await import('./libs/hot-reload.js');
         for (const plugin of plugins) {
             if (plugin.onParticipantsUpdate) {

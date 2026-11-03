@@ -55,6 +55,8 @@ export const extractMessageData = (m, sock) => {
         isGroup,
         remoteJid,
         senderJid,
+        rawSenderJid,
+        participant: m.key?.participant || m.participant || null,
         fromMe,
         pushName: m.pushName || 'User',
         messageType,

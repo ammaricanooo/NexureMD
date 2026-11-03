@@ -37,6 +37,10 @@ const getCachedSetting = async () => {
 export const processAuth = async (sock, msgData) => {
     const setting = await getCachedSetting();
 
+    // Default status admin
+    msgData.isAdmin = false;
+    msgData.isBotAdmin = false;
+
     // Jangan simpan grup atau status broadcast ke tabel User
     if (msgData.senderJid.endsWith('@g.us') || msgData.senderJid === 'status@broadcast') {
         return {
@@ -72,24 +76,26 @@ export const processAuth = async (sock, msgData) => {
     if (msgData.isGroup) {
         let metadata = getGroupMetadata(msgData.remoteJid);
 
-        if (!metadata) {
-            // Cache miss: coba DB dulu (cepat) sebagai cadangan nama grup
+        if (!metadata || !Array.isArray(metadata.participants) || metadata.participants.length === 0) {
+            // Cache miss atau data kosong: coba ambil dari WhatsApp
             let dbGroup = await Group.findOne({ where: { jid: msgData.remoteJid } });
             try {
-                // Tambahkan timeout yang lebih singkat agar tidak membuat user menunggu lama
+                // Beri timeout 3.5 detik untuk fetch WhatsApp
                 const timeout = (ms) => new Promise((_, reject) => setTimeout(() => reject(new Error('Fetch timeout')), ms));
                 metadata = await Promise.race([
                     sock.groupMetadata(msgData.remoteJid),
-                    timeout(2000) // 2 detik saja, lebih dari itu kelamaan
+                    timeout(3500)
                 ]);
 
-                setGroupMetadata(msgData.remoteJid, metadata);
+                if (metadata && Array.isArray(metadata.participants) && metadata.participants.length > 0) {
+                    setGroupMetadata(msgData.remoteJid, metadata);
+                }
             } catch (err) {
                 // Jika gagal fetch metadata (timeout/error), gunakan data dari DB atau dummy
                 metadata = {
                     id: msgData.remoteJid,
                     subject: dbGroup?.name || 'Unknown Group',
-                    participants: [] // Fitur admin mungkin tidak jalan di command pertama jika ini terjadi
+                    participants: []
                 };
             }
         }
@@ -105,33 +111,97 @@ export const processAuth = async (sock, msgData) => {
             await group.update({ name: metadata.subject });
         }
 
-        // Fungsi pembantu untuk normalisasi JID ke format nomor murni
-        const jidToNum = (jid) => jid?.split('@')[0].split(':')[0];
-        const normalizedSender = jidToNum(msgData.senderJid);
-        const normalizedBot = jidToNum(botJid);
+        // Fungsi pembantu untuk normalisasi JID ke format nomor murni (hanya digit angka)
+        const jidToNum = (jid) => {
+            if (!jid) return '';
+            return jid.split('@')[0].split(':')[0].replace(/[^0-9]/g, '');
+        };
 
-        // Ambil ID mentah untuk perbandingan cadangan
-        const botId = sock.user?.id;
-        const botLid = sock.user?.lid;
+        const normalizePhone = (num) => {
+            if (!num) return '';
+            let clean = num.replace(/[^0-9]/g, '');
+            if (clean.startsWith('0')) clean = '62' + clean.slice(1);
+            return clean;
+        };
 
-        const participant = metadata.participants.find(p => 
-            p.id === msgData.senderJid ||
-            p.lid === msgData.senderJid ||
-            jidToNum(resolveLidToJid(p.id)) === normalizedSender
-        );
-        // Baileys sets admin to 'admin' or 'superadmin' for admins, and null/undefined/false for regular members
-        msgData.isAdmin = participant?.admin === 'admin' || participant?.admin === 'superadmin';
+        // Kumpulkan semua identifier bot (nomor telepon, nomor LID, dan nomor dari config)
+        const botNum = normalizePhone(jidToNum(sock?.user?.id));
+        const botLidNum = jidToNum(sock?.user?.lid);
+        const configBotNum = normalizePhone(config.BOT_NUMBER);
+        const botIdentifiers = new Set([botNum, botLidNum, configBotNum].filter(Boolean));
 
-        const botParticipant = metadata.participants.find(p => 
-            p.id === botId || 
-            p.id === botLid || 
-            jidToNum(resolveLidToJid(p.id)) === normalizedBot
-        );
-        // Baileys sets admin to 'admin' or 'superadmin' for admins, and null/undefined/false for regular members
-        msgData.isBotAdmin = botParticipant?.admin === 'admin' || botParticipant?.admin === 'superadmin';
+        const isBotParticipant = (p) => {
+            if (!p) return false;
+            const pIdNum = jidToNum(p.id);
+            const pLidNum = jidToNum(p.lid);
+            const pPhoneNum = normalizePhone(pIdNum);
+            const pResolvedNum = normalizePhone(jidToNum(resolveLidToJid(p.id)));
+            const pLidResolvedNum = normalizePhone(jidToNum(resolveLidToJid(p.lid)));
+            return (
+                botIdentifiers.has(pIdNum) ||
+                botIdentifiers.has(pLidNum) ||
+                botIdentifiers.has(pPhoneNum) ||
+                botIdentifiers.has(pResolvedNum) ||
+                botIdentifiers.has(pLidResolvedNum)
+            );
+        };
+
+        // Kumpulkan identifier pengirim pesan
+        const senderNum = normalizePhone(jidToNum(msgData.senderJid));
+        const rawSenderNum = normalizePhone(jidToNum(msgData.rawSenderJid || msgData.participant));
+        const senderRawId = jidToNum(msgData.senderJid);
+        const senderRawParticipant = jidToNum(msgData.rawSenderJid || msgData.participant);
+        const senderIdentifiers = new Set([senderNum, rawSenderNum, senderRawId, senderRawParticipant].filter(Boolean));
+
+        const isSenderParticipant = (p) => {
+            if (!p) return false;
+            const pIdNum = jidToNum(p.id);
+            const pLidNum = jidToNum(p.lid);
+            const pPhoneNum = normalizePhone(pIdNum);
+            const pResolvedNum = normalizePhone(jidToNum(resolveLidToJid(p.id)));
+            const pLidResolvedNum = normalizePhone(jidToNum(resolveLidToJid(p.lid)));
+            return (
+                senderIdentifiers.has(pIdNum) ||
+                senderIdentifiers.has(pLidNum) ||
+                senderIdentifiers.has(pPhoneNum) ||
+                senderIdentifiers.has(pResolvedNum) ||
+                senderIdentifiers.has(pLidResolvedNum) ||
+                p.id === msgData.senderJid ||
+                p.lid === msgData.senderJid ||
+                (msgData.rawSenderJid && (p.id === msgData.rawSenderJid || p.lid === msgData.rawSenderJid))
+            );
+        };
+
+        let botParticipant = metadata?.participants?.find(isBotParticipant);
+        let isBotAdmin = botParticipant?.admin === 'admin' || botParticipant?.admin === 'superadmin';
+
+        let senderParticipant = metadata?.participants?.find(isSenderParticipant);
+        let isAdmin = senderParticipant?.admin === 'admin' || senderParticipant?.admin === 'superadmin';
+
+        // Jika bot belum terdeteksi admin ATAU pengirim bukan admin dan bukan owner,
+        // ada kemungkinan metadata grup di cache sudah basi (stale) atau kosong.
+        // Lakukan fetch metadata segar langsung dari WhatsApp agar akurat 100%!
+        if (!isBotAdmin || (!isAdmin && !user.isOwner)) {
+            try {
+                const freshMetadata = await sock.groupMetadata(msgData.remoteJid);
+                if (freshMetadata && Array.isArray(freshMetadata.participants) && freshMetadata.participants.length > 0) {
+                    metadata = freshMetadata;
+                    setGroupMetadata(msgData.remoteJid, freshMetadata);
+
+                    botParticipant = metadata.participants.find(isBotParticipant);
+                    isBotAdmin = botParticipant?.admin === 'admin' || botParticipant?.admin === 'superadmin';
+
+                    senderParticipant = metadata.participants.find(isSenderParticipant);
+                    isAdmin = senderParticipant?.admin === 'admin' || senderParticipant?.admin === 'superadmin';
+                }
+            } catch (err) {
+                // Abaikan jika fetch live gagal karena timeout/jaringan
+            }
+        }
+
+        msgData.isBotAdmin = isBotAdmin;
+        msgData.isAdmin = isAdmin;
     }
 
     return { user, group, setting };
 };
-
-
