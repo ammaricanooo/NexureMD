@@ -4,7 +4,6 @@ import { processAuth } from './auth.js';
 import { validatePlugin } from './validator.js';
 import config from '../config.js';
 import { handleAutoAiMessage } from '../libs/autoai.js';
-import { handleAgentMessage } from '../libs/hermes.js';
 import { handleInteractiveReply } from '../libs/interactive.js';
 
 // Inisialisasi Hot-Reload untuk Plugins
@@ -21,11 +20,7 @@ export default async function botHandler(sock, m, msgData) {
             const isInteractive = await handleInteractiveReply(sock, m, msgData);
             if (isInteractive) return;
 
-            // 2. Cek apakah Mode Agent aktif dan pengirim adalah Owner
-            const isHandledByAgent = await handleAgentMessage(sock, m, msgData);
-            if (isHandledByAgent) return;
-
-            // 3. Jika bukan agent, jalankan Auto AI biasa (grup)
+            // 2. Jalankan Auto AI biasa (grup)
             await handleAutoAiMessage(sock, m, msgData);
             return;
         }

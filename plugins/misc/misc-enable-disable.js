@@ -6,7 +6,7 @@ export default {
     category: 'misc',
     description: 'Mengaktifkan atau menonaktifkan fitur bot',
     async execute(sock, m, msgData, user, group) {
-        const availableFeatures = ['welcome', 'limit', 'public', 'register', 'gconly', 'autoai', 'agent'];
+        const availableFeatures = ['welcome', 'limit', 'public', 'register', 'gconly', 'autoai'];
         const feature = msgData.args[0]?.toLowerCase();
         const action = msgData.commandName;
         const status = (action === 'enable' || action === 'on');
@@ -16,13 +16,13 @@ export default {
                 `*Penggunaan:* \`.${action} <fitur>\`\n\n` +
                 `*Daftar fitur:*\n`;
             availableFeatures.forEach(f => {
-                text += `• *${f}*${f === 'agent' ? ' _(Khusus Owner)_' : ''}\n`;
+                text += `• *${f}*\n`;
             });
             return msgData.reply(text.trim());
         }
 
         // Fitur khusus Global (Owner Only)
-        if (['public', 'register', 'gconly', 'agent'].includes(feature)) {
+        if (['public', 'register', 'gconly'].includes(feature)) {
             if (!user.isOwner) {
                 return msgData.reply(
                     config.RYZUMI_MSG_OWNER ||
@@ -32,7 +32,7 @@ export default {
 
             const [setting] = await Setting.findOrCreate({
                 where: { id: 1 },
-                defaults: { is_public: true, is_register: true, is_gconly: false, is_agent: false }
+                defaults: { is_public: true, is_register: true, is_gconly: false }
             });
 
             if (feature === 'public') {
@@ -58,14 +58,6 @@ export default {
                     status
                         ? `Selesai! Mode *Group Only* aktif, Nexure hanya merespon di dalam grup yaa~ (˶˃ ᵕ ˂˶)`
                         : `Selesai! Mode *Group Only* mati, Nexure bisa merespon di grup dan private chat yaa~ (๑>ᴗ<๑)`
-                );
-            } else if (feature === 'agent') {
-                await setting.update({ is_agent: status });
-                await msgData.react('✅');
-                return msgData.reply(
-                    status
-                        ? `🤖 *Mode Agent Berhasil Diaktifkan!* (Khusus Owner) ✨\n\nSekarang semua pesan teks dari Owner (di Private Chat maupun mention di Grup) akan langsung dieksekusi oleh *Hermes Agent* di server tanpa perlu mengetik command prefix.\n\n_Untuk menonaktifkan, ketik: .disable agent atau cukup chat 'disable agent'_`
-                        : `Selesai! *Mode Agent* telah dinonaktifkan. Nexure kembali ke mode percakapan biasa.`
                 );
             }
         }
