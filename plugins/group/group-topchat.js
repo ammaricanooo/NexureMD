@@ -1,3 +1,4 @@
+import { generateWAMessageFromContent } from 'baileys';
 import GroupMemberStat from '../../databases/orm/GroupMemberStat.js';
 
 /**
@@ -5,7 +6,7 @@ import GroupMemberStat from '../../databases/orm/GroupMemberStat.js';
  *
  * Fitur:
  * 1. Tracking otomatis jumlah pesan setiap member di grup (via trackMessage)
- * 2. Command .topchat → Tampilkan Top member terbanyak sebagai POLL MESSAGE (dengan pemilihan disabled: selectableCount = 0)
+ * 2. Command .topchat → Tampilkan Top member terbanyak sebagai Poll Result Snapshot (dengan indikator bar hijau, jumlah pesan, dan non-selectable)
  * 3. Command .resetchat → Reset statistik grup (owner only)
  */
 
@@ -43,7 +44,7 @@ export async function trackMessage(groupJid, memberJid, memberName) {
 const plugin = {
     command: ['topchat', 'top', 'resetchat'],
     category: 'group',
-    description: 'Menampilkan top member terbanyak chat di grup sebagai Poll Message (non-selectable).',
+    description: 'Menampilkan top member terbanyak chat di grup sebagai Poll Result Snapshot.',
     isGroup: true,
 
     execute: async (sock, m, msgData) => {
@@ -71,11 +72,11 @@ const plugin = {
             return;
         }
 
-        // ── TOP CHAT (POLL MESSAGE) ─────────────────────────────────────────
+        // ── TOP CHAT (POLL RESULT SNAPSHOT MESSAGE VIA CRM) ─────────────────
         try {
             await msgData.react('⏳');
 
-            // Ambil top 10 member berdasarkan message_count
+            // Ambil top 10 member berdasarkan message_count (maks 12 sesuai limit opsi poll WhatsApp)
             const limit = Math.min(parseInt(args[0]) || 10, 12);
             const topMembers = await GroupMemberStat.findAll({
                 where: { group_jid: remoteJid },
@@ -94,29 +95,31 @@ const plugin = {
             // Total pesan seluruh member di grup
             const totalMessages = topMembers.reduce((sum, item) => sum + item.message_count, 0);
 
-            // Format opsi poll: nama member untuk label, jumlah pesan untuk value poll
-            const medals = ['🥇', '🥈', '🥉', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟', '1️⃣1️⃣', '1️⃣2️⃣'];
-            const pollValues = topMembers.map((stat, idx) => {
-                const name = stat.member_name || stat.member_jid.split('@')[0];
-                const shortName = name.length > 18 ? name.slice(0, 16) + '..' : name;
-                return `${medals[idx] || `${idx + 1}.`} ${shortName}`;
+            // Format opsi pollVotes untuk pollResultSnapshotMessage
+            const pollVotes = topMembers.map((stat, idx) => {
+                const rawName = stat.member_name || stat.member_jid.split('@')[0];
+                const cleanName = rawName.replace(/[\r\n]+/g, ' ').trim() || 'Member';
+                const shortName = cleanName.length > 25 ? cleanName.slice(0, 23) + '..' : cleanName;
+                return {
+                    optionName: `${idx + 1}. ${shortName}`,
+                    optionVoteCount: stat.message_count
+                };
             });
 
-            // Jika ingin menampilkan jumlah pesan di teks tambahan, simpan di data terpisah
-            const pollMeta = topMembers.map((stat) => ({
-                name: stat.member_name || stat.member_jid.split('@')[0],
-                count: stat.message_count
-            }));
-
-            // Kirim Poll Message dengan selectableCount: 0 (Voting/Pemilihan Nonaktif)
-            await sock.sendMessage(remoteJid, {
-                poll: {
+            // Buat pesan pollResultSnapshotMessage menggunakan generateWAMessageFromContent
+            // Tampilan: indikator bar hijau terisi, angka jumlah chat di samping kanan, dan non-selectable
+            const waMsg = generateWAMessageFromContent(remoteJid, {
+                pollResultSnapshotMessage: {
                     name: `📊 TOP ${topMembers.length} MOST ACTIVE MEMBERS\nTotal Chat: ${totalMessages.toLocaleString()} pesan`,
-                    values: pollValues,
-                    selectableCount: 0, // 0 = Disable pilihan/voting (hanya info display)
-                    toAnnouncementGroup: false
+                    pollVotes
                 }
+            }, {
+                userJid: sock.user?.id,
+                quoted: m
             });
+
+            // Kirim pesan menggunakan conn.relayMessage (crm)
+            await sock.relayMessage(remoteJid, waMsg.message, { messageId: waMsg.key.id });
 
             await msgData.react('📊');
 
