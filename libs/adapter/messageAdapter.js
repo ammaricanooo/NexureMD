@@ -47,6 +47,7 @@ export const extractMessageData = (m, sock) => {
 
     const isQuotedMedia = isQuoted && /imageMessage|videoMessage|audioMessage|stickerMessage|documentMessage/.test(quotedType);
     const quotedMime = isQuoted ? (quotedMsg[quotedType]?.mimetype || '') : '';
+    const fileName = msg[messageType]?.fileName || (isQuoted ? quotedMsg?.[quotedType]?.fileName : '') || '';
 
     const remoteJid = resolveLidToJid(rawRemoteJid);
 
@@ -70,6 +71,7 @@ export const extractMessageData = (m, sock) => {
         isMedia,
         mime,
         quotedMime,
+        fileName,
         isQuotedMedia,
         mentions: contextInfo.mentionedJid || [],
         msg,
