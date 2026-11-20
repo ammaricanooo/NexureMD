@@ -1,6 +1,6 @@
 import axios from 'axios';
 import fetch from 'node-fetch';
-import { ryzumiCDN } from '../../libs/uploader.js';
+import { ammaricanoCDN } from '../../libs/uploader.js';
 
 export default {
     command: ['faketweet', 'tweet'],
@@ -51,8 +51,8 @@ export default {
                     });
                     if (ppRes.ok) {
                         const ppBuffer = Buffer.from(await ppRes.arrayBuffer());
-                        const uploadResult = await ryzumiCDN(ppBuffer);
-                        avatar = uploadResult.url || (typeof uploadResult === 'string' ? uploadResult : ppUrl);
+                        const uploadResult = await ammaricanoCDN(ppBuffer);
+                        avatar = uploadResult?.result?.url || uploadResult?.url || (typeof uploadResult === 'string' ? uploadResult : ppUrl);
                         if (typeof avatar === 'object' && avatar.url) avatar = avatar.url;
                     }
                 } catch (e) {
@@ -64,8 +64,8 @@ export default {
             const bufferMedia = await msgData.downloadMedia();
             if (bufferMedia && /imageMessage/.test(isQuoted ? msgData.quotedType : messageType)) {
                 try {
-                    const uploadResult = await ryzumiCDN(bufferMedia);
-                    imageUrl = uploadResult.url || uploadResult;
+                    const uploadResult = await ammaricanoCDN(bufferMedia);
+                    imageUrl = uploadResult?.result?.url || uploadResult?.url || uploadResult;
                     if (typeof imageUrl === 'object' && imageUrl.url) imageUrl = imageUrl.url;
                 } catch (e) {
                     console.error('Upload Media Error:', e);

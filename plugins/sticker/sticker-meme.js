@@ -1,7 +1,7 @@
 import axios from 'axios';
 import fetch from 'node-fetch';
 import { imageToWebp, writeExif } from '../../libs/sticker/sticker.js';
-import { ryzumiCDN } from '../../libs/uploader.js';
+import { ammaricanoCDN } from '../../libs/uploader.js';
 
 export default {
     command: ['smeme', 'stickermeme'],
@@ -31,8 +31,8 @@ export default {
             if (!buffer) throw new Error('Yahh... Gagal mengunduh media (╥﹏╥)');
 
             // Upload ke CDN agar background dapat diakses oleh memegen
-            const uploadResult = await ryzumiCDN(buffer);
-            let imageUrl = uploadResult?.url || (typeof uploadResult === 'string' ? uploadResult : null);
+            const uploadResult = await ammaricanoCDN(buffer);
+            let imageUrl = uploadResult?.result?.url || uploadResult?.url || (typeof uploadResult === 'string' ? uploadResult : null);
             if (!imageUrl && uploadResult && typeof uploadResult === 'object') {
                 // try common shapes
                 imageUrl = uploadResult.url || uploadResult.result || null;

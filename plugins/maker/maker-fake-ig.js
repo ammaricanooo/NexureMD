@@ -1,6 +1,6 @@
 import axios from 'axios';
 import fetch from 'node-fetch';
-import { ryzumiCDN } from '../../libs/uploader.js';
+import { ammaricanoCDN } from '../../libs/uploader.js';
 
 export default {
     command: ['fakestory', 'fakeig'],
@@ -58,8 +58,8 @@ export default {
                     });
                     if (ppRes.ok) {
                         const ppBuffer = Buffer.from(await ppRes.arrayBuffer());
-                        const uploadResult = await ryzumiCDN(ppBuffer);
-                        avatar = uploadResult.url || (typeof uploadResult === 'string' ? uploadResult : ppUrl);
+                        const uploadResult = await ammaricanoCDN(ppBuffer);
+                        avatar = uploadResult?.result?.url || uploadResult?.url || (typeof uploadResult === 'string' ? uploadResult : ppUrl);
                         if (typeof avatar === 'object' && avatar.url) avatar = avatar.url;
                     }
                 } catch (e) {
