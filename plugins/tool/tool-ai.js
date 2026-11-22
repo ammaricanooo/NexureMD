@@ -1,11 +1,11 @@
 import { executeAiPrompt } from '../../libs/autoai.js';
 
 export default {
-    command: ['ai', 'gemini', 'nexure'],
+    command: ['ai', 'deeperseeker', 'deepseek', 'gemini', 'nexure'],
     category: 'tool',
     isRegistered: true,
     limit: 1,
-    description: 'Tanya jawab cerdas dengan Nexure AI (Mendukung teks, reply chat, dokumen Word/PDF/Teks, audio/VN, & video)',
+    description: 'Tanya jawab cerdas dengan Nexure AI DeeperSeeker (Mendukung teks, deep thinking, reply chat, dokumen Word/Teks, audio/VN, & video)',
     async execute(sock, m, msgData) {
         const text = msgData.args.join(' ').trim();
         const hasMedia = msgData.isMedia || msgData.isQuotedMedia;
@@ -16,11 +16,13 @@ export default {
                 `Uwaaa! Kakak mau tanya apa sama Nexure? (๑>ᴗ<๑)\n\n` +
                 `*Contoh Penggunaan:*\n` +
                 `• \`.ai halo siapa kamu?\` (Tanya teks bebas)\n` +
+                `• \`.ai --think analisis permasalahan ini\` (Mode Deep Reasoning / berpikir mendalam)\n` +
                 `• \`.ai tanggapi ini\` (Reply/balas pesan chat orang lain)\n` +
-                `• \`.ai rangkum dokumen ini\` (Kirim / reply file Word .docx, PDF, teks, dll)\n` +
+                `• \`.ai rangkum dokumen ini\` (Kirim / reply file Word .docx, teks, dll)\n` +
                 `• \`.ai jelaskan foto ini\` (Kirim / reply gambar/foto)\n` +
                 `• \`.ai transkrip rekaman ini\` (Kirim / reply Voice Note/Audio)\n` +
-                `• \`.ai rangkum video ini\` (Kirim / reply video)`
+                `• \`.ai rangkum video ini\` (Kirim / reply video)\n\n` +
+                `_Ditenagai oleh DeeperSeeker (DeepSeek AI) pada Ammaricano API Platform._`
             );
         }
 

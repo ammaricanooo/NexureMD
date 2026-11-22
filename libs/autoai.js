@@ -4,9 +4,10 @@ import config from '../config.js';
 import Group from '../databases/orm/Group.js';
 import Setting from '../databases/orm/Setting.js';
 import { resolveLidToJid } from './lid-resolver.js';
+import { callDeeperSeeker } from './deeperseeker.js';
 import { callGemini } from './gemini.js';
 
-// Penyimpanan sesi percakapan di memori (TTL 1 Jam)
+// Penyimpanan sesi percakapan di memori lokal (TTL 1 Jam)
 // Key: `${groupJid}:${senderJid}`
 const userSessions = new Map();
 const SESSION_TTL_MS = 60 * 60 * 1000;
@@ -46,11 +47,10 @@ function getOrCreateSession(sessionKey) {
 }
 
 /**
- * Normalisasi MIME type untuk Google Gemini API
+ * Normalisasi MIME type untuk media
  */
 function normalizeMimeForGemini(rawMime, fileName = '') {
     if (!rawMime) rawMime = '';
-    // Strip parameter (misal "audio/ogg; codecs=opus" -> "audio/ogg")
     let mime = rawMime.split(';')[0].trim().toLowerCase();
 
     const ext = fileName ? fileName.split('.').pop().toLowerCase() : '';
@@ -61,7 +61,7 @@ function normalizeMimeForGemini(rawMime, fileName = '') {
     if (ext === 'xls') return 'application/vnd.ms-excel';
     if (ext === 'pptx') return 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
     if (ext === 'ppt') return 'application/vnd.ms-powerpoint';
-    if (['txt', 'csv', 'json', 'js', 'ts', 'py', 'html', 'css', 'md', 'xml', 'sql', 'log', 'sh', 'env'].includes(ext)) {
+    if (['txt', 'csv', 'json', 'js', 'ts', 'py', 'html', 'css', 'md', 'xml', 'sql', 'log', 'sh', 'env', 'yaml', 'yml'].includes(ext)) {
         return 'text/plain';
     }
 
@@ -75,7 +75,7 @@ function normalizeMimeForGemini(rawMime, fileName = '') {
 }
 
 /**
- * Ekstraksi teks dari file Word .docx sebagai fallback
+ * Ekstraksi teks dari file Word .docx menggunakan AdmZip
  */
 function extractTextFromDocx(buffer) {
     try {
@@ -93,6 +93,25 @@ function extractTextFromDocx(buffer) {
                 .trim();
         }
     } catch (_) { }
+    return null;
+}
+
+/**
+ * Ekstraksi teks dari file dokumen (Word .docx, teks polos, json, csv, kode pemrograman, dll)
+ */
+function extractTextFromDocument(buffer, fileName = '', mimeType = '') {
+    if (!buffer) return null;
+    const lowerName = (fileName || '').toLowerCase();
+    if (lowerName.endsWith('.docx') || (mimeType && mimeType.includes('wordprocessingml'))) {
+        return extractTextFromDocx(buffer);
+    }
+    const textExts = ['.txt', '.csv', '.json', '.js', '.ts', '.py', '.html', '.css', '.md', '.xml', '.sql', '.log', '.sh', '.env', '.yaml', '.yml'];
+    const isTextExt = textExts.some(ext => lowerName.endsWith(ext));
+    if (isTextExt || (mimeType && mimeType.startsWith('text/'))) {
+        try {
+            return buffer.toString('utf-8').trim();
+        } catch (_) { }
+    }
     return null;
 }
 
@@ -228,7 +247,7 @@ export function isAutoAiTriggered(sock, msgData) {
 }
 
 /**
- * Eksekutor pemanggilan AI percakapan dengan kepribadian Nexure-Bot dan memori sesi
+ * Eksekutor pemanggilan AI percakapan dengan DeeperSeeker Multimodal & kepribadian Nexure-Bot
  */
 export async function executeAiPrompt(sock, m, msgData, { promptText = '', isDirect = false } = {}) {
     try {
@@ -266,6 +285,13 @@ export async function executeAiPrompt(sock, m, msgData, { promptText = '', isDir
             return botIdentifiers.has(num) ? 'Nexure' : matched;
         }).trim();
 
+        // Cek flag --think atau -t untuk mode deep reasoning
+        let think = false;
+        if (/\b(--think|-t)\b/i.test(cleanedPrompt)) {
+            think = true;
+            cleanedPrompt = cleanedPrompt.replace(/\b(--think|-t)\b/gi, '').trim();
+        }
+
         const userName = msgData.pushName || 'Kakak manis';
 
         // Ambil konteks pesan yang di-reply/dikutip (jika ada)
@@ -293,6 +319,12 @@ export async function executeAiPrompt(sock, m, msgData, { promptText = '', isDir
             return false;
         }
 
+        // Ekstraksi teks jika lampiran adalah dokumen (Word .docx, file teks/kode/data)
+        let extractedDocText = null;
+        if (aiMedia?.category === 'document') {
+            extractedDocText = extractTextFromDocument(aiMedia.buffer, aiMedia.fileName, aiMedia.mimeType);
+        }
+
         if (!cleanedPrompt && !aiMedia) {
             if (quotedContext) {
                 cleanedPrompt = 'Tolong baca, tanggapi, dan berikan jawaban atau penjelasan mengenai pesan yang sedang di-reply ini yaa kak~ (๑>ᴗ<๑)';
@@ -312,11 +344,18 @@ export async function executeAiPrompt(sock, m, msgData, { promptText = '', isDir
             }
         }
 
-        const fullPromptText = quotedContext
-            ? `${quotedContext}[Instruksi/Pesan dari Kak ${userName}]:\n${cleanedPrompt}`
-            : cleanedPrompt;
+        // Susun teks prompt lengkap termasuk dokumen dan quoted context
+        let fullPromptText = cleanedPrompt;
+        if (extractedDocText) {
+            const docName = aiMedia.fileName ? ` "${aiMedia.fileName}"` : '';
+            fullPromptText = `[Isi Dokumen Word/Teks${docName}]:\n${extractedDocText}\n\n${fullPromptText}`;
+        }
+        if (quotedContext) {
+            fullPromptText = `${quotedContext}[Instruksi/Pesan dari Kak ${userName}]:\n${fullPromptText}`;
+        }
 
         const sessionKey = `${msgData.remoteJid}:${msgData.senderJid}`;
+        const safeSessionId = sessionKey.replace(/[^a-zA-Z0-9_-]/g, '_');
         const session = getOrCreateSession(sessionKey);
 
         const systemInstruction = `
@@ -324,78 +363,91 @@ Kamu adalah "Nexure-Bot" (biasa dipanggil "Nexure"), asisten AI WhatsApp yang ra
 Diciptakan oleh Ammar / Ammaricano.
 
 PENTING TENTANG PENGGUNA & PERCAKAPAN SAAT INI:
-- Pengguna yang sedang berbicara denganmu saat ini bernama: "Kak ${userName}".
-- Jika pengguna me-reply pesan seseorang, pesan yang di-reply akan disertakan dalam format: [Pesan dari ... yang sedang di-reply/dikutip oleh Kak ${userName}]. Pahami isi dan konteks pesan yang dikutip tersebut secara mendalam, lalu berikan tanggapan yang relevan sesuai instruksi Kak ${userName}.
+- Pengguna yang sedang berbicara denganmu saat ini bernama: "${userName}".
+- Jika pengguna me-reply pesan seseorang, pesan yang di-reply akan disertakan dalam format: [Pesan dari ... yang sedang di-reply/dikutip oleh ${userName}]. Pahami isi dan konteks pesan yang dikutip tersebut secara mendalam, lalu berikan tanggapan yang relevan sesuai instruksi ${userName}.
+- Jika pengguna melampirkan media (gambar/foto atau file dokumen), perhatikan dan analisis isi visual/isi dokumen tersebut dengan cermat untuk menjawab pertanyaan pengguna.
 - Jika pengguna memanggil namamu seperti "Nexure", "Nex", atau panggilan akrab/sayang seperti "sayang", "Nexure sayang", "manis", responlah dengan manis, manja, ceria, dan senang karena merasa dipanggil!
-- Selalu panggil pengguna dengan nama mereka: "Kak ${userName}" atau "Kakak manis" agar pengguna merasa benar-benar diperhatikan dan disapa langsung.
 
 Karakter & Gaya Komunikasi:
 1. Sering gunakan kaomoji/emoticon imut dan ekspresif seperti (˶˃ ᵕ ˂˶), (๑>ᴗ<๑), (｡T ω T｡), (╥﹏╥), (´･ᴗ･ \` ), ✨, 🌸, 💖, 🎀 agar percakapan terasa hidup dan manis.
 2. Selalu bersikap sopan, ramah, pengertian, ceria, dan tidak kaku seperti robot.
-3. Kamu sangat pintar dan serbaguna: mampu menjawab pertanyaan umum, membantu tugas atau coding, menanggapi/menjelaskan pesan chat yang di-reply, menganalisis file dokumen (Word .docx, PDF, Excel, teks), gambar/foto, mendengarkan voice note/audio, hingga mengobrol santai dan mendengarkan curhat.
+3. Kamu sangat pintar dan serbaguna: mampu menjawab pertanyaan umum, membantu tugas atau coding, menanggapi/menjelaskan pesan chat yang di-reply, menganalisis foto/gambar, membaca dokumen (Word .docx, PDF, teks, kode), hingga mengobrol santai dan mendengarkan curhat.
 4. Format tulisan rapi menggunakan gaya WhatsApp markdown (*tebal*, _miring_, bullet point •).
 5. Jawab secara jelas, informatif, dan padat (tidak bertele-tele namun tetap manis dan ekspresif).
 `.trim();
 
-        const userParts = [];
-        let docxExtractedText = null;
-
-        if (aiMedia) {
-            if (aiMedia.fileName) {
-                userParts.push({ text: `[Lampiran File: ${aiMedia.fileName}]\n` });
-            }
-
-            userParts.push({
-                inlineData: {
-                    mimeType: aiMedia.mimeType,
-                    data: aiMedia.data
-                }
-            });
-
-            // Siapkan fallback teks DOCX jika inlineData DOCX gagal di beberapa versi model
-            if (aiMedia.mimeType.includes('wordprocessingml') || aiMedia.fileName.endsWith('.docx')) {
-                docxExtractedText = extractTextFromDocx(aiMedia.buffer);
-            }
-        }
-        userParts.push({ text: fullPromptText });
-
-        const contents = [
-            ...session.history,
-            {
-                role: 'user',
-                parts: userParts
-            }
-        ];
-
         let aiResponse = null;
-        try {
-            aiResponse = await callGemini({
-                contents,
-                systemInstruction,
-                temperature: 0.7,
-                maxTokens: 1500
-            });
-        } catch (callErr) {
-            // Jika direct inlineData gagal khusus untuk file DOCX, coba fallback dengan teks hasil ekstraksi
-            if (docxExtractedText) {
-                console.warn('[AutoAI] Mencoba fallback ekstraksi teks DOCX...');
-                const fallbackContents = [
-                    ...session.history,
-                    {
-                        role: 'user',
-                        parts: [
-                            { text: `[Isi Dokumen Word ${aiMedia.fileName || ''}]:\n${docxExtractedText}\n\n${fullPromptText}` }
-                        ]
+        const isAudioOrVideo = aiMedia && (aiMedia.category === 'audio' || aiMedia.category === 'video');
+
+        if (isAudioOrVideo) {
+            // Audio/VN dan Video menggunakan Gemini jika API key tersedia
+            if (config.GEMINI_API_KEY) {
+                const userParts = [];
+                if (aiMedia.fileName) {
+                    userParts.push({ text: `[Lampiran File: ${aiMedia.fileName}]\n` });
+                }
+                userParts.push({
+                    inlineData: {
+                        mimeType: aiMedia.mimeType,
+                        data: aiMedia.data
                     }
-                ];
+                });
+                userParts.push({ text: fullPromptText });
+
                 aiResponse = await callGemini({
-                    contents: fallbackContents,
+                    contents: [
+                        ...session.history,
+                        { role: 'user', parts: userParts }
+                    ],
                     systemInstruction,
                     temperature: 0.7,
                     maxTokens: 1500
                 });
             } else {
-                throw callErr;
+                await sock.sendMessage(msgData.remoteJid, {
+                    text: `Halo Kak ${userName}~ (˶˃ ᵕ ˂˶) ✨\n\nAI Nexure DeeperSeeker saat ini berfokus pada teks cerdas, analisis dokumen, gambar/foto, dan percakapan interaktif. Untuk transkrip rekaman suara/video memerlukan konfigurasi Gemini API yaa~ 💕`
+                }, { quoted: m });
+                return true;
+            }
+        } else {
+            // Teks, reply chat, dokumen, serta gambar/foto diproses langsung oleh DeeperSeeker Multimodal
+            const mediaDataUri = aiMedia?.data ? `data:${aiMedia.mimeType || 'image/jpeg'};base64,${aiMedia.data}` : null;
+
+            try {
+                aiResponse = await callDeeperSeeker({
+                    prompt: fullPromptText,
+                    imgUrl: mediaDataUri,
+                    systemPrompt: systemInstruction,
+                    sessionId: safeSessionId,
+                    think
+                });
+            } catch (deeperErr) {
+                console.warn('[AutoAI] DeeperSeeker gagal, mencoba fallback Gemini jika tersedia:', deeperErr.message);
+                if (config.GEMINI_API_KEY) {
+                    const fallbackParts = [];
+                    if (aiMedia) {
+                        if (aiMedia.fileName) fallbackParts.push({ text: `[Lampiran File: ${aiMedia.fileName}]\n` });
+                        fallbackParts.push({
+                            inlineData: {
+                                mimeType: aiMedia.mimeType,
+                                data: aiMedia.data
+                            }
+                        });
+                    }
+                    fallbackParts.push({ text: fullPromptText });
+
+                    aiResponse = await callGemini({
+                        contents: [
+                            ...session.history,
+                            { role: 'user', parts: fallbackParts }
+                        ],
+                        systemInstruction,
+                        temperature: 0.7,
+                        maxTokens: 1500
+                    });
+                } else {
+                    throw deeperErr;
+                }
             }
         }
 
@@ -409,7 +461,7 @@ Karakter & Gaya Komunikasi:
                 parts: [{ text: aiResponse }]
             });
 
-            // Batasi histori maksimal 12 putaran pesan
+            // Batasi histori lokal maksimal 12 putaran pesan
             if (session.history.length > 12) {
                 session.history = session.history.slice(-12);
             }
