@@ -8,8 +8,12 @@ import { callDeeperSeeker } from './deeperseeker.js';
 import { callGemini } from './gemini.js';
 
 // Penyimpanan sesi percakapan di memori lokal (TTL 1 Jam)
-// Key: `${groupJid}:${senderJid}`
+// Key: `${groupJid}:${senderJid}` atau sessionKey thread yang diwarisi
 const userSessions = new Map();
+
+// Pemetaan ID pesan bot (stanzaId) ke sessionKey thread asal
+// Digunakan agar saat orang lain me-reply bot, mereka otomatis menyambung ke thread sesi yang sama
+const botMessageThreadMap = new Map();
 const SESSION_TTL_MS = 60 * 60 * 1000;
 
 // Pembersihan berkala setiap 10 menit untuk sesi kadaluwarsa
@@ -18,6 +22,11 @@ const cleanupTimer = setInterval(() => {
     for (const [key, session] of userSessions.entries()) {
         if (now - session.lastActive > SESSION_TTL_MS) {
             userSessions.delete(key);
+        }
+    }
+    for (const [msgId, threadData] of botMessageThreadMap.entries()) {
+        if (now - threadData.timestamp > SESSION_TTL_MS) {
+            botMessageThreadMap.delete(msgId);
         }
     }
 }, 10 * 60 * 1000);
@@ -247,7 +256,7 @@ export function isAutoAiTriggered(sock, msgData) {
 }
 
 /**
- * Eksekutor pemanggilan AI percakapan dengan DeeperSeeker Multimodal & kepribadian Nexure-Bot
+ * Eksekutor pemanggilan AI percakapan dengan DeeperSeeker Multimodal, Thread Inheritance, & kepribadian Nexure-Bot
  */
 export async function executeAiPrompt(sock, m, msgData, { promptText = '', isDirect = false } = {}) {
     try {
@@ -294,6 +303,12 @@ export async function executeAiPrompt(sock, m, msgData, { promptText = '', isDir
 
         const userName = msgData.pushName || 'Kakak manis';
 
+        // Deteksi apakah pesan saat ini me-reply pesan balasan bot sebelumnya (Thread Inheritance)
+        const ownSessionKey = `${msgData.remoteJid}:${msgData.senderJid}`;
+        let activeSessionKey = ownSessionKey;
+        let isInheritedThread = false;
+        let originalThreadOwner = null;
+
         // Ambil konteks pesan yang di-reply/dikutip (jika ada)
         let quotedContext = '';
         if (msgData.isQuoted && msgData.quotedContent) {
@@ -304,6 +319,19 @@ export async function executeAiPrompt(sock, m, msgData, { promptText = '', isDir
 
             if (isQuotedSelf) {
                 quotedContext = `[Pesan Nexure sebelumnya yang sedang di-reply oleh Kak ${userName}]:\n"${msgData.quotedContent.trim()}"\n\n`;
+
+                // Cek relasi thread dari botMessageThreadMap
+                const quotedStanzaId = msgData.contextInfo?.stanzaId;
+                if (quotedStanzaId && botMessageThreadMap.has(quotedStanzaId)) {
+                    const threadInfo = botMessageThreadMap.get(quotedStanzaId);
+                    if (threadInfo?.sessionKey) {
+                        activeSessionKey = threadInfo.sessionKey;
+                        if (activeSessionKey !== ownSessionKey) {
+                            isInheritedThread = true;
+                            originalThreadOwner = threadInfo.originalSenderJid;
+                        }
+                    }
+                }
             } else {
                 const senderLabel = participantNum ? `@${participantNum}` : 'anggota lain';
                 quotedContext = `[Pesan dari ${senderLabel} yang sedang di-reply/dikutip oleh Kak ${userName}]:\n"${msgData.quotedContent.trim()}"\n\n`;
@@ -354,16 +382,21 @@ export async function executeAiPrompt(sock, m, msgData, { promptText = '', isDir
             fullPromptText = `${quotedContext}[Instruksi/Pesan dari Kak ${userName}]:\n${fullPromptText}`;
         }
 
-        const sessionKey = `${msgData.remoteJid}:${msgData.senderJid}`;
-        const safeSessionId = sessionKey.replace(/[^a-zA-Z0-9_-]/g, '_');
-        const session = getOrCreateSession(sessionKey);
+        // Inisialisasi sesi aktif (sesi thread bersama jika me-reply bot, atau sesi mandiri jika chat baru)
+        const safeSessionId = activeSessionKey.replace(/[^a-zA-Z0-9_-]/g, '_');
+        const session = getOrCreateSession(activeSessionKey);
+
+        const threadNote = isInheritedThread
+            ? `- Catatan Thread: Ini adalah kelanjutan diskusi grup yang sebelumnya dimulai oleh Kak ${originalThreadOwner ? '@' + originalThreadOwner.split('@')[0] : 'anggota lain'}, dan saat ini sedang ditanggapi/dilanjutkan oleh Kak ${userName}. Pahami riwayat diskusi di atas secara berkesinambungan dan jawab pertanyaan Kak ${userName} secara relevan.`
+            : '';
 
         const systemInstruction = `
 Kamu adalah "Nexure-Bot" (biasa dipanggil "Nexure"), asisten AI WhatsApp yang ramah, imut, ceria, manja, sopan, dan hangat layaknya anime waifu assistant / sahabat baik.
-Diciptakan oleh Ammar / Ammaricano.
+Diciptakan oleh Ammar / Ammaricano dan ditenagai oleh DeeperSeeker (DeepSeek AI).
 
 PENTING TENTANG PENGGUNA & PERCAKAPAN SAAT INI:
 - Pengguna yang sedang berbicara denganmu saat ini bernama: "${userName}".
+${threadNote}
 - Jika pengguna me-reply pesan seseorang, pesan yang di-reply akan disertakan dalam format: [Pesan dari ... yang sedang di-reply/dikutip oleh ${userName}]. Pahami isi dan konteks pesan yang dikutip tersebut secara mendalam, lalu berikan tanggapan yang relevan sesuai instruksi ${userName}.
 - Jika pengguna melampirkan media (gambar/foto atau file dokumen), perhatikan dan analisis isi visual/isi dokumen tersebut dengan cermat untuk menjawab pertanyaan pengguna.
 - Jika pengguna memanggil namamu seperti "Nexure", "Nex", atau panggilan akrab/sayang seperti "sayang", "Nexure sayang", "manis", responlah dengan manis, manja, ceria, dan senang karena merasa dipanggil!
@@ -467,10 +500,19 @@ Karakter & Gaya Komunikasi:
             }
             session.lastActive = Date.now();
 
-            await sock.sendMessage(msgData.remoteJid, {
+            const sentMsg = await sock.sendMessage(msgData.remoteJid, {
                 text: aiResponse,
                 mentions: [msgData.senderJid]
             }, { quoted: m });
+
+            // Rekam ID pesan bot ke pemetaan thread sesi agar orang lain yang me-reply dapat mewarisi sesi ini
+            if (sentMsg?.key?.id) {
+                botMessageThreadMap.set(sentMsg.key.id, {
+                    sessionKey: activeSessionKey,
+                    originalSenderJid: originalThreadOwner || msgData.senderJid,
+                    timestamp: Date.now()
+                });
+            }
 
             return true;
         }
