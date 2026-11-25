@@ -95,4 +95,8 @@ async function writeExif(media, metadata) {
     return await img.save(null);
 }
 
-export { imageToWebp, videoToWebp, writeExif };
+function formatStickerAuthor(user, msgData) {
+    return user?.name || msgData?.pushName || 'User';
+}
+
+export { imageToWebp, videoToWebp, writeExif, formatStickerAuthor };

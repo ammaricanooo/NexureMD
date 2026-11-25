@@ -1,29 +1,63 @@
 import { downloadContentFromMessage } from 'baileys';
 import AdmZip from 'adm-zip';
+import sharp from 'sharp';
 import config from '../config.js';
 import Group from '../databases/orm/Group.js';
 import Setting from '../databases/orm/Setting.js';
 import { resolveLidToJid } from './lid-resolver.js';
-import { callDeeperSeeker } from './deeperseeker.js';
 import { callGemini } from './gemini.js';
+import { getAgentSystemInstructions, runAgentLoop } from './ai-agent.js';
+import { getSession, saveSession } from './ai-session-manager.js';
 
-// Penyimpanan sesi percakapan di memori lokal (TTL 1 Jam)
-// Key: `${groupJid}:${senderJid}` atau sessionKey thread yang diwarisi
-const userSessions = new Map();
+/**
+ * Mengompres gambar dengan sharp sebelum diubah menjadi Base64 Data URI agar ringan & cepat
+ */
+async function compressImageToDataUri(buffer, fallbackMime = 'image/jpeg') {
+    if (!buffer || !Buffer.isBuffer(buffer)) return null;
+    try {
+        const compressed = await sharp(buffer)
+            .rotate()
+            .resize(1024, 1024, { fit: 'inside', withoutEnlargement: true })
+            .jpeg({ quality: 80, progressive: true })
+            .toBuffer();
+        return `data:image/jpeg;base64,${compressed.toString('base64')}`;
+    } catch {
+        return `data:${fallbackMime};base64,${buffer.toString('base64')}`;
+    }
+}
+
+/**
+ * Memeriksa apakah pengirim pesan adalah Owner Bot
+ */
+function isSenderOwner(sock, msgData) {
+    const rawBotId = sock?.user?.id || '';
+    const rawBotLid = sock?.user?.lid || '';
+    const botNum = rawBotId.split(':')[0].split('@')[0];
+    const botLidNum = rawBotLid.split(':')[0].split('@')[0];
+    const configBotNum = config.BOT_NUMBER ? config.BOT_NUMBER.replace(/[^0-9]/g, '') : '';
+    const ownerNum = config.OWNER_NUMBER ? config.OWNER_NUMBER.replace(/[^0-9]/g, '') : '';
+
+    const resolvedSender = resolveLidToJid(msgData.senderJid || '') || msgData.senderJid || '';
+    const senderNum = resolvedSender.split(':')[0].split('@')[0];
+    const rawSenderNum = (msgData.senderJid || '').split(':')[0].split('@')[0];
+
+    return Boolean(
+        msgData.fromMe ||
+        (ownerNum && (senderNum === ownerNum || rawSenderNum === ownerNum)) ||
+        (botNum && (senderNum === botNum || rawSenderNum === botNum)) ||
+        (botLidNum && (senderNum === botLidNum || rawSenderNum === botLidNum)) ||
+        (configBotNum && (senderNum === configBotNum || rawSenderNum === configBotNum))
+    );
+}
 
 // Pemetaan ID pesan bot (stanzaId) ke sessionKey thread asal
 // Digunakan agar saat orang lain me-reply bot, mereka otomatis menyambung ke thread sesi yang sama
 const botMessageThreadMap = new Map();
 const SESSION_TTL_MS = 60 * 60 * 1000;
 
-// Pembersihan berkala setiap 10 menit untuk sesi kadaluwarsa
+// Pembersihan berkala setiap 10 menit untuk thread mapping yang kadaluwarsa
 const cleanupTimer = setInterval(() => {
     const now = Date.now();
-    for (const [key, session] of userSessions.entries()) {
-        if (now - session.lastActive > SESSION_TTL_MS) {
-            userSessions.delete(key);
-        }
-    }
     for (const [msgId, threadData] of botMessageThreadMap.entries()) {
         if (now - threadData.timestamp > SESSION_TTL_MS) {
             botMessageThreadMap.delete(msgId);
@@ -33,26 +67,6 @@ const cleanupTimer = setInterval(() => {
 
 if (cleanupTimer?.unref) {
     cleanupTimer.unref();
-}
-
-/**
- * Mengambil atau membuat sesi percakapan user
- */
-function getOrCreateSession(sessionKey) {
-    const now = Date.now();
-    let session = userSessions.get(sessionKey);
-
-    if (!session || (now - session.lastActive > SESSION_TTL_MS)) {
-        session = {
-            history: [],
-            lastActive: now
-        };
-        userSessions.set(sessionKey, session);
-    } else {
-        session.lastActive = now;
-    }
-
-    return session;
 }
 
 /**
@@ -382,20 +396,22 @@ export async function executeAiPrompt(sock, m, msgData, { promptText = '', isDir
             fullPromptText = `${quotedContext}[Instruksi/Pesan dari Kak ${userName}]:\n${fullPromptText}`;
         }
 
-        // Inisialisasi sesi aktif (sesi thread bersama jika me-reply bot, atau sesi mandiri jika chat baru)
-        const safeSessionId = activeSessionKey.replace(/[^a-zA-Z0-9_-]/g, '_');
-        const session = getOrCreateSession(activeSessionKey);
+        // Inisialisasi sesi aktif persisten (sesi thread bersama jika me-reply bot, atau sesi mandiri jika chat baru)
+        const session = getSession(activeSessionKey);
 
         const threadNote = isInheritedThread
             ? `- Catatan Thread: Ini adalah kelanjutan diskusi grup yang sebelumnya dimulai oleh Kak ${originalThreadOwner ? '@' + originalThreadOwner.split('@')[0] : 'anggota lain'}, dan saat ini sedang ditanggapi/dilanjutkan oleh Kak ${userName}. Pahami riwayat diskusi di atas secara berkesinambungan dan jawab pertanyaan Kak ${userName} secara relevan.`
             : '';
+
+        const isOwner = isSenderOwner(sock, msgData);
+        const agentInstructions = `\n\n${getAgentSystemInstructions(isOwner)}`;
 
         const systemInstruction = `
 Kamu adalah "Nexure-Bot" (biasa dipanggil "Nexure"), asisten AI WhatsApp yang ramah, imut, ceria, manja, sopan, dan hangat layaknya anime waifu assistant / sahabat baik.
 Diciptakan oleh Ammar / Ammaricano dan ditenagai oleh DeeperSeeker (DeepSeek AI).
 
 PENTING TENTANG PENGGUNA & PERCAKAPAN SAAT INI:
-- Pengguna yang sedang berbicara denganmu saat ini bernama: "${userName}".
+- Pengguna yang sedang berbicara denganmu saat ini bernama: "${userName}"${isOwner ? ' (OWNER UTAMA / PENCIPTAMU)' : ''}.
 ${threadNote}
 - Jika pengguna me-reply pesan seseorang, pesan yang di-reply akan disertakan dalam format: [Pesan dari ... yang sedang di-reply/dikutip oleh ${userName}]. Pahami isi dan konteks pesan yang dikutip tersebut secara mendalam, lalu berikan tanggapan yang relevan sesuai instruksi ${userName}.
 - Jika pengguna melampirkan media (gambar/foto atau file dokumen), perhatikan dan analisis isi visual/isi dokumen tersebut dengan cermat untuk menjawab pertanyaan pengguna.
@@ -406,7 +422,7 @@ Karakter & Gaya Komunikasi:
 2. Selalu bersikap sopan, ramah, pengertian, ceria, dan tidak kaku seperti robot.
 3. Kamu sangat pintar dan serbaguna: mampu menjawab pertanyaan umum, membantu tugas atau coding, menanggapi/menjelaskan pesan chat yang di-reply, menganalisis foto/gambar, membaca dokumen (Word .docx, PDF, teks, kode), hingga mengobrol santai dan mendengarkan curhat.
 4. Format tulisan rapi menggunakan gaya WhatsApp markdown (*tebal*, _miring_, bullet point •).
-5. Jawab secara jelas, informatif, dan padat (tidak bertele-tele namun tetap manis dan ekspresif).
+5. Jawab secara jelas, informatif, dan padat (tidak bertele-tele namun tetap manis dan ekspresif).${agentInstructions}
 `.trim();
 
         let aiResponse = null;
@@ -443,16 +459,28 @@ Karakter & Gaya Komunikasi:
                 return true;
             }
         } else {
-            // Teks, reply chat, dokumen, serta gambar/foto diproses langsung oleh DeeperSeeker Multimodal
-            const mediaDataUri = aiMedia?.data ? `data:${aiMedia.mimeType || 'image/jpeg'};base64,${aiMedia.data}` : null;
+            // Teks, reply chat, dokumen, serta gambar/foto (dikompres sharp) diproses oleh DeeperSeeker + Tool Loop
+            let mediaDataUri = null;
+            if (aiMedia?.data) {
+                if (aiMedia.category === 'image' && aiMedia.buffer) {
+                    mediaDataUri = await compressImageToDataUri(aiMedia.buffer, aiMedia.mimeType || 'image/jpeg');
+                } else {
+                    mediaDataUri = `data:${aiMedia.mimeType || 'application/octet-stream'};base64,${aiMedia.data}`;
+                }
+            }
 
             try {
-                aiResponse = await callDeeperSeeker({
+                aiResponse = await runAgentLoop({
                     prompt: fullPromptText,
                     imgUrl: mediaDataUri,
+                    history: session.history,
                     systemPrompt: systemInstruction,
-                    sessionId: safeSessionId,
-                    think
+                    think,
+                    isOwner,
+                    sock,
+                    m,
+                    msgData,
+                    remoteJid: msgData.remoteJid
                 });
             } catch (deeperErr) {
                 console.warn('[AutoAI] DeeperSeeker gagal, mencoba fallback Gemini jika tersedia:', deeperErr.message);
@@ -494,11 +522,8 @@ Karakter & Gaya Komunikasi:
                 parts: [{ text: aiResponse }]
             });
 
-            // Batasi histori lokal maksimal 12 putaran pesan
-            if (session.history.length > 12) {
-                session.history = session.history.slice(-12);
-            }
-            session.lastActive = Date.now();
+            // Simpan histori ke file JSON persisten (maksimal 16 item)
+            saveSession(activeSessionKey, session);
 
             const sentMsg = await sock.sendMessage(msgData.remoteJid, {
                 text: aiResponse,

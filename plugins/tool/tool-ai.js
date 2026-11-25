@@ -1,11 +1,11 @@
 import { executeAiPrompt } from '../../libs/autoai.js';
 
 export default {
-    command: ['ai', 'deeperseeker', 'deepseek', 'gemini', 'nexure'],
+    command: ['ai', 'agent', 'deeperseeker', 'deepseek', 'gemini', 'nexure'],
     category: 'tool',
     isRegistered: true,
     limit: 1,
-    description: 'Tanya jawab cerdas dengan Nexure AI DeeperSeeker (Mendukung teks, deep thinking, reply chat, dokumen Word/Teks, audio/VN, & video)',
+    description: 'Tanya jawab cerdas & AI Agent Server (Owner) dengan Nexure AI DeeperSeeker',
     async execute(sock, m, msgData) {
         const text = msgData.args.join(' ').trim();
         const hasMedia = msgData.isMedia || msgData.isQuotedMedia;
