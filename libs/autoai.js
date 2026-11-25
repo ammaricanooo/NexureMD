@@ -469,47 +469,18 @@ Karakter & Gaya Komunikasi:
                 }
             }
 
-            try {
-                aiResponse = await runAgentLoop({
-                    prompt: fullPromptText,
-                    imgUrl: mediaDataUri,
-                    history: session.history,
-                    systemPrompt: systemInstruction,
-                    think,
-                    isOwner,
-                    sock,
-                    m,
-                    msgData,
-                    remoteJid: msgData.remoteJid
-                });
-            } catch (deeperErr) {
-                console.warn('[AutoAI] DeeperSeeker gagal, mencoba fallback Gemini jika tersedia:', deeperErr.message);
-                if (config.GEMINI_API_KEY) {
-                    const fallbackParts = [];
-                    if (aiMedia) {
-                        if (aiMedia.fileName) fallbackParts.push({ text: `[Lampiran File: ${aiMedia.fileName}]\n` });
-                        fallbackParts.push({
-                            inlineData: {
-                                mimeType: aiMedia.mimeType,
-                                data: aiMedia.data
-                            }
-                        });
-                    }
-                    fallbackParts.push({ text: fullPromptText });
-
-                    aiResponse = await callGemini({
-                        contents: [
-                            ...session.history,
-                            { role: 'user', parts: fallbackParts }
-                        ],
-                        systemInstruction,
-                        temperature: 0.7,
-                        maxTokens: 1500
-                    });
-                } else {
-                    throw deeperErr;
-                }
-            }
+            aiResponse = await runAgentLoop({
+                prompt: fullPromptText,
+                imgUrl: mediaDataUri,
+                history: session.history,
+                systemPrompt: systemInstruction,
+                think,
+                isOwner,
+                sock,
+                m,
+                msgData,
+                remoteJid: msgData.remoteJid
+            });
         }
 
         if (aiResponse) {

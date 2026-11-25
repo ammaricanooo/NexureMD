@@ -4,7 +4,9 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
 import { lookup as mimeLookup } from 'mime-types';
+import config from '../config.js';
 import { callDeeperSeeker } from './deeperseeker.js';
+import { callGemini } from './gemini.js';
 import { webSearch, fetchWebPage } from './ai-web-tools.js';
 import { plugins } from './hot-reload.js';
 import { processAuth } from '../middlewares/auth.js';
@@ -378,7 +380,52 @@ function parseToolCall(responseText) {
 }
 
 /**
- * Menjalankan ReAct Agent Loop bersama DeeperSeeker
+ * Memanggil DeeperSeeker dengan fallback otomatis ke Gemini jika DeeperSeeker gagal/sibuk,
+ * sehingga loop tool-calling tetap berjalan mulus di provider mana pun.
+ */
+async function callWithFallback({ messages, systemPrompt, think = false }) {
+    try {
+        return await callDeeperSeeker({
+            messages,
+            systemPrompt,
+            think
+        });
+    } catch (deeperErr) {
+        if (!config.GEMINI_API_KEY) {
+            throw deeperErr;
+        }
+        console.warn('[AIAgent] DeeperSeeker gagal, fallback ke Gemini:', deeperErr.message);
+
+        const geminiContents = messages.map((msg) => {
+            const role = msg.role === 'assistant' ? 'model' : 'user';
+            if (Array.isArray(msg.content)) {
+                const parts = [];
+                for (const c of msg.content) {
+                    if (c.type === 'text' && c.text) {
+                        parts.push({ text: c.text });
+                    } else if (c.type === 'image_url' && c.image_url?.url?.startsWith('data:')) {
+                        const match = c.image_url.url.match(/^data:([^;]+);base64,(.+)$/);
+                        if (match) {
+                            parts.push({ inlineData: { mimeType: match[1], data: match[2] } });
+                        }
+                    }
+                }
+                return { role, parts: parts.length ? parts : [{ text: '' }] };
+            }
+            return { role, parts: [{ text: String(msg.content || '') }] };
+        });
+
+        return await callGemini({
+            contents: geminiContents,
+            systemInstruction: systemPrompt,
+            temperature: 0.7,
+            maxTokens: 1500
+        });
+    }
+}
+
+/**
+ * Menjalankan ReAct Agent Loop bersama DeeperSeeker (dan fallback Gemini)
  */
 export async function runAgentLoop({
     prompt,
@@ -421,7 +468,7 @@ export async function runAgentLoop({
             sock.sendPresenceUpdate('composing', remoteJid).catch(() => { });
         }
 
-        const aiText = await callDeeperSeeker({
+        const aiText = await callWithFallback({
             messages,
             systemPrompt,
             think: step === 1 ? think : false
@@ -459,12 +506,14 @@ export async function runAgentLoop({
 
     messages.push({
         role: 'user',
-        content: 'Batas langkah eksekusi tercapai. Segera berikan ringkasan dan jawaban akhir berdasarkan hasil yang sudah diperoleh.'
+        content: 'Batas langkah eksekusi tercapai. JANGAN panggil tool lagi. Segera berikan ringkasan dan jawaban akhir kepada pengguna berdasarkan hasil yang sudah diperoleh.'
     });
 
-    return await callDeeperSeeker({
+    const finalReply = await callWithFallback({
         messages,
         systemPrompt,
         think: false
     });
+
+    return String(finalReply || '').replace(/<tool_call>[\s\S]*?<\/tool_call>/gi, '').trim();
 }
