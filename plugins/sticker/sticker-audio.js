@@ -266,6 +266,14 @@ async function sendAudioSticker(sock, remoteJid, m, stickerBuffer, oggResult) {
     stickerMessage.isLottie = false;
     stickerMessage.audioMessage = audioMessage;
 
+    if (m?.key?.id) {
+        stickerMessage.contextInfo = {
+            stanzaId: m.key.id,
+            participant: m.key.participant || m.key.remoteJid,
+            quotedMessage: m.message
+        };
+    }
+
     const payload = {
         messageContextInfo: {
             messageSecret: crypto.randomBytes(32)
@@ -277,7 +285,9 @@ async function sendAudioSticker(sock, remoteJid, m, stickerBuffer, oggResult) {
         }
     };
 
-    await sock.relayMessage(remoteJid, payload, { quoted: m });
+    await sock.relayMessage(remoteJid, payload, {
+        additionalAttributes: { mediatype: 'sticker' }
+    });
 }
 
 export default {

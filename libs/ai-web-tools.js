@@ -17,8 +17,29 @@ function isPrivateOrUnsafeHost(hostname) {
     return false;
 }
 
+const STOPWORDS = new Set([
+    'apa', 'siapa', 'kapan', 'dimana', 'mengapa', 'kenapa', 'bagaimana',
+    'yang', 'dan', 'atau', 'di', 'ke', 'dari', 'untuk', 'pada', 'dengan',
+    'ini', 'itu', 'hari', 'terkini', 'terbaru', 'berita', 'info', 'tentang',
+    'the', 'is', 'are', 'of', 'in', 'to', 'for', 'today', 'latest', 'news'
+]);
+
+function extractKeywords(query) {
+    return String(query || '')
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/gi, ' ')
+        .split(/\s+/)
+        .filter((w) => w.length >= 3 && !STOPWORDS.has(w));
+}
+
+function isRelevantResult(item, keywords) {
+    if (!keywords || keywords.length === 0) return true;
+    const haystack = `${item.title || ''} ${item.snippet || ''} ${item.url || ''}`.toLowerCase();
+    return keywords.some((kw) => haystack.includes(kw));
+}
+
 /**
- * Mencari informasi terkini di internet via Bing Search RSS, Google News RSS, & Wikipedia API (tanpa API key)
+ * Mencari informasi terkini di internet via Google News RSS, Bing Search/News RSS (cc=ID), & Wikipedia API
  * @param {Object} options
  * @param {string} options.query - Kata kunci pencarian
  * @param {number} [options.maxResults=5] - Maksimal hasil
@@ -28,53 +49,88 @@ export async function webSearch({ query, maxResults = 5 }) {
         return { error: 'Parameter query pencarian wajib diisi.' };
     }
 
+    const q = query.trim();
     const limit = Math.min(Math.max(Number(maxResults) || 5, 1), 10);
-    const results = [];
+    const keywords = extractKeywords(q);
 
-    // 1. Primary: Bing Web Search RSS
-    try {
-        const res = await axios.get('https://www.bing.com/search', {
-            params: { q: query.trim(), format: 'rss' },
+    const [gnewsRes, bingNewsRes, bingWebRes] = await Promise.allSettled([
+        axios.get('https://news.google.com/rss/search', {
+            params: { q, hl: 'id', gl: 'ID', ceid: 'ID:id' },
             headers: { 'User-Agent': USER_AGENT },
             timeout: 8000
-        });
+        }),
+        axios.get('https://www.bing.com/news/search', {
+            params: { q, format: 'rss', cc: 'ID', setlang: 'id' },
+            headers: { 'User-Agent': USER_AGENT },
+            timeout: 8000
+        }),
+        axios.get('https://www.bing.com/search', {
+            params: { q, format: 'rss', cc: 'ID', setlang: 'id' },
+            headers: { 'User-Agent': USER_AGENT },
+            timeout: 8000
+        })
+    ]);
 
-        const $ = cheerio.load(String(res.data), { xmlMode: true });
+    const results = [];
+    const seenUrls = new Set();
+
+    const pushItem = (item) => {
+        if (results.length >= limit) return;
+        if (!item.title || !item.url || seenUrls.has(item.url)) return;
+        if (!isRelevantResult(item, keywords)) return;
+        seenUrls.add(item.url);
+        results.push(item);
+    };
+
+    // 1. Google News RSS (sangat akurat untuk berita & isu terkini Indonesia)
+    if (gnewsRes.status === 'fulfilled') {
+        const $ = cheerio.load(String(gnewsRes.value.data), { xmlMode: true });
+        $('item').each((_, el) => {
+            if (results.length >= limit) return false;
+            const title = $(el).find('title').text().trim();
+            const url = $(el).find('link').text().trim();
+            const pubDate = $(el).find('pubDate').text().trim();
+            const snippet = $(el).find('description').text().replace(/<[^>]+>/g, '').trim();
+            pushItem({
+                source: 'google_news',
+                title,
+                url,
+                snippet: pubDate ? `[${pubDate}] ${snippet}` : snippet
+            });
+        });
+    }
+
+    // 2. Bing News RSS (cc=ID)
+    if (results.length < limit && bingNewsRes.status === 'fulfilled') {
+        const $ = cheerio.load(String(bingNewsRes.value.data), { xmlMode: true });
+        $('item').each((_, el) => {
+            if (results.length >= limit) return false;
+            const title = $(el).find('title').text().trim();
+            const url = $(el).find('link').text().trim();
+            const pubDate = $(el).find('pubDate').text().trim();
+            const snippet = $(el).find('description').text().replace(/<[^>]+>/g, '').trim();
+            pushItem({
+                source: 'bing_news',
+                title,
+                url,
+                snippet: pubDate ? `[${pubDate}] ${snippet}` : snippet
+            });
+        });
+    }
+
+    // 3. Bing Web Search RSS (cc=ID) dengan filter relevansi kata kunci
+    if (results.length < limit && bingWebRes.status === 'fulfilled') {
+        const $ = cheerio.load(String(bingWebRes.value.data), { xmlMode: true });
         $('item').each((_, el) => {
             if (results.length >= limit) return false;
             const title = $(el).find('title').text().trim();
             const url = $(el).find('link').text().trim();
             const snippet = $(el).find('description').text().replace(/<[^>]+>/g, '').trim();
-            if (title && url) {
-                results.push({ source: 'bing', title, url, snippet });
-            }
+            pushItem({ source: 'bing_web', title, url, snippet });
         });
-    } catch { }
-
-    // 2. Fallback / Tambahan berita terkini: Google News RSS (jika Bing kosong)
-    if (results.length === 0) {
-        try {
-            const res = await axios.get('https://news.google.com/rss/search', {
-                params: { q: query.trim(), hl: 'id', gl: 'ID', ceid: 'ID:id' },
-                headers: { 'User-Agent': USER_AGENT },
-                timeout: 8000
-            });
-
-            const $ = cheerio.load(String(res.data), { xmlMode: true });
-            $('item').each((_, el) => {
-                if (results.length >= limit) return false;
-                const title = $(el).find('title').text().trim();
-                const url = $(el).find('link').text().trim();
-                const pubDate = $(el).find('pubDate').text().trim();
-                const snippet = $(el).find('description').text().replace(/<[^>]+>/g, '').trim();
-                if (title && url) {
-                    results.push({ source: 'google_news', title, url, snippet: pubDate ? `${pubDate} — ${snippet}` : snippet });
-                }
-            });
-        } catch { }
     }
 
-    // 3. Fallback pengetahuan umum: Wikipedia API (id -> en)
+    // 4. Fallback pengetahuan umum: Wikipedia API (id -> en)
     if (results.length === 0) {
         for (const lang of ['id', 'en']) {
             if (results.length >= limit) break;
@@ -83,7 +139,7 @@ export async function webSearch({ query, maxResults = 5 }) {
                     params: {
                         action: 'query',
                         list: 'search',
-                        srsearch: query.trim(),
+                        srsearch: q,
                         utf8: '',
                         format: 'json',
                         srlimit: limit
@@ -107,10 +163,10 @@ export async function webSearch({ query, maxResults = 5 }) {
     }
 
     if (results.length === 0) {
-        return { query, results: [], message: 'Tidak ada hasil pencarian yang ditemukan.' };
+        return { query: q, results: [], message: 'Tidak ada hasil pencarian yang relevan ditemukan.' };
     }
 
-    return { query, results };
+    return { query: q, results };
 }
 
 /**

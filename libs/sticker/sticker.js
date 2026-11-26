@@ -49,10 +49,12 @@ async function videoToWebp(media) {
             .on('end', () => resolve(true))
             .addOutputOptions([
                 '-vcodec', 'libwebp',
-                '-vf', 'scale=512:512:flags=lanczos:force_original_aspect_ratio=decrease,format=rgba,pad=512:512:(ow-iw)/2:(oh-ih)/2:color=#00000000',
+                '-vf', 'fps=15,scale=512:512:flags=lanczos:force_original_aspect_ratio=decrease,format=rgba,pad=512:512:(ow-iw)/2:(oh-ih)/2:color=#00000000',
                 '-loop', '0',
                 '-ss', '00:00:00',
                 '-t', '00:00:10',
+                '-q:v', '50',
+                '-compression_level', '6',
                 '-preset', 'default',
                 '-an',
                 '-vsync', '0'

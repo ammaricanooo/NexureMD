@@ -6,6 +6,7 @@ export const unwrapMessage = (msg) => {
     if (unwrapped.viewOnceMessageV2) unwrapped = unwrapped.viewOnceMessageV2.message;
     if (unwrapped.viewOnceMessageV2Extension) unwrapped = unwrapped.viewOnceMessageV2Extension.message;
     if (unwrapped.documentWithCaptionMessage) unwrapped = unwrapped.documentWithCaptionMessage.message;
+    if (unwrapped.audioStickerMessage?.message) unwrapped = unwrapped.audioStickerMessage.message;
     return unwrapped || {};
 };
 
