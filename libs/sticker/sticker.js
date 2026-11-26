@@ -98,21 +98,11 @@ async function videoToWebp(media, maxBytes = MAX_ANIMATED_WEBP_BYTES) {
 }
 
 /**
- * Format sticker author watermark: Name (+WhatsApp Number)
+ * Format sticker author watermark: Name only (without WhatsApp number)
  */
 function formatStickerAuthor(user, msgData) {
-    const jid = (user?.jid?.endsWith('@s.whatsapp.net') ? user.jid : '') ||
-                (msgData?.senderJid?.endsWith('@s.whatsapp.net') ? msgData.senderJid : '') ||
-                user?.jid || msgData?.senderJid || '';
-    const rawNumber = jid.split('@')[0].split(':')[0].replace(/[^0-9]/g, '');
-    const userNumber = rawNumber ? `+${rawNumber}` : '';
-
-    let userName = (user?.name || msgData?.pushName || '').trim();
-    if (!userName || (rawNumber && userName.replace(/[^0-9]/g, '') === rawNumber)) {
-        userName = 'User';
-    }
-
-    return userNumber ? `${userName} (${userNumber})` : userName;
+    const userName = (user?.name || msgData?.pushName || '').trim();
+    return userName || 'User';
 }
 
 /**
